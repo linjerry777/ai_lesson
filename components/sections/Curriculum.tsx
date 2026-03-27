@@ -1,45 +1,45 @@
 const stages = [
   {
     num: '01',
-    title: 'AI 工程思維建立',
-    desc: '理解 Claude Code 的底層設計邏輯，跳脫傳統 AI 工具使用框架，建立能放大成果的工程師 AI 協作心態。',
-    items: ['Claude Code 的設計理念與 Coding Agent 能力邊界', '與傳統 AI 工具的根本差異', '高效 AI 協作的核心心智模型'],
+    title: '從想法到 Landing Page，一個指令',
+    desc: '你現在看到的整個課程銷售頁——Hero、Pain Points、課程大綱、學員回饋、定價、FAQ——全部是這樣生出來的。',
+    items: ['需求描述怎麼寫 AI 才看得懂', '版面結構規劃與 Tailwind 設計系統', '每個 Section 的生成與調整過程', '為什麼「改一點」比「重新生」更快'],
   },
   {
     num: '02',
-    title: '核心工作流與 Context 設計',
-    desc: '掌握讓 AI 真正「看懂你的專案」的關鍵技術，避免幻覺、穩定產出高品質程式碼。',
-    items: ['Plan Mode 與 Ultra Think 的使用時機', 'Memory 系統、檔案參照與模型切換', '避免幻覺的 Context 設計技巧', '需求拆解的正確方法'],
+    title: 'Supabase 登入：Google OAuth 踩坑全記錄',
+    desc: '理論上三行程式就能搞定，實際上你會踩到 redirect URL 白名單、Site URL 設定錯、cookie 沒帶到。我們全踩過。',
+    items: ['Supabase 專案建立與 Vercel 整合', 'Google OAuth Client 設定（正確姿勢）', 'Callback URL 為什麼一直跑到首頁', 'Magic Link 備用方案'],
   },
   {
     num: '03',
-    title: '完整專案實戰開發',
-    desc: '從需求到部署，完整走一次前端 + 後端 + 資料庫的全端開發流程，讓 AI 做大部分工作。',
-    items: ['架構規劃與技術選型', '前端 UI 實作與元件設計', '後端 API 與資料庫開發', '自動化測試與 Debug 流程', 'Github Pages / Vercel 部署'],
+    title: '環境變數地獄：那個 \\n 差點毀了一切',
+    desc: '用 echo 把 API key 傳給 Vercel，結果 key 的結尾多了一個換行符。Stripe 直接拒收，回傳 500。全過程在這章。',
+    items: ['echo vs printf 的差異（血淚教訓）', 'Vercel env var 的正確設定方式', '怎麼用 /api/debug 診斷 env 問題', '本機 .env.local 與線上環境的同步'],
   },
   {
     num: '04',
-    title: 'MCP 整合應用',
-    desc: '從原理到實作，打造屬於你自己的可擴充 AI 開發系統，串接你最常用的工具。',
-    items: ['MCP Server 的原理與架構', '串接 Playwright、資料庫、API 工具', '打造自己的 MCP Server', '用 MCP 實現真正的工程自動化'],
+    title: 'Stripe Checkout：沙盒測試到真實收款',
+    desc: '建 product、設 price、接 webhook、存進資料庫。整個付款流程從零開始，包含你一定會碰到的那些錯誤。',
+    items: ['Stripe 產品與價格 API 建立', 'Checkout Session 生成與跳轉', 'Webhook 接收與 purchases 資料表', '用測試卡 4242 4242 4242 4242 驗收'],
   },
   {
     num: '05',
-    title: 'Hook 與自動化工程',
-    desc: '用事件驅動的方式建立自動化流程，讓 Claude Code 在關鍵時刻自動執行對的動作。',
-    items: ['Hook 機制的設計原則', '自動化測試與 CI/CD 整合', '用 Playwright + MCP 自動化驗收', '資安預先檢查與敏感資訊防護'],
+    title: 'Vercel 部署：push code = 自動更新',
+    desc: '從 git init 到 GitHub 連動到 Vercel 自動部署，加上固定域名設定。每次改完 code 一個 push 就上線。',
+    items: ['git init + GitHub repo 建立', 'vercel CLI 部署與環境綁定', '固定 alias vs 每次換 URL 的差異', 'CI/CD：commit → push → 自動部署'],
   },
   {
     num: '06',
-    title: 'Sub-Agent 多代理協作',
-    desc: '進入高階應用——讓 AI 管理 AI，設計多代理協作系統，實現真正的工程自動化。',
-    items: ['Sub-Agent 的設計原則與使用時機', '任務分工與平行處理架構', 'Skills 客製化與工具鏈建立', '用 AI 管理 AI 的進階工作流'],
+    title: '完整 Debug 實錄：500、CORS、Session 消失',
+    desc: '這是其他課不敢教的部分。我們遇到的每一個錯誤——500 on /api/checkout、session 沒帶到、domain 設錯——全在這章。',
+    items: ['怎麼讀 Vercel function logs', '500 error 的三種來源', 'Session cookie 為什麼在線上不見了', 'debug route 的設計與使用'],
   },
   {
     num: '07',
-    title: '團隊落地與成本控管',
-    desc: '讓整個團隊 AI 戰力翻倍——從個人效率到組織層級的 AI-first 開發流程導入。',
-    items: ['AI-first 開發流程設計', 'Token 消耗控管的五大技巧', '模型選擇與 Sub-Agent 成本優化', '資安最佳實踐與企業導入指南'],
+    title: '同樣的方法，套到你自己的專案',
+    desc: '這整套流程不只能做課程網站。SaaS、作品集、工具型產品——你學到的是一個可以複製的建站方法論。',
+    items: ['架構模板的複用邏輯', '哪些部分換掉、哪些直接套', '從 landing page 到完整產品的延伸路徑', '下一步：把你自己的想法建出來'],
   },
 ]
 
@@ -53,10 +53,10 @@ export default function Curriculum() {
             課程大綱
           </p>
           <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">
-            完整 7 階段學習路徑
+            7 章，從零到一個真實產品
           </h2>
           <p className="text-gray-600 max-w-xl mx-auto">
-            從觀念建立到高階應用，完整走一遍真實工程師的 AI 開發工作流。
+            不是理論，不是假示範。每一章都是建這個網站時實際發生的過程。
           </p>
         </div>
 

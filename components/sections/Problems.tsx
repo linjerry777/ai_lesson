@@ -2,24 +2,24 @@ import { AlertCircle } from 'lucide-react'
 
 const problems = [
   {
-    title: 'AI 寫得出片段，整合進專案就爆炸',
-    desc: 'Context 不完整，AI 看不懂你的專案架構，產出的程式碼無法直接使用，還要花更多時間修正。',
+    title: '花了錢，學完還是做不出東西',
+    desc: '全是工具介紹和指令大全，沒有一個完整的真實專案。看完等於沒學，做作品時還是一片茫然。',
   },
   {
-    title: '對話一長，AI 開始幻覺越修越亂',
-    desc: '上下文越給越多，Claude 開始亂改不相關的程式碼，一個 bug 修好三個 bug 跑出來。',
+    title: '示範永遠是 Todo List',
+    desc: '他們的「實戰」是一個假資料的前端頁面。你的需求是做一個能登入、能收錢、能部署的東西。',
   },
   {
-    title: '只會零碎 copy/paste，沒有系統流程',
-    desc: '每次開發都靠感覺，沒有可複製、可擴展的工作流，導致效率低落，無法規模化。',
+    title: '踩到地雷自己查，講師說「這超出範圍」',
+    desc: '環境變數設錯、API 金鑰有換行符、Webhook 沒反應——這些才是真正會卡住你的問題，但課裡不教。',
   },
   {
-    title: 'MCP、Hook、Sub-Agent 完全不知從哪入手',
-    desc: '聽說很強大，但文件難懂，不知道如何整合進自己的開發流程，停留在基礎功能用法。',
+    title: '「Vibe Coding」聽起來很潮，但你學完在 vibe 什麼？',
+    desc: '對，氛圍很好，截圖很漂亮。但能不能告訴我 Stripe 的 webhook 怎麼接，購買記錄怎麼存進資料庫？',
   },
   {
-    title: '導入 AI 後，程式碼品質反而更難控管',
-    desc: '團隊各自用 AI，Context 不一致，Code Review 困難，技術債暴增，成本失控。',
+    title: '貴，而且還要再買下一堂才學得完',
+    desc: '第一堂教「觀念」，第二堂才教「實作」，第三堂才教「部署」。每堂 NT$2,940 起跳，當你是冤大頭。',
   },
 ]
 
@@ -30,10 +30,11 @@ export default function Problems() {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">
-            你是不是也遇過這些問題？
+            你買過這種課嗎？
           </h2>
           <p className="text-gray-600 max-w-xl mx-auto">
-            大多數工程師用 AI 的方式都是錯的——結果 AI 反而變成負擔。
+            市面上的 AI 課程有個共同特色——
+            <strong className="text-gray-800">教你怎麼用工具，但不告訴你怎麼做出東西。</strong>
           </p>
         </div>
 
@@ -52,7 +53,7 @@ export default function Problems() {
         {/* Bottom CTA hint */}
         <div className="text-center">
           <p className="text-gray-500 text-sm">
-            這堂課就是專門為以上問題設計的 ↓
+            這堂課的答案很簡單——<strong className="text-gray-700">直接帶你做出一個真的能用的產品。</strong> ↓
           </p>
         </div>
       </div>

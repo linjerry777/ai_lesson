@@ -1,10 +1,10 @@
 import { CheckCircle, Zap } from 'lucide-react'
 
 const bullets = [
-  '完整前後端 + 資料庫實戰專案，從零到部署',
-  'MCP / Hook / Sub-Agent 高階應用不藏私',
-  '矽谷工程師真實使用的開發方法論',
-  '永久觀看，Claude Code 更新課程跟著更新',
+  '你現在看到的這個網站，是課程裡直接建出來的',
+  'Google 登入 + Stripe 付款 + Vercel 部署，全部串好',
+  '遇到的每個 bug、每個環境變數地獄，都在課程裡',
+  '從零到上線，實際花了一個下午',
 ]
 
 export default function Hero() {
@@ -17,23 +17,23 @@ export default function Hero() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-brand-50 border border-brand-200 text-brand-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
               <Zap size={12} className="fill-brand-500 text-brand-500" />
-              限時早鳥優惠 · 現省 NT$2,360
+              比市面上同類課程便宜 10%，內容還更實在
             </div>
 
             {/* Headline */}
             <h1 className="text-4xl sm:text-5xl font-black text-gray-900 leading-tight mb-4">
-              用 Claude Code
+              你現在看到的
               <br />
-              <span className="text-brand-500">打造 AI 時代</span>
+              <span className="text-brand-500">這個網站</span>
               <br />
-              的工程師超能力
+              是 Claude Code 做的
             </h1>
 
             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              不是工具功能大全——是一套讓你{' '}
-              <strong className="text-gray-900">真正 10 倍速交付成果</strong>
-              的 AI 開發方法論。帶你走過完整專案流程：
-              需求拆解 → 架構 → 開發 → 測試 → 自動化 → 部署。
+              不是 Todo List，不是假示範。是一個{' '}
+              <strong className="text-gray-900">真的能收錢的課程銷售頁</strong>
+              ——前後端 + 資料庫 + 登入 + 付款 + 部署。
+              這個建站過程，就是整堂課的內容。
             </p>
 
             {/* Bullets */}
@@ -95,37 +95,28 @@ export default function Hero() {
                 <div className="flex gap-2">
                   <span className="text-green-400">❯</span>
                   <span className="text-gray-300">
-                    claude <span className="text-brand-400">&quot;幫我建立電商後端 API，包含 JWT 認證、購物車和訂單管理&quot;</span>
+                    claude <span className="text-brand-400">&quot;幫我建立一個賣線上課程的網站，要有 Google 登入和 Stripe 付款&quot;</span>
                   </span>
                 </div>
-                <div className="text-gray-500 text-xs pl-4">
-                  ● 分析需求，規劃架構...
-                </div>
-                <div className="text-gray-500 text-xs pl-4">
-                  ● 設計資料庫 Schema...
-                </div>
-                <div className="text-gray-500 text-xs pl-4">
-                  ● 生成 REST API 端點...
-                </div>
-                <div className="text-gray-500 text-xs pl-4">
-                  ● 撰寫單元測試 (覆蓋率 91%)...
-                </div>
-                <div className="text-gray-500 text-xs pl-4">
-                  ● 部署到 Vercel...
-                </div>
+                <div className="text-gray-500 text-xs pl-4">● 分析需求，規劃 Next.js + Supabase + Stripe 架構...</div>
+                <div className="text-gray-500 text-xs pl-4">● 建立 Landing Page 所有 section...</div>
+                <div className="text-gray-500 text-xs pl-4">● 串接 Google OAuth 登入流程...</div>
+                <div className="text-gray-500 text-xs pl-4">● 建立 Stripe Checkout API...</div>
+                <div className="text-gray-500 text-xs pl-4">● 設定 Webhook + purchases 資料表...</div>
+                <div className="text-gray-500 text-xs pl-4">● 部署到 Vercel...</div>
                 <div className="mt-3 text-green-400 text-xs">
-                  ✓ 完成！16 個 API 端點，測試全過，已部署
+                  ✓ 完成！就是你現在看到的這個網站。
                 </div>
                 <div className="mt-1 text-gray-500 text-xs">
-                  耗時 4 分 23 秒 · 傳統開發預計 2-3 天
+                  耗時 1 個下午 · 某些人要收 NT$2,940 才教這個
                 </div>
               </div>
             </div>
 
             {/* Floating badge */}
             <div className="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg border border-gray-100 px-4 py-3">
-              <p className="text-xs text-gray-500">開發速度提升</p>
-              <p className="text-2xl font-black text-brand-500">10-100×</p>
+              <p className="text-xs text-gray-500">省下的時間</p>
+              <p className="text-2xl font-black text-brand-500">數個月</p>
             </div>
           </div>
         </div>
