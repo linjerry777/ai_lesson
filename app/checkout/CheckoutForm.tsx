@@ -27,11 +27,11 @@ export default function CheckoutForm({ userEmail, userName }: Props) {
 
   /* ── init TapPay once SDK script loads ── */
   const initTapPay = useCallback(() => {
-    window.TPDirect.setupSDK(
-      Number(process.env.NEXT_PUBLIC_TAPPAY_APP_ID),
-      process.env.NEXT_PUBLIC_TAPPAY_APP_KEY!,
-      process.env.NEXT_PUBLIC_TAPPAY_ENV === 'production' ? 'production' : 'sandbox'
-    )
+    const appId = Number(process.env.NEXT_PUBLIC_TAPPAY_APP_ID)
+    const appKey = process.env.NEXT_PUBLIC_TAPPAY_APP_KEY ?? ''
+    const env = process.env.NEXT_PUBLIC_TAPPAY_ENV === 'production' ? 'production' : 'sandbox'
+    console.log('[TapPay setup]', { appId, appKey: appKey.slice(0, 20) + '...', env })
+    window.TPDirect.setupSDK(appId, appKey, env)
 
     window.TPDirect.card.setup({
       fields: {
