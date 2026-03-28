@@ -13,7 +13,7 @@ const includes = [
 ]
 
 const badges = [
-  { icon: Shield, text: '安全付款', sub: 'Stripe 加密保護' },
+  { icon: Shield, text: '安全付款', sub: 'TapPay 加密保護' },
   { icon: RefreshCw, text: '7 天退費', sub: '未觀看全額退款' },
   { icon: Infinity, text: '永久觀看', sub: '課程持續更新' },
 ]
@@ -72,7 +72,7 @@ export default function Pricing() {
                 立即購課 →
               </a>
               <p className="text-center text-xs text-gray-400 mt-3">
-                點擊後將跳轉至安全付款頁面
+                點擊後進入安全付款頁面，直接填卡號即可
               </p>
             </div>
           </div>

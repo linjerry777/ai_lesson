@@ -1,54 +1,7 @@
 import { CheckCircle } from 'lucide-react'
 import Link from 'next/link'
-import { stripe } from '@/lib/stripe'
-import { createClient, createServiceClient } from '@/lib/supabase/server'
 
-export default async function SuccessPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ session_id?: string }>
-}) {
-  const { session_id } = await searchParams
-
-  if (session_id) {
-    try {
-      // Verify Stripe session and auth in parallel
-      const [session, supabase] = await Promise.all([
-        stripe.checkout.sessions.retrieve(session_id),
-        createClient(),
-      ])
-      const { data: { user } } = await supabase.auth.getUser()
-
-      if (session.payment_status === 'paid') {
-        const userId = session.metadata?.user_id ?? user?.id
-
-        if (userId) {
-          const serviceClient = createServiceClient()
-          // Only insert if not already recorded (idempotent)
-          const { data: existing } = await serviceClient
-            .from('purchases')
-            .select('id')
-            .eq('user_id', userId)
-            .eq('status', 'completed')
-            .maybeSingle()
-
-          if (!existing) {
-            const { error: insertError } = await serviceClient.from('purchases').insert({
-              user_id: userId,
-              stripe_session_id: session.id,
-              amount: session.amount_total ?? 0,
-              currency: session.currency,
-              status: 'completed',
-            })
-            if (insertError) console.error('[success] insert error:', insertError)
-          }
-        }
-      }
-    } catch (e) {
-      console.error('[success] failed to record purchase:', e)
-    }
-  }
-
+export default function SuccessPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="text-center max-w-md">
