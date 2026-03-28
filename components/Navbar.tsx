@@ -58,7 +58,7 @@ export default function Navbar() {
               <span className="text-white font-bold text-sm">AI</span>
             </div>
             <span className="font-bold text-gray-900 text-lg">
-              <span className="text-brand-500">[</span>品牌名稱<span className="text-brand-500">]</span>
+              網課小韭菜
             </span>
           </Link>
 

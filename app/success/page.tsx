@@ -75,8 +75,8 @@ export default async function SuccessPage({
 
         <p className="text-xs text-gray-400 mt-4">
           有任何問題請聯繫{' '}
-          <a href="mailto:contact@example.com" className="underline">
-            contact@example.com
+          <a href="mailto:donutai08@gmail.com" className="underline">
+            donutai08@gmail.com
           </a>
         </p>
       </div>

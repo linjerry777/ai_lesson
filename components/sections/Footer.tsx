@@ -9,10 +9,10 @@ export default function Footer() {
               <div className="w-7 h-7 bg-brand-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xs">AI</span>
               </div>
-              <span className="font-bold text-white text-base">[品牌名稱]</span>
+              <span className="font-bold text-white text-base">網課小韭菜</span>
             </div>
             <p className="text-xs text-gray-500 leading-relaxed">
-              幫助工程師真正掌握 AI 開發工作流，而不是另一堆沒用的指令清單。
+              被網課騙過 NT$50,000 的人，教你用一個下午真正做出東西。
             </p>
           </div>
 
@@ -40,7 +40,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
           <p className="text-xs text-gray-600">
-            © {new Date().getFullYear()} [品牌名稱]. All rights reserved.
+            © {new Date().getFullYear()} 網課小韭菜. All rights reserved.
           </p>
           <p className="text-xs text-gray-600">
             Secure payments by{' '}

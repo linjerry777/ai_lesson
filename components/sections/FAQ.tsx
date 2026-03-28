@@ -74,7 +74,7 @@ export default function FAQ() {
 
         <p className="text-center text-sm text-gray-500 mt-8">
           還有其他問題？{' '}
-          <a href="mailto:contact@example.com" className="text-brand-500 hover:underline">
+          <a href="mailto:donutai08@gmail.com" className="text-brand-500 hover:underline">
             聯絡我們
           </a>
         </p>

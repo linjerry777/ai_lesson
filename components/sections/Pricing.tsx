@@ -1,14 +1,14 @@
 import { CheckCircle, Shield, RefreshCw, Infinity } from 'lucide-react'
 
 const includes = [
-  '40+ 個實戰單元，6+ 小時精華內容',
-  '完整前後端 + 資料庫全端專案實作',
-  'MCP Server 建立與整合教學',
-  'Hook 事件驅動自動化工程',
-  'Sub-Agent 多代理協作系統設計',
-  '團隊導入 AI 工作流完整指南',
-  'Token 成本控管與資安最佳實踐',
-  '完課證明',
+  '7 章完整課程，真實建站全過程',
+  'Landing Page → 登入 → 付款 → 部署，一條龍',
+  'Google OAuth 完整串接與踩坑紀錄',
+  'Stripe Checkout + Webhook 完整實作',
+  'Vercel 自動部署 CI/CD 流程',
+  '完整 Debug 實錄：500、session 消失、env 地獄',
+  '可複用架構模板，下一個專案直接套',
+  '每章附詳細操作步驟 + 可複製 Claude 指令',
   '永久觀看，未來更新免費獲取',
 ]
 
