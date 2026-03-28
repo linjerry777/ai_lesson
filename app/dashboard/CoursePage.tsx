@@ -9,17 +9,18 @@ import { CheckCircle, Circle, PlayCircle, LogOut, BookOpen, Clock, ChevronRight 
 
 interface Props {
   userEmail: string
+  videoUrls: Record<string, string>
 }
 
-export default function CoursePage({ userEmail }: Props) {
+export default function CoursePage({ userEmail, videoUrls }: Props) {
   const [activeId, setActiveId] = useState(lessons[0].id)
   const [completed, setCompleted] = useState<Set<string>>(new Set())
   const router = useRouter()
   const supabase = createClient()
 
-  const active = lessons.find(l => l.id === activeId)!
+  const active    = lessons.find(l => l.id === activeId)!
   const activeIdx = lessons.findIndex(l => l.id === activeId)
-  const progress = Math.round((completed.size / lessons.length) * 100)
+  const progress  = Math.round((completed.size / lessons.length) * 100)
 
   const toggleComplete = (id: string) => {
     setCompleted(prev => {
@@ -44,13 +45,9 @@ export default function CoursePage({ userEmail }: Props) {
             <span className="font-bold text-gray-900 text-sm">{COURSE_TITLE}</span>
           </Link>
           <div className="flex items-center gap-4">
-            {/* Progress */}
             <div className="hidden sm:flex items-center gap-2 text-xs text-gray-500">
               <div className="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-brand-500 rounded-full transition-all"
-                  style={{ width: `${progress}%` }}
-                />
+                <div className="h-full bg-brand-500 rounded-full transition-all" style={{ width: `${progress}%` }} />
               </div>
               <span>{progress}% 完成</span>
             </div>
@@ -76,12 +73,8 @@ export default function CoursePage({ userEmail }: Props) {
               <span className="text-gray-300">·</span>
               <span>{completed.size} 已完成</span>
             </div>
-            {/* Overall progress bar */}
             <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-brand-500 rounded-full transition-all duration-500"
-                style={{ width: `${progress}%` }}
-              />
+              <div className="h-full bg-brand-500 rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
             </div>
           </div>
 
@@ -89,7 +82,7 @@ export default function CoursePage({ userEmail }: Props) {
             {lessons.map((lesson, idx) => {
               const isActive    = lesson.id === activeId
               const isDone      = completed.has(lesson.id)
-              const isAvailable = lesson.youtubeId !== ''
+              const hasVideo    = !!videoUrls[lesson.id]
 
               return (
                 <button
@@ -101,14 +94,13 @@ export default function CoursePage({ userEmail }: Props) {
                       : 'hover:bg-gray-50 border-r-2 border-transparent'
                     }`}
                 >
-                  {/* Status icon */}
                   <div className="mt-0.5 flex-shrink-0">
                     {isDone ? (
                       <CheckCircle size={16} className="text-brand-500" />
                     ) : isActive ? (
                       <PlayCircle size={16} className="text-brand-500" />
                     ) : (
-                      <Circle size={16} className={isAvailable ? 'text-gray-300' : 'text-gray-200'} />
+                      <Circle size={16} className={hasVideo ? 'text-gray-300' : 'text-gray-200'} />
                     )}
                   </div>
 
@@ -117,12 +109,11 @@ export default function CoursePage({ userEmail }: Props) {
                       <span className="text-[10px] font-mono text-brand-400 font-bold">
                         {String(idx + 1).padStart(2, '0')}
                       </span>
-                      {!isAvailable && (
+                      {!hasVideo && (
                         <span className="text-[9px] bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded">即將上線</span>
                       )}
                     </div>
-                    <p className={`text-xs font-medium leading-snug
-                      ${isActive ? 'text-brand-700' : 'text-gray-700'}`}>
+                    <p className={`text-xs font-medium leading-snug ${isActive ? 'text-brand-700' : 'text-gray-700'}`}>
                       {lesson.title}
                     </p>
                     <p className="text-[10px] text-gray-400 mt-0.5 flex items-center gap-1">
@@ -160,6 +151,7 @@ export default function CoursePage({ userEmail }: Props) {
           <div className="p-6 max-w-4xl">
             <LessonView
               lesson={active}
+              videoUrl={videoUrls[active.id] ?? null}
               isDone={completed.has(active.id)}
               onToggleDone={() => toggleComplete(active.id)}
               onNext={() => { if (activeIdx < lessons.length - 1) setActiveId(lessons[activeIdx + 1].id) }}
@@ -175,12 +167,14 @@ export default function CoursePage({ userEmail }: Props) {
 // ── 單章節內容 ──────────────────────────────────────────────────────────────
 function LessonView({
   lesson,
+  videoUrl,
   isDone,
   onToggleDone,
   onNext,
   isLast,
 }: {
   lesson: Lesson
+  videoUrl: string | null
   isDone: boolean
   onToggleDone: () => void
   onNext: () => void
@@ -188,12 +182,10 @@ function LessonView({
 }) {
   return (
     <div>
-      {/* Chapter label */}
       <p className="text-brand-500 text-xs font-semibold uppercase tracking-wider mb-2">
         {lesson.id.replace('ch', 'Chapter ')}
       </p>
 
-      {/* Title */}
       <h1 className="text-2xl font-black text-gray-900 mb-1">{lesson.title}</h1>
       <p className="text-sm text-gray-400 flex items-center gap-1 mb-6">
         <Clock size={13} /> {lesson.duration}
@@ -201,12 +193,13 @@ function LessonView({
 
       {/* Video player */}
       <div className="aspect-video bg-gray-900 rounded-2xl overflow-hidden mb-6 shadow-lg">
-        {lesson.youtubeId ? (
-          <iframe
-            src={`https://www.youtube.com/embed/${lesson.youtubeId}?rel=0&modestbranding=1`}
-            title={lesson.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
+        {videoUrl ? (
+          <video
+            key={videoUrl}
+            src={videoUrl}
+            controls
+            controlsList="nodownload"
+            onContextMenu={e => e.preventDefault()}
             className="w-full h-full"
           />
         ) : (
