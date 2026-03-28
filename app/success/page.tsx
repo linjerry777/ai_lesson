@@ -1,6 +1,5 @@
 import { CheckCircle } from 'lucide-react'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 import { stripe } from '@/lib/stripe'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 
@@ -13,14 +12,14 @@ export default async function SuccessPage({
 
   if (session_id) {
     try {
-      // Verify Stripe session
-      const session = await stripe.checkout.sessions.retrieve(session_id)
+      // Verify Stripe session and auth in parallel
+      const [session, supabase] = await Promise.all([
+        stripe.checkout.sessions.retrieve(session_id),
+        createClient(),
+      ])
+      const { data: { user } } = await supabase.auth.getUser()
 
       if (session.payment_status === 'paid') {
-        // Get current user
-        const supabase = await createClient()
-        const { data: { user } } = await supabase.auth.getUser()
-
         const userId = session.metadata?.user_id ?? user?.id
 
         if (userId) {
@@ -34,18 +33,19 @@ export default async function SuccessPage({
             .maybeSingle()
 
           if (!existing) {
-            await serviceClient.from('purchases').insert({
+            const { error: insertError } = await serviceClient.from('purchases').insert({
               user_id: userId,
               stripe_session_id: session.id,
               amount: (session.amount_total ?? 0) / 100,
               currency: session.currency,
               status: 'completed',
             })
+            if (insertError) console.error('[success] insert error:', insertError)
           }
         }
       }
-    } catch {
-      // Non-fatal — still show success page, webhook will handle it
+    } catch (e) {
+      console.error('[success] failed to record purchase:', e)
     }
   }
 

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { stripe } from '@/lib/stripe'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3001'
@@ -14,8 +14,8 @@ export async function GET() {
       return NextResponse.redirect(new URL('/login', SITE_URL))
     }
 
-    // Check if already purchased (ignore errors if table not ready)
-    const { data: purchase } = await supabase
+    // Check if already purchased — service client bypasses RLS
+    const { data: purchase } = await createServiceClient()
       .from('purchases')
       .select('id')
       .eq('user_id', user.id)

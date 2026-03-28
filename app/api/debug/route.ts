@@ -6,23 +6,16 @@ export async function GET() {
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
-    // Query purchases with service client (bypasses RLS)
     const serviceClient = createServiceClient()
-    const { data: allPurchases, error: purchaseError } = await serviceClient
-      .from('purchases')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(10)
-
-    // Query just for current user
-    const { data: myPurchase } = user
-      ? await serviceClient
-          .from('purchases')
-          .select('*')
-          .eq('user_id', user.id)
-          .eq('status', 'completed')
-          .maybeSingle()
-      : { data: null }
+    const [
+      { data: allPurchases, error: purchaseError },
+      { data: myPurchase },
+    ] = await Promise.all([
+      serviceClient.from('purchases').select('*').order('created_at', { ascending: false }).limit(10),
+      user
+        ? serviceClient.from('purchases').select('*').eq('user_id', user.id).eq('status', 'completed').maybeSingle()
+        : Promise.resolve({ data: null }),
+    ])
 
     return NextResponse.json({
       user: user ? { id: user.id, email: user.email } : null,

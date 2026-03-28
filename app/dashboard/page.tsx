@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import CoursePage from './CoursePage'
 
 export default async function DashboardPage() {
@@ -9,20 +9,20 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // 檢查購買
-  const { data: purchase } = await supabase
+  // 檢查購買 — use service client to bypass RLS on purchases table
+  const serviceClient = createServiceClient()
+  const { data: purchase } = await serviceClient
     .from('purchases')
-    .select('id, created_at')
+    .select('id')
     .eq('user_id', user.id)
     .eq('status', 'completed')
-    .single()
+    .maybeSingle()
 
   if (!purchase) redirect('/#pricing')
 
   return (
     <CoursePage
       userEmail={user.email ?? ''}
-      purchasedAt={purchase.created_at}
     />
   )
 }

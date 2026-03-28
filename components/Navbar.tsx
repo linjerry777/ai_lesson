@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { Menu, X, LogOut, BookOpen } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
@@ -12,7 +12,7 @@ export default function Navbar() {
   const [user, setUser] = useState<User | null>(null)
   const [avatarError, setAvatarError] = useState(false)
 
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
@@ -81,7 +81,7 @@ export default function Navbar() {
               /* ── 已登入 ── */
               <>
                 <Link
-                  href="/success"
+                  href="/dashboard"
                   className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-brand-500 transition-colors"
                 >
                   <BookOpen size={15} />

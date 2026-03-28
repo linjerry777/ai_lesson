@@ -8,7 +8,6 @@ import { CheckCircle, Circle, PlayCircle, LogOut, BookOpen, Clock, ChevronRight 
 
 interface Props {
   userEmail: string
-  purchasedAt: string
 }
 
 export default function CoursePage({ userEmail }: Props) {
@@ -18,6 +17,7 @@ export default function CoursePage({ userEmail }: Props) {
   const supabase = createClient()
 
   const active = lessons.find(l => l.id === activeId)!
+  const activeIdx = lessons.findIndex(l => l.id === activeId)
   const progress = Math.round((completed.size / lessons.length) * 100)
 
   const toggleComplete = (id: string) => {
@@ -161,11 +161,8 @@ export default function CoursePage({ userEmail }: Props) {
               lesson={active}
               isDone={completed.has(active.id)}
               onToggleDone={() => toggleComplete(active.id)}
-              onNext={() => {
-                const idx = lessons.findIndex(l => l.id === activeId)
-                if (idx < lessons.length - 1) setActiveId(lessons[idx + 1].id)
-              }}
-              isLast={lessons.findIndex(l => l.id === activeId) === lessons.length - 1}
+              onNext={() => { if (activeIdx < lessons.length - 1) setActiveId(lessons[activeIdx + 1].id) }}
+              isLast={activeIdx === lessons.length - 1}
             />
           </div>
         </main>
