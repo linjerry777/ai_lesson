@@ -36,7 +36,7 @@ export default async function SuccessPage({
             const { error: insertError } = await serviceClient.from('purchases').insert({
               user_id: userId,
               stripe_session_id: session.id,
-              amount: (session.amount_total ?? 0) / 100,
+              amount: session.amount_total ?? 0,
               currency: session.currency,
               status: 'completed',
             })

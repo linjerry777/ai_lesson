@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       await supabase.from('purchases').upsert({
         user_id: userId,
         stripe_session_id: session.id,
-        amount: (session.amount_total ?? 0) / 100,
+        amount: session.amount_total ?? 0,
         currency: session.currency,
         status: 'completed',
         created_at: new Date().toISOString(),
