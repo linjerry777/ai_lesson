@@ -67,9 +67,10 @@ export default function CheckoutForm({ userEmail, userName }: Props) {
     setLoading(true)
     setError('')
 
-    window.TPDirect.card.getPrime(async (result: { status: number; card: { prime: string } }) => {
+    window.TPDirect.card.getPrime(async (result: { status: number; msg?: string; card: { prime: string } }) => {
+      console.log('[TapPay getPrime]', result)
       if (result.status !== 0) {
-        setError('卡號驗證失敗，請再檢查一遍')
+        setError(`getPrime 失敗 status=${result.status} msg=${result.msg ?? ''}`)
         setLoading(false)
         return
       }
