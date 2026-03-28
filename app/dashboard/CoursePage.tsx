@@ -215,7 +215,11 @@ function LessonView({
       {/* Description */}
       <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-4">
         <h2 className="font-bold text-gray-900 mb-3 text-sm">這章在學什麼</h2>
-        <p className="text-gray-600 text-sm leading-relaxed mb-5">{lesson.description}</p>
+        <div className="text-gray-600 text-sm leading-relaxed mb-5 space-y-3">
+          {lesson.description.split('\n\n').map((para, i) => (
+            <p key={i}>{para}</p>
+          ))}
+        </div>
 
         <h2 className="font-bold text-gray-900 mb-3 text-sm">重點內容</h2>
         <ul className="space-y-2">
