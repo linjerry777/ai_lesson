@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { lessons, COURSE_TITLE, type Lesson } from '@/lib/course-data'
 import Link from 'next/link'
 import { CheckCircle, Circle, PlayCircle, LogOut, BookOpen, Clock, ChevronRight } from 'lucide-react'
+import StepGuide from './StepGuide'
 
 interface Props {
   userEmail: string
@@ -232,8 +233,11 @@ function LessonView({
         </ul>
       </div>
 
+      {/* Step guide */}
+      {lesson.steps?.length > 0 && <StepGuide steps={lesson.steps} />}
+
       {/* Actions */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 mt-4">
         <button
           onClick={onToggleDone}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors
