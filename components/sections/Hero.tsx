@@ -17,7 +17,7 @@ export default function Hero() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-brand-50 border border-brand-200 text-brand-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
               <Zap size={12} className="fill-brand-500 text-brand-500" />
-              比市面上同類課程便宜 10%，內容還更實在
+              比那些教 Todo List 的貴課，便宜一半還更實在
             </div>
 
             {/* Headline */}

@@ -53,7 +53,7 @@ export default function Problems() {
         {/* Bottom CTA hint */}
         <div className="text-center">
           <p className="text-gray-500 text-sm">
-            這堂課的答案很簡單——<strong className="text-gray-700">直接帶你做出一個真的能用的產品。</strong> ↓
+            我全部都買過。<strong className="text-gray-700">所以我知道差在哪。</strong> ↓
           </p>
         </div>
       </div>

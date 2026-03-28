@@ -1,10 +1,10 @@
-import { BookOpen, Users, Code2, Award } from 'lucide-react'
+import { BookOpen, TrendingDown, Zap, DollarSign } from 'lucide-react'
 
 const credentials = [
-  { icon: Code2, text: '多年業界全端開發實戰經驗' },
-  { icon: Users, text: '帶領 100+ 位工程師導入 AI 工作流' },
-  { icon: BookOpen, text: 'AI 工程技術暢銷書作者' },
-  { icon: Award, text: '頂尖科技公司 AI-first 開發實踐者' },
+  { icon: DollarSign,   text: '累計被騙網課費用 NT$50,000+' },
+  { icon: TrendingDown, text: '學完歸零，作品數量依然是 0' },
+  { icon: Zap,          text: '某個下午被 Claude Code 改變人生' },
+  { icon: BookOpen,     text: '現在靠賣這堂課努力把錢賺回來' },
 ]
 
 export default function Instructor() {
@@ -37,16 +37,18 @@ export default function Instructor() {
                   [講師姓名]
                 </h3>
                 <p className="text-brand-500 font-semibold text-sm mb-4">
-                  資深全端工程師 / AI 開發顧問
+                  資深網課受害者 / 現已康復
                 </p>
 
                 <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                  擁有多年業界軟體開發經驗，目前在頂尖科技公司任職，深度使用 Claude Code
-                  作為核心開發工具。曾帶領多個工程團隊完整導入 AI-first 開發工作流，
-                  在實際商業專案中驗證了這套方法論的效果。
+                  擁有多年購買網課的豐富經驗——每堂都有「業界實戰」四個字，
+                  每堂都教 Todo List，每堂結束後依然做不出任何東西。
+                  累積課費超過 NT$50,000，換來一整個硬碟的 mp4 和深深的空虛感。
                   <br /><br />
-                  活躍於台灣工程師社群，以「把複雜技術拆解成可立即使用的方法論」的教學風格受到學員好評。
-                  課程內容 100% 來自真實工作場景，不教你按按鈕，只教你真正做到事情。
+                  直到某個下午，用 Claude Code 一個指令就把你現在看到的這個網站建起來了。
+                  當下只有一個念頭：<strong className="text-gray-900">幹，原來是這樣。</strong>
+                  於是把整個過程錄下來，做成這堂課，
+                  試圖從你身上把之前被騙的錢賺回來——但這次是真的教你做出東西。
                 </p>
 
                 <div className="grid sm:grid-cols-2 gap-3">
