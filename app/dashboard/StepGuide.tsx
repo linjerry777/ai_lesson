@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Copy, Check, AlertTriangle, Lightbulb, Camera } from 'lucide-react'
+import { Copy, Check, AlertTriangle, Lightbulb } from 'lucide-react'
 
 export interface Step {
   title: string
@@ -73,9 +73,12 @@ export default function StepGuide({ steps }: { steps: Step[] }) {
               )}
 
               {step.screenshot && (
-                <div className="mt-3 rounded-xl border-2 border-dashed border-gray-200 p-6 flex flex-col items-center gap-2 text-gray-400">
-                  <Camera size={20} />
-                  <p className="text-xs">截圖：{step.screenshot}</p>
+                <div className="mt-3 rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+                  <img
+                    src={`/screenshots/${step.screenshot}`}
+                    alt={step.title}
+                    className="w-full h-auto"
+                  />
                 </div>
               )}
             </div>
