@@ -4,7 +4,9 @@ import { createClient } from '@/lib/supabase/server'
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/api/checkout'
+  const allowedRedirects = ['/api/checkout', '/checkout', '/dashboard', '/']
+  const nextParam = searchParams.get('next') ?? '/api/checkout'
+  const next = allowedRedirects.includes(nextParam) ? nextParam : '/api/checkout'
 
   if (code) {
     const supabase = await createClient()

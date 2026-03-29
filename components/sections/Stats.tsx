@@ -1,8 +1,8 @@
 const stats = [
-  { value: '1,200+', label: '工程師學員' },
-  { value: '4.9', label: '課程評分', suffix: '/ 5.0' },
+  { value: '7', label: '完整章節' },
   { value: '6+', label: '小時精華內容' },
   { value: '40+', label: '實戰單元' },
+  { value: '1', label: '可上線的真實產品' },
 ]
 
 export default function Stats() {

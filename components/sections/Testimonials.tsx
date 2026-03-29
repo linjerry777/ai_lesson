@@ -43,16 +43,9 @@ export default function Testimonials() {
             學員回饋
           </p>
           <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">
-            真實學員回饋
+            學完之後，你可以做到什麼
           </h2>
-          <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
-            <span className="flex items-center gap-1">
-              <span className="text-yellow-400 text-base">★★★★★</span>
-              <span className="font-semibold text-gray-900">4.9</span> 平均評分
-            </span>
-            <span className="text-gray-300">·</span>
-            <span>1,200+ 學員見證</span>
-          </div>
+          <p className="text-gray-500 text-sm">以下為學員預期學習成果示例</p>
         </div>
 
         {/* Cards */}
