@@ -13,7 +13,7 @@ const includes = [
 ]
 
 const badges = [
-  { icon: Shield, text: '安全付款', sub: 'TapPay 加密保護' },
+  { icon: Shield, text: '安全付款', sub: 'Gumroad 加密保護' },
   { icon: RefreshCw, text: '7 天退費', sub: '未觀看全額退款' },
   { icon: Infinity, text: '永久觀看', sub: '課程持續更新' },
 ]
@@ -66,13 +66,15 @@ export default function Pricing() {
 
               {/* CTA */}
               <a
-                href="/api/checkout"
+                href="https://3638974706248.gumroad.com/l/apwvvk"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block w-full bg-brand-500 hover:bg-brand-600 text-white text-center font-bold py-4 px-6 rounded-xl text-base transition-colors shadow-lg shadow-brand-500/25"
               >
                 立即購課 →
               </a>
               <p className="text-center text-xs text-gray-400 mt-3">
-                點擊後進入安全付款頁面，直接填卡號即可
+                點擊後跳轉至安全付款頁面，支援所有信用卡
               </p>
             </div>
           </div>
