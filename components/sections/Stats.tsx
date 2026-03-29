@@ -14,9 +14,6 @@ export default function Stats() {
             <div key={stat.label} className="text-center">
               <div className="flex items-baseline justify-center gap-1">
                 <span className="text-3xl font-black text-white">{stat.value}</span>
-                {stat.suffix && (
-                  <span className="text-gray-400 text-sm">{stat.suffix}</span>
-                )}
               </div>
               <p className="text-gray-400 text-sm mt-1">{stat.label}</p>
             </div>
