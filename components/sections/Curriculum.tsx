@@ -15,7 +15,7 @@ const stages = [
     num: '03',
     title: '環境變數地獄：那個 \\n 差點毀了一切',
     desc: '用 echo 把 API key 傳給 Vercel，結果 key 的結尾多了一個換行符。Stripe 直接拒收，回傳 500。全過程在這章。',
-    items: ['echo vs printf 的差異（血淚教訓）', 'Vercel env var 的正確設定方式', '怎麼用 /api/debug 診斷 env 問題', '本機 .env.local 與線上環境的同步'],
+    items: ['echo vs printf 的差異（血淚教訓）', 'Vercel env var 的正確設定方式', '怎麼用 debug route 診斷 env 問題', '本機 .env.local 與線上環境的同步'],
   },
   {
     num: '04',

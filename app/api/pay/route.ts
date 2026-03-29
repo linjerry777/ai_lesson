@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     currency: CURRENCY,
     details: '網課小韭菜 — AI 工具課程（7 章全程）',
     cardholder: {
-      phone_number: '+886900000000',
+      phone_number: '',
       name: user.user_metadata?.full_name ?? '學員',
       email: email ?? user.email ?? '',
     },

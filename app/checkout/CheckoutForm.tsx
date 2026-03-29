@@ -30,7 +30,6 @@ export default function CheckoutForm({ userEmail, userName }: Props) {
     const appId = Number(process.env.NEXT_PUBLIC_TAPPAY_APP_ID)
     const appKey = process.env.NEXT_PUBLIC_TAPPAY_APP_KEY ?? ''
     const env = process.env.NEXT_PUBLIC_TAPPAY_ENV === 'production' ? 'production' : 'sandbox'
-    console.log('[TapPay setup]', { appId, appKey: appKey.slice(0, 20) + '...', env })
     window.TPDirect.setupSDK(appId, appKey, env)
 
     window.TPDirect.card.setup({
@@ -68,7 +67,6 @@ export default function CheckoutForm({ userEmail, userName }: Props) {
     setError('')
 
     window.TPDirect.card.getPrime(async (result: { status: number; msg?: string; card: { prime: string } }) => {
-      console.log('[TapPay getPrime]', result)
       if (result.status !== 0) {
         setError(`getPrime 失敗 status=${result.status} msg=${result.msg ?? ''}`)
         setLoading(false)
