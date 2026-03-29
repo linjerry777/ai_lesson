@@ -4,7 +4,7 @@ const includes = [
   '7 章完整課程，真實建站全過程',
   'Landing Page → 登入 → 付款 → 部署，一條龍',
   'Google OAuth 完整串接與踩坑紀錄',
-  'Stripe Checkout + Webhook 完整實作',
+  '金流串接完整實作 + 台灣付款方案踩坑',
   'Vercel 自動部署 CI/CD 流程',
   '完整 Debug 實錄：500、session 消失、env 地獄',
   '可複用架構模板，下一個專案直接套',
