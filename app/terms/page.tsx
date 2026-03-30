@@ -5,7 +5,7 @@ export default function TermsPage() {
     <div className="min-h-screen bg-white py-16 px-4">
       <div className="max-w-2xl mx-auto prose prose-gray">
         <h1 className="text-3xl font-black text-gray-900 mb-2">使用條款</h1>
-        <p className="text-gray-400 text-sm mb-8">最後更新：2025 年 6 月</p>
+        <p className="text-gray-400 text-sm mb-8">最後更新：2026 年 3 月</p>
 
         <section className="mb-8">
           <h2 className="text-xl font-bold text-gray-800 mb-3">一、服務說明</h2>
