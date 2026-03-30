@@ -81,6 +81,12 @@ export default function Navbar() {
               /* ── 已登入 ── */
               <>
                 <Link
+                  href="/activate"
+                  className="text-sm text-gray-500 hover:text-brand-500 transition-colors"
+                >
+                  啟用課程
+                </Link>
+                <Link
                   href="/dashboard"
                   className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-brand-500 transition-colors"
                 >
@@ -173,6 +179,13 @@ export default function Navbar() {
                 </div>
                 <span className="text-sm text-gray-700 font-medium truncate">{displayName}</span>
               </div>
+              <Link
+                href="/activate"
+                className="block text-center text-sm text-gray-500 py-2"
+                onClick={() => setMenuOpen(false)}
+              >
+                啟用課程
+              </Link>
               <button
                 onClick={() => { handleLogout(); setMenuOpen(false) }}
                 className="w-full flex items-center justify-center gap-2 border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-colors"
