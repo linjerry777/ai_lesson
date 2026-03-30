@@ -26,7 +26,9 @@ const env = loadEnv()
 const supabase = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY)
 
 const BUCKET      = 'videos'
-const VIDEO_DIR   = 'C:\\Users\\User\\Documents\\GitHub\\AutoVideo\\pipeline\\2026-03-28'
+// Set VIDEO_DIR to the folder containing ch01/, ch02/, ... subfolders,
+// each with an output.mp4 file. Example: '/path/to/AutoVideo/pipeline/2026-03-28'
+const VIDEO_DIR   = process.env.VIDEO_DIR ?? './videos'
 const CHAPTERS    = ['ch01', 'ch02', 'ch03', 'ch04', 'ch05', 'ch06', 'ch07']
 
 async function main() {
