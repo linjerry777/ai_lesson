@@ -25,8 +25,8 @@ export async function GET() {
       return NextResponse.redirect(new URL('/dashboard', SITE_URL))
     }
 
-    // Redirect to TapPay checkout page
-    return NextResponse.redirect(new URL('/checkout', SITE_URL))
+    // Not purchased → send to Gumroad to buy
+    return NextResponse.redirect('https://3638974706248.gumroad.com/l/apwvvk')
   } catch (err) {
     console.error('[checkout] error:', err)
     return NextResponse.redirect(new URL('/?error=checkout_failed', SITE_URL))

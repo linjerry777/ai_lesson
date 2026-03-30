@@ -120,6 +120,12 @@ export default function Navbar() {
               /* ── 未登入 ── */
               <>
                 <Link
+                  href="/activate"
+                  className="text-sm text-gray-500 hover:text-brand-500 transition-colors"
+                >
+                  已購課？啟用
+                </Link>
+                <Link
                   href="/login"
                   className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
                 >
@@ -177,6 +183,13 @@ export default function Navbar() {
             </>
           ) : (
             <>
+              <Link
+                href="/activate"
+                className="block text-center text-sm text-gray-500 py-2"
+                onClick={() => setMenuOpen(false)}
+              >
+                已購課？點此啟用課程
+              </Link>
               <Link
                 href="/login"
                 className="block text-center border border-gray-200 text-gray-700 text-sm font-medium px-4 py-2.5 rounded-lg"
