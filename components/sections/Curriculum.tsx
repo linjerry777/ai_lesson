@@ -19,9 +19,9 @@ const stages = [
   },
   {
     num: '04',
-    title: 'Stripe Checkout：沙盒測試到真實收款',
-    desc: '建 product、設 price、接 webhook、存進資料庫。整個付款流程從零開始，包含你一定會碰到的那些錯誤。',
-    items: ['Stripe 產品與價格 API 建立', 'Checkout Session 生成與跳轉', 'Webhook 接收與 purchases 資料表', '用測試卡 4242 4242 4242 4242 驗收'],
+    title: '金流串接：Stripe 實作 + 台灣付款方案全紀錄',
+    desc: '從 Stripe 沙盒串接開始，到發現台灣出金限制、嘗試 TapPay 遇到 status 735、最終用 Gumroad + License Key 搞定收款。真實踩坑全紀錄。',
+    items: ['Stripe Checkout Session 與 Webhook 完整實作', 'Stripe 台灣出金限制：為什麼行不通', 'TapPay status 735 踩坑與排查過程', 'Gumroad License Key 啟用流程實作'],
   },
   {
     num: '05',
