@@ -13,10 +13,10 @@ export default function SuccessPage() {
           購課成功！🎉
         </h1>
         <p className="text-gray-600 mb-2">
-          感謝你的購買！課程確認信已寄到你的 Email。
+          感謝你的購買！課程已成功啟用。
         </p>
         <p className="text-sm text-gray-500 mb-8">
-          你現在可以開始學習所有課程內容，祝你學習愉快！
+          你現在可以開始學習所有課程內容，祝學習愉快！
         </p>
 
         <Link
