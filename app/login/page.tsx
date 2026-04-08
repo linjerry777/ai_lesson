@@ -6,9 +6,9 @@ export default async function LoginPage() {
   const supabase = await createClient()
   const { data: { session } } = await supabase.auth.getSession()
 
-  // Already logged in → send to activate (which redirects to dashboard if already purchased)
+  // Already logged in → send to checkout (redirects to dashboard if already purchased)
   if (session) {
-    redirect('/activate')
+    redirect('/api/checkout')
   }
 
   return (

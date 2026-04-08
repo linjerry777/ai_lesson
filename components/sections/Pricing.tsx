@@ -66,20 +66,12 @@ export default function Pricing() {
 
               {/* CTA */}
               <a
-                href="https://3638974706248.gumroad.com/l/apwvvk"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/api/checkout"
                 className="block w-full bg-brand-500 hover:bg-brand-600 text-white text-center font-bold py-4 px-6 rounded-xl text-base transition-colors shadow-lg shadow-brand-500/25"
               >
                 立即購課 →
               </a>
-              <a
-                href="/activate"
-                className="block w-full text-center text-gray-400 hover:text-white text-xs py-2 transition-colors"
-              >
-                已購課？點此啟用課程 →
-              </a>
-              <p className="text-center text-xs text-gray-400 mt-1">
+              <p className="text-center text-xs text-gray-400 mt-3">
                 點擊後跳轉至安全付款頁面，支援所有信用卡
               </p>
             </div>

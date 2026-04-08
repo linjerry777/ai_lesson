@@ -44,7 +44,7 @@ export default function Footer() {
           </p>
           <p className="text-xs text-gray-600">
             Secure payments by{' '}
-            <span className="text-gray-400">Gumroad</span>
+            <span className="text-gray-400">Stripe</span>
           </p>
         </div>
       </div>
