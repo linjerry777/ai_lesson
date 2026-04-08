@@ -198,11 +198,28 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000`,
         warning: '.env.local 絕對不能 commit 到 git！確認專案裡的 .gitignore 有包含 .env.local 這一行。',
       },
       {
-        title: '把 env var 加到 Vercel（一定要用 Dashboard，不要用指令）',
-        body: '直接在 Vercel 網站貼上，不要用 echo pipe 的方式，Windows 上會自動加換行符害你除錯一整天。\n\n1. 打開你的 Vercel 專案\n2. 點上方 Settings → Environment Variables\n3. 一個一個手動加，直接複製貼上值',
+        title: '把 env var 加到 Vercel（一定要用 Dashboard 手動貼，不要用指令）',
+        body: '直接在 Vercel 網站貼上。\n\n1. 打開你的 Vercel 專案\n2. 點上方 Settings → Environment Variables\n3. 一個一個手動加，直接複製貼上值',
         link: { text: '打開 Vercel Dashboard', url: 'https://vercel.com/dashboard' },
         screenshot: 'vercel-env-vars.png',
         warning: 'NEXT_PUBLIC_SITE_URL 記得改成你的線上網址（https://xxx.vercel.app），不能是 localhost。這個設錯會導致登入後一直 redirect 回本機。',
+      },
+      {
+        title: '換行符地獄：Stripe 連線直接炸掉',
+        body: '我在這個坑裡踩了整個下午。\n\n用 CLI 指令把 STRIPE_SECRET_KEY 推到 Vercel，然後 Stripe 回傳：\n\nStripeConnectionError: Invalid character in header content ["Authorization"]\n\n錯誤訊息說 Authorization header 有非法字元。原因是用 CLI pipe 的方式（echo 或 printf）設定 env var，Windows 環境會在字串尾端自動加上換行符 \\n。Stripe 把 key 直接塞進 HTTP header，換行符在 header 裡是非法字元，直接拒收。\n\n你可以在 Vercel Dashboard 編輯 env var 的時候看到它——值的最後會有一個 ¶ 符號，就是那個換行符。\n\n解法：一律用 Vercel Dashboard 手動貼值，不要用指令。',
+        code: {
+          lang: 'text',
+          content: `// 你在 Vercel Function Logs 看到的錯誤長這樣：
+StripeConnectionError: An error occurred with our connection to Stripe.
+  detail: TypeError [ERR_INVALID_CHAR]: Invalid character in header content ["Authorization"]
+
+// 排查順序：
+1. Vercel Dashboard → Settings → Environment Variables
+2. 點開 STRIPE_SECRET_KEY 編輯
+3. 看值的最後有沒有 ¶ 符號（換行符）
+4. 有的話刪掉重新手動貼，不要用 CLI 指令`,
+        },
+        tip: '如果你真的想用 CLI，加一行防禦：在 lib/stripe.ts 裡用 process.env.STRIPE_SECRET_KEY.trim() 把首尾空白全砍掉，這樣就算 env var 帶了換行符也不會炸。',
       },
       {
         title: '叫 Claude 建立 /api/debug，方便你隨時檢查',
