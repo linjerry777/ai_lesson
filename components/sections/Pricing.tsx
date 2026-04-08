@@ -45,11 +45,12 @@ export default function Pricing() {
               {/* Price */}
               <div className="text-center mb-8">
                 <div className="flex items-baseline justify-center gap-3 mb-1">
-                  <span className="text-5xl font-black text-gray-900">NT$2,640</span>
+                  <span className="text-5xl font-black text-gray-900">£66</span>
+                  <span className="text-lg text-gray-400">≈ NT$2,640</span>
                 </div>
                 <p className="text-gray-400">
-                  原價 <span className="line-through">NT$5,000</span>
-                  <span className="ml-2 text-green-600 font-semibold">省 NT$2,360</span>
+                  原價 <span className="line-through">£125</span>
+                  <span className="ml-2 text-green-600 font-semibold">限時優惠</span>
                 </p>
                 <p className="text-xs text-gray-400 mt-1">一次買斷，永久觀看</p>
               </div>
