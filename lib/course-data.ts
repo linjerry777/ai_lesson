@@ -159,7 +159,7 @@ export const lessons: Lesson[] = [
     steps: [
       {
         title: '建立 Supabase 專案',
-        body: '去 Supabase 建立帳號，然後建一個新專案。建完之後點左側「Project Settings → API」，把這兩個值複製起來：\n\n• Project URL（長得像 https://xxx.supabase.co）\n• anon / public key（很長的 JWT）\n• service_role key（另一個，權限更高）',
+        body: '登入 Supabase（帳號在 ch00 已建好），點右上角「New project」建一個新專案。建完之後點左側「Project Settings → API」，把這三個值複製起來：\n\n• Project URL（長得像 https://xxx.supabase.co）\n• anon / public key（很長的 JWT）\n• service_role key（另一個，權限更高）',
         link: { text: '打開 Supabase Dashboard', url: 'https://supabase.com/dashboard' },
         screenshot: 'supabase-api-keys.png',
         warning: 'service_role key 絕對不能公開！只能在後端用。不能 commit 到 git，不能放到前端程式碼。',
