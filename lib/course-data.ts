@@ -77,6 +77,16 @@ export const lessons: Lesson[] = [
 3. 安裝完執行 vercel --version 和 stripe --version 確認有沒有裝成功
 告訴我結果。`,
       },
+      {
+        title: '認識 Claude Code 的技能系統（Skill）',
+        body: 'Claude Code Desktop 內建了很多專業技能，輸入 / 就能看到清單。這堂課最常用的是 UI 設計技能：',
+        code: {
+          lang: 'text',
+          content: `/ui-ux-pro-max   → 啟用 UI/UX 設計模式，讓 Claude 生出更精緻的介面
+/simplify        → 檢查並優化你剛寫好的程式碼`,
+        },
+        tip: '每次想讓介面更好看，直接輸入 /ui-ux-pro-max，然後告訴 Claude 你想改哪個頁面的設計。不需要自己懂 CSS。',
+      },
     ],
   },
 
@@ -99,20 +109,21 @@ export const lessons: Lesson[] = [
       {
         title: '建立 Next.js 專案',
         body: '打開 Claude Code Desktop，選一個你想放專案的資料夾，然後貼這段給它：',
-        claude: `幫我建立一個新的 Next.js 專案，名稱叫 ai-lesson。
+        claude: `幫我建立一個 Next.js 15 的專案，名稱叫 ai-lesson。
 問到設定的時候 TypeScript 選 Yes、Tailwind 選 Yes，其他都選預設值。
 建完之後進入專案資料夾，告訴我成功了。`,
-        tip: '如果 Claude 問你要放在哪個位置，告訴它你想放的資料夾路徑就好。',
+        tip: '版本指定 15，避免裝到最新版遇到不相容問題。如果 Claude 問你要放在哪個位置，告訴它你想放的資料夾路徑就好。',
       },
       {
         title: '告訴 Claude 你要什麼樣的網站',
         body: '專案建好之後，繼續在 Claude Code Desktop 貼這段：',
-        claude: `幫我參考這個網站的布局和設計風格，幫我建一個類似的課程銷售首頁：
+        claude: `幫我參考這個網站的設計，幫我建一個一樣的課程銷售首頁：
 https://ailesson-two.vercel.app/
 
-技術用 Next.js + Tailwind CSS，把課程名稱、文案、圖片換成我自己的內容就好，整體風格保持深色背景橘色主色。
+把課程名稱、文案換成我的內容，整體版型、配色、風格都照這個網站做。
 建完之後告訴我怎麼在瀏覽器預覽。`,
         warning: '不要一次叫它做太多。先讓它建好整體、能在瀏覽器看到之後，再慢慢調整細節。',
+        tip: '想讓 UI 更精緻的話，輸入 /ui-ux-pro-max 啟用設計模式，再告訴 Claude 你想改哪個區塊。',
       },
       {
         title: '想改哪裡，直接描述給 Claude',
@@ -166,6 +177,8 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000`,
         title: '叫 Claude 把 Google 登入接起來',
         claude: `幫我加 Google 登入功能，用 Supabase Auth。
 
+參考這個登入頁面的設計風格：https://ailesson-two.vercel.app/login
+
 我要的效果：
 - 有一個 /login 頁面，上面有「用 Google 登入」按鈕
 - 點按鈕後跳出 Google 登入視窗
@@ -173,6 +186,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000`,
 - 導覽列右上角：還沒登入顯示「登入」按鈕，登入後顯示我的 email 和「登出」按鈕
 
 .env.local 裡已經有 Supabase 的設定了。`,
+        warning: '導覽列需要同時讀取登入狀態（Server）和處理登出點擊（Client）。如果 Claude 生出來的 Navbar 有錯，告訴它：「Navbar 需要拆成 Server Component 讀取用戶資訊，加上 Client Component 處理登出按鈕」。',
       },
       {
         title: '去 Google Cloud Console 開 OAuth 憑證',
@@ -328,16 +342,19 @@ STRIPE_PRICE_ID=price_...（剛才複製的 Price ID）`,
       },
       {
         title: '叫 Claude 把 Stripe 付款接起來',
-        claude: `幫我把 Stripe 付款接起來。
+        claude: `幫我把 Stripe 付款接起來。請參考這個網站的付款流程和成功頁設計：https://ailesson-two.vercel.app/
 
 我要的功能：
 1. 點「購課」按鈕 → 跳到 Stripe 付款頁
-2. 付款成功 → 跳到 /success 頁面，顯示「購課成功」和「開始學習」按鈕
+2. 付款成功 → 跳到 /success 頁面，顯示「購課成功」和「開始學習」按鈕（設計參考 https://ailesson-two.vercel.app/success）
 3. 付款完成後，把購買紀錄存進 Supabase
 4. 已買過的用戶再點購課按鈕，直接進 /dashboard，不用重複付款
 
 .env.local 裡已有 STRIPE_SECRET_KEY 和 STRIPE_PRICE_ID。
-幣別是台幣（TWD），台幣不需要除以 100。`,
+幣別是台幣（TWD），台幣不需要除以 100。
+
+⚠️ 重要：Webhook handler 裡讀取 request body 要用 request.text()，不是 request.json()，不然 Stripe signature 驗證會失敗。`,
+        warning: 'Webhook 如果沒有觸發，先去 Vercel Function Logs 看錯誤訊息。最常見的原因是 STRIPE_WEBHOOK_SECRET 填錯、或 request body 用錯方式讀取。',
       },
       {
         title: '在 Supabase 建立購買紀錄資料表',
@@ -586,7 +603,7 @@ git push
       },
       {
         title: '叫 Claude 幫你改成自己的產品',
-        claude: `我想把這個課程網站的模板改成 [你的產品描述]。
+        claude: `我想把這個課程網站的模板改成 [你的產品描述]。請先看這個網站了解現有設計：https://ailesson-two.vercel.app/
 
 請幫我：
 1. 把 components/sections/Hero.tsx 的文案換成 [你的產品標題和賣點]
@@ -595,7 +612,7 @@ git push
 4. 把 lib/course-data.ts 的課程資料換成 [你的內容結構]
 
 品牌色保持橘色，版面結構不變，只換內容。`,
-        tip: '把 [括號內的東西] 換成你自己的產品描述，然後貼給 Claude。它會幫你把所有文案一次換完。',
+        tip: '把 [括號內的東西] 換成你自己的產品描述，然後貼給 Claude。它會幫你把所有文案一次換完。也可以先用 /ui-ux-pro-max 讓 Claude 自動優化整體視覺。',
       },
       {
         title: '從這個模板開始新專案',
