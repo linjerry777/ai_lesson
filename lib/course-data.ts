@@ -26,7 +26,7 @@ export const lessons: Lesson[] = [
       '五個必要帳號：Google、GitHub、Claude、Supabase、Vercel',
       '安裝 Claude Code Desktop（GUI 介面，比 CLI 更直觀）',
       '用 Claude Code Desktop 安裝 Node.js 和 Git',
-      '安裝 Vercel CLI 和 Stripe CLI（後續章節會用到）',
+      '安裝 Vercel CLI（ch05 部署用）和 Stripe CLI（ch04 本機測試 Webhook 用）',
     ],
     steps: [
       {
