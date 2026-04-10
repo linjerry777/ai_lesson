@@ -333,8 +333,8 @@ STRIPE_WEBHOOK_SECRET=whsec_...（Stripe Dashboard 線上 webhook 的 secret）`
         warning: 'TWD（台幣）在 Stripe 是 zero-decimal 幣別，金額直接填 2640，不是 264000。跟美元不同，千萬不要除以 100。',
       },
       {
-        title: '把 Stripe keys 加到 .env.local',
-        body: '去 Stripe Dashboard → Developers → API keys，複製 Secret key：',
+        title: '把 Stripe keys 補入 .env.local',
+        body: 'ch03 建好的 .env.local 裡，ch04 區段填入這兩行（去 Stripe Dashboard → Developers → API keys 複製 Secret key）：',
         link: { text: '打開 Stripe API Keys', url: 'https://dashboard.stripe.com/test/apikeys' },
         code: {
           lang: 'bash',
@@ -390,8 +390,8 @@ create policy "Users can view own purchases"
         },
       },
       {
-        title: '在 Stripe 設定 Webhook（讓付款通知打進來）',
-        body: '1. Stripe Dashboard → Developers → Webhooks → + Add endpoint\n2. Endpoint URL 填入你的線上網址\n3. Events 只勾選「checkout.session.completed」\n4. 建立後複製 Signing secret（whsec_xxx）加到 Vercel env',
+        title: '在 Stripe 設定 Webhook（完成 ch05 部署後再做這步）',
+        body: '⚠️ 這步需要 Vercel 線上網址，請先完成 ch05 部署取得網址後，再回來做這步。\n\n1. Stripe Dashboard → Developers → Webhooks → + Add endpoint\n2. Endpoint URL 填入你的線上網址\n3. Events 只勾選「checkout.session.completed」\n4. 建立後複製 Signing secret（whsec_xxx）加到 Vercel env',
         link: { text: '打開 Stripe Webhooks', url: 'https://dashboard.stripe.com/test/webhooks' },
         code: {
           lang: 'text',
