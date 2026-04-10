@@ -236,16 +236,19 @@ https://你的線上網址.vercel.app/auth/callback`,
     steps: [
       {
         title: '.env.local 正確格式',
-        body: '在專案根目錄建立這個檔案，把所有 key 填進去（等號兩邊不要有空格）：',
+        body: '在專案根目錄建立這個檔案。Supabase 的 key 現在就能填，Stripe 的 key 等 ch04 建好帳號後再補進來：',
         code: {
           lang: 'bash',
-          content: `NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+          content: `# ── 現在填（從 Supabase Dashboard 複製）──
+NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# ── ch04 填（建好 Stripe 商品後再補）──
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_PRICE_ID=price_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-NEXT_PUBLIC_SITE_URL=http://localhost:3000`,
+STRIPE_WEBHOOK_SECRET=whsec_...`,
         },
         warning: '.env.local 絕對不能 commit 到 git！確認專案裡的 .gitignore 有包含 .env.local 這一行。',
       },
