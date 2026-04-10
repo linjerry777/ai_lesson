@@ -106,9 +106,8 @@ export const lessons: Lesson[] = [
         tip: '跑指令時會問你幾個問題，全部按 Enter 選預設值就好。TypeScript → Yes，Tailwind → Yes，其他都 Yes。',
       },
       {
-        title: '啟動 Claude Code，告訴它你要什麼',
-        body: '進入專案資料夾後，輸入 claude 啟動。然後把下面這段指令複製貼上給它：',
-        code: { lang: 'bash', content: 'claude' },
+        title: '打開 Claude Code Desktop，告訴它你要什麼',
+        body: '打開 Claude Code Desktop，點左上角選擇你剛建的專案資料夾（ai-lesson），然後把下面這段複製貼上給它：',
         claude: `幫我建立一個賣線上課程的 Next.js Landing Page。
 
 技術需求：
