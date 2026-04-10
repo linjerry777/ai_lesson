@@ -98,34 +98,29 @@ export const lessons: Lesson[] = [
     steps: [
       {
         title: '建立 Next.js 專案',
-        body: '選一個你想放專案的資料夾，打開終端機，輸入這個指令。跑完之後進入專案資料夾：',
-        code: {
-          lang: 'bash',
-          content: 'npx create-next-app@latest ai-lesson\ncd ai-lesson',
-        },
-        tip: '跑指令時會問你幾個問題，全部按 Enter 選預設值就好。TypeScript → Yes，Tailwind → Yes，其他都 Yes。',
+        body: '打開 Claude Code Desktop，選一個你想放專案的資料夾，然後貼這段給它：',
+        claude: `幫我建立一個新的 Next.js 專案，名稱叫 ai-lesson。
+問到設定的時候 TypeScript 選 Yes、Tailwind 選 Yes，其他都選預設值。
+建完之後進入專案資料夾，告訴我成功了。`,
+        tip: '如果 Claude 問你要放在哪個位置，告訴它你想放的資料夾路徑就好。',
       },
       {
-        title: '打開 Claude Code Desktop，告訴它你要什麼',
-        body: '打開 Claude Code Desktop，點左上角選擇你剛建的專案資料夾（ai-lesson），然後把下面這段複製貼上給它：',
-        claude: `幫我建立一個賣線上課程的 Next.js Landing Page。
+        title: '告訴 Claude 你要什麼樣的網站',
+        body: '專案建好之後，繼續在 Claude Code Desktop 貼這段：',
+        claude: `幫我建一個賣線上課程的網站首頁。
 
-技術需求：
-- Next.js 14 App Router
-- Tailwind CSS
-- 品牌主色：brand-500 = #f97316（橘色），記得加進 tailwind.config.ts
+風格：深色背景、現代感，主色用橘色。
 
-需要的 section（依序）：
-1. Navbar：左邊 logo，中間導覽連結，右邊「立即購課」按鈕
-2. Hero：大標題、副標、重點 bullet list、定價、CTA 按鈕，右側放 terminal 風格裝飾
-3. Problems：5 張痛點卡片，描述市面上課程的問題
-4. Curriculum：課程大綱
-5. Pricing：定價卡片
-6. FAQ：常見問題
-7. Footer
+需要這幾個區塊：
+- 頂部導覽列（左邊 logo，右邊「立即購課」按鈕）
+- 主視覺區（大標題、說明文字、購課按鈕）
+- 課程大綱（列出幾個章節）
+- 定價（單一方案，價格先填 NT$2,640）
+- 常見問題
+- 頁尾
 
-風格：乾淨、專業、重視可讀性。`,
-        warning: '不要一次叫它做太多。先讓它建好整體架構，確認能跑起來之後，再逐一調整每個 section 的內容。',
+建完之後告訴我怎麼在瀏覽器預覽。`,
+        warning: '不要一次叫它做太多。先讓它建好整體、能在瀏覽器看到之後，再慢慢調整細節。',
       },
       {
         title: '想改哪裡，直接描述給 Claude',
@@ -176,18 +171,16 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000`,
         },
       },
       {
-        title: '叫 Claude 把 Supabase 串好',
-        claude: `幫我在這個 Next.js 專案裡串接 Supabase 登入。
+        title: '叫 Claude 把 Google 登入接起來',
+        claude: `幫我加 Google 登入功能，用 Supabase Auth。
 
-需要做的事：
-1. 安裝 @supabase/supabase-js 和 @supabase/ssr
-2. 建立 lib/supabase/server.ts，裡面有兩個 function：
-   - createClient()：一般用戶 client，用 cookie session
-   - createServiceClient()：service role client，給後端用
-3. 建立 lib/supabase/client.ts，給前端用的 client
-4. 建立 app/auth/callback/route.ts，把 OAuth code 換成 session
-5. 建立 app/login/page.tsx，有一個「用 Google 登入」按鈕
-6. Navbar 加上登入狀態判斷：登入後顯示用戶 email 和登出按鈕`,
+我要的效果：
+- 有一個 /login 頁面，上面有「用 Google 登入」按鈕
+- 點按鈕後跳出 Google 登入視窗
+- 登入成功後跳到 /dashboard 頁面
+- 導覽列右上角：還沒登入顯示「登入」按鈕，登入後顯示我的 email 和「登出」按鈕
+
+.env.local 裡已經有 Supabase 的設定了。`,
       },
       {
         title: '去 Google Cloud Console 開 OAuth 憑證',
@@ -274,21 +267,20 @@ StripeConnectionError: An error occurred with our connection to Stripe.
 3. 看值的最後有沒有 ¶ 符號（換行符）
 4. 有的話刪掉重新手動貼，不要用 CLI 指令`,
         },
-        tip: '如果你真的想用 CLI，加一行防禦：在 lib/stripe.ts 裡用 process.env.STRIPE_SECRET_KEY.trim() 把首尾空白全砍掉，這樣就算 env var 帶了換行符也不會炸。',
+        tip: '如果你真的想用 CLI，可以請 Claude 在程式碼裡自動幫 Stripe key 去掉前後空白，這樣就算不小心帶了換行符也不會炸。',
       },
       {
-        title: '叫 Claude 建立 /api/debug，方便你隨時檢查',
-        body: '這個 route 是診斷所有問題最快的工具。貼給 Claude：',
-        claude: `幫我建立 app/api/debug/route.ts，這是一個診斷用的 API endpoint。
+        title: '叫 Claude 建立診斷頁面，方便你隨時檢查',
+        body: '遇到問題的時候，打開這個頁面就能馬上知道哪裡出錯。貼給 Claude：',
+        claude: `幫我建一個 /api/debug 診斷頁面。
 
-回傳 JSON 包含：
-1. 目前登入的 user（id 和 email），沒登入就回傳 null
-2. auth error 訊息
-3. 這個用戶有沒有購買紀錄（從 purchases 表查）
-4. env 狀態：NEXT_PUBLIC_SUPABASE_URL、STRIPE_SECRET_KEY、SUPABASE_SERVICE_ROLE_KEY、NEXT_PUBLIC_SITE_URL 有沒有設定（顯示 SET 或 MISSING，不要把值印出來）
+打開這個頁面，我要能直接看到：
+- 現在有沒有登入、是哪個帳號
+- 這個帳號有沒有購買紀錄
+- 所有環境變數有沒有設定好
 
-purchases 的查詢要用 serviceClient（繞過 RLS）。`,
-        tip: '部署完之後，遇到任何問題先打開 /api/debug 看輸出。user 是 null 代表 session 問題，env 有 MISSING 代表 Vercel 上沒設那個變數。',
+環境變數只顯示「已設定」或「未設定」就好，不要把實際的值顯示出來。`,
+        tip: '部署完之後，遇到任何問題先打開 /api/debug 看。沒登入或 env 顯示「未設定」，就知道問題在哪了。',
       },
       {
         title: '本機測試 vs 線上環境的差異',
@@ -343,31 +335,21 @@ STRIPE_PRICE_ID=price_...（剛才複製的 Price ID）`,
         },
       },
       {
-        title: '叫 Claude 把整個付款流程串好',
-        claude: `幫我在這個 Next.js 專案裡串接 Stripe 付款，需要以下功能：
+        title: '叫 Claude 把 Stripe 付款接起來',
+        claude: `幫我把 Stripe 付款接起來。
 
-1. 安裝 stripe 和 @stripe/stripe-js
-2. 建立 lib/stripe.ts，初始化 Stripe client
-3. 建立 app/api/checkout/route.ts（GET 請求）：
-   - 確認用戶已登入，沒登入跳到 /login
-   - 用 serviceClient 確認用戶有沒有已購買，有的話直接跳 /dashboard
-   - 建立 Stripe Checkout Session，metadata 裡放 user_id
-   - success_url 設定為 /success?session_id={CHECKOUT_SESSION_ID}
-   - 跳轉到 Stripe 付款頁
-4. 建立 app/api/webhooks/stripe/route.ts（POST 請求）：
-   - 驗證 Stripe webhook 簽名
-   - 監聽 checkout.session.completed 事件
-   - 用 serviceClient 把購買記錄 upsert 進 purchases 表
-5. 建立 app/success/page.tsx：
-   - 顯示購課成功訊息
-   - 有「開始學習」按鈕連到 /dashboard
+我要的功能：
+1. 點「購課」按鈕 → 跳到 Stripe 付款頁
+2. 付款成功 → 跳到 /success 頁面，顯示「購課成功」和「開始學習」按鈕
+3. 付款完成後，把購買紀錄存進 Supabase
+4. 已買過的用戶再點購課按鈕，直接進 /dashboard，不用重複付款
 
-SITE_URL 從 NEXT_PUBLIC_SITE_URL 環境變數取得。
-TWD 是 zero-decimal 幣別，amount 直接存 session.amount_total，不需要除以 100。`,
+.env.local 裡已有 STRIPE_SECRET_KEY 和 STRIPE_PRICE_ID。
+幣別是台幣（TWD），台幣不需要除以 100。`,
       },
       {
-        title: '在 Supabase 建立 purchases 資料表',
-        body: '打開 Supabase → SQL Editor，把下面這段 SQL 貼上去執行：',
+        title: '在 Supabase 建立購買紀錄資料表',
+        body: '打開 Supabase SQL Editor，把下面這段 SQL 貼上去執行（這段是 Claude 幫我們生成的，直接用就好）：',
         link: { text: '打開 Supabase SQL Editor', url: 'https://supabase.com/dashboard/project/_/sql/new' },
         code: {
           lang: 'sql',
