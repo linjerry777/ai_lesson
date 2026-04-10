@@ -97,19 +97,6 @@ export const lessons: Lesson[] = [
     ],
     steps: [
       {
-        title: '安裝 Node.js',
-        body: '先去官網下載 Node.js，選「LTS」版本安裝。裝完之後打開終端機（Windows 按 Win+R 輸入 cmd，Mac 搜尋 Terminal）確認一下：',
-        link: { text: '下載 Node.js', url: 'https://nodejs.org/' },
-        code: { lang: 'bash', content: 'node -v\n# 出現版本號（例如 v20.11.0）就成功了' },
-      },
-      {
-        title: '安裝 Claude Code',
-        body: '在終端機輸入這個指令安裝，安裝完就可以在任何資料夾啟動 Claude Code：',
-        link: { text: '取得 Anthropic API Key', url: 'https://console.anthropic.com/' },
-        code: { lang: 'bash', content: 'npm install -g @anthropic-ai/claude-code' },
-        tip: '安裝完第一次執行 claude 指令，它會要你輸入 API Key。去上面的連結登入後，點「Create API Key」就能取得。',
-      },
-      {
         title: '建立 Next.js 專案',
         body: '選一個你想放專案的資料夾，打開終端機，輸入這個指令。跑完之後進入專案資料夾：',
         code: {
@@ -268,7 +255,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000`,
         body: '直接在 Vercel 網站貼上。\n\n1. 打開你的 Vercel 專案\n2. 點上方 Settings → Environment Variables\n3. 一個一個手動加，直接複製貼上值',
         link: { text: '打開 Vercel Dashboard', url: 'https://vercel.com/dashboard' },
         screenshot: 'vercel-env-vars.png',
-        warning: 'NEXT_PUBLIC_SITE_URL 記得改成你的線上網址（https://xxx.vercel.app），不能是 localhost。這個設錯會導致登入後一直 redirect 回本機。',
+        warning: '⚠️ 換行符地獄警告：絕對不要用終端機指令（echo、printf、pipe）把值傳給 Vercel。Windows 的 echo 會在字串尾端自動加上換行符 \\n，Stripe 拿到帶換行符的 key 會直接拒收，錯誤訊息是 Invalid character in header。一律手動在 Vercel Dashboard 貼上，貼完確認值的結尾沒有 ¶ 符號。',
       },
       {
         title: '換行符地獄：Stripe 連線直接炸掉',
