@@ -14,6 +14,72 @@ export const COURSE_SUBTITLE = '從零建立一個真實產品的完整過程'
 
 export const lessons: Lesson[] = [
 
+  // ── ch00 ─────────────────────────────────────────────────────────────────
+  {
+    id: 'ch00',
+    title: '準備工作：帳號申請 + 環境安裝',
+    duration: '約 20 分',
+    description:
+      '開始之前，你需要五個帳號和幾個工具。這章把每個步驟都整理好了，照著做就能把環境準備好。\n\n' +
+      '所有工具都有免費方案，信用卡不是必須的。唯一要花錢的是 Claude Code Desktop 的訂閱，月費約 $20 USD。',
+    keyPoints: [
+      '五個必要帳號：Google、GitHub、Claude、Supabase、Vercel',
+      '安裝 Claude Code Desktop（GUI 介面，比 CLI 更直觀）',
+      '用 Claude Code Desktop 安裝 Node.js 和 Git',
+      '安裝 Vercel CLI 和 Stripe CLI（後續章節會用到）',
+    ],
+    steps: [
+      {
+        title: '依序申請這五個帳號',
+        body: '全部用同一個 Google 帳號串起來，方便管理。依序開這些網址：',
+        code: {
+          lang: 'text',
+          content: `① Google：https://accounts.google.com
+   → 這個帳號會用來登入後面所有服務
+
+② GitHub：https://github.com/signup
+   → 用 Google 帳號登入建立
+
+③ Claude：https://claude.ai
+   → 用 Google 帳號登入建立
+
+④ Supabase：https://supabase.com
+   → 用 Google 帳號登入
+
+⑤ Vercel：https://vercel.com/signup
+   → 用 GitHub 帳號登入`,
+        },
+        tip: 'Stripe 帳號在 ch04 才會用到，現在不用急著申請。',
+      },
+      {
+        title: '下載並安裝 Claude Code Desktop',
+        body: '去官方網站下載，選你的作業系統版本安裝。裝完打開，用你的 Claude 帳號登入。',
+        link: { text: '下載 Claude Code Desktop', url: 'https://claude.ai/download' },
+        tip: 'Claude Code Desktop 需要訂閱 Claude Pro（約 $20/月）才能使用。這是這堂課唯一需要付費的工具。',
+      },
+      {
+        title: '用 Claude Code Desktop 安裝 Node.js 和 Git',
+        body: '打開 Claude Code Desktop，把下面這段貼進去，讓 Claude 幫你確認和安裝環境：',
+        claude: `請幫我確認開發環境，依序做以下事情：
+1. 執行 node -v 確認有沒有裝 Node.js
+2. 執行 git --version 確認有沒有裝 Git
+3. 如果沒有裝 Node.js，告訴我去哪裡下載（選 LTS 版本）
+4. 如果沒有裝 Git，告訴我去哪裡下載
+5. 全部確認好之後告訴我可以開始了`,
+        warning: 'Node.js 和 Git 如果沒有裝，Claude 會給你下載連結，照著裝完之後重新貼一次這段確認。',
+      },
+      {
+        title: '安裝 Vercel CLI 和 Stripe CLI',
+        body: '在 Claude Code Desktop 裡貼這段，讓它幫你安裝後續章節需要的工具：',
+        claude: `請幫我安裝以下工具：
+1. 執行 npm install -g vercel 安裝 Vercel CLI
+2. 執行 npm install -g stripe 安裝 Stripe CLI
+3. 安裝完執行 vercel --version 和 stripe --version 確認有沒有裝成功
+告訴我結果。`,
+      },
+    ],
+  },
+
   // ── ch01 ─────────────────────────────────────────────────────────────────
   {
     id: 'ch01',
@@ -257,19 +323,17 @@ STRIPE_WEBHOOK_SECRET=whsec_...（Stripe Dashboard 線上 webhook 的 secret）`
   // ── ch04 ─────────────────────────────────────────────────────────────────
   {
     id: 'ch04',
-    title: '金流串接：Stripe 實作 + 台灣付款方案全紀錄',
-    duration: '約 70 分',
+    title: '金流串接：Stripe Checkout + Webhook 完整實作',
+    duration: '約 50 分',
     description:
       '付款功能不能直接上線測。Stripe 有沙盒環境，用測試卡 4242 4242 4242 4242，打多少都不會真的扣錢。\n\n' +
       'Stripe 付款成功，但你的資料庫沒更新。原因是 webhook 沒設好。這章完整講 webhook endpoint 的建立、驗證、purchases 資料表的寫入。\n\n' +
-      '但等你要真的收台幣的時候，才發現 Stripe 在台灣根本無法出金。這章也紀錄了我嘗試 TapPay（遇到 status 735 卡關）、最後選用 Gumroad 的完整過程——這才是真實開發會遇到的坑。',
+      '跑完這章，你的網站能完整走完：按購課 → Stripe 付款頁 → 付款成功 → purchases 寫入 → 進入 Dashboard。',
     keyPoints: [
       'Stripe 產品與 Price ID 建立，沙盒環境設定',
       'Checkout Session 生成與付款後跳轉邏輯',
       'Webhook endpoint 建立、簽名驗證、寫入資料庫',
       '用測試卡 4242 把整條付款流程端到端跑通',
-      '台灣付款困境：Stripe 出金限制、TapPay 踩坑實錄',
-      'Gumroad 30 分鐘搞定台灣收款的實際操作',
     ],
     steps: [
       {
@@ -363,32 +427,6 @@ Webhook 收到 → purchases 表新增一筆
 再點購課按鈕 → 自動跳到 /dashboard（不再走付款流程）`,
         },
         tip: '付款後如果進不了 dashboard，去 /api/debug 確認 myPurchase 有沒有值。沒有的話可能是 webhook 沒打進來，去 Stripe Dashboard → Webhooks 看有沒有成功送達。',
-      },
-      {
-        title: '台灣的付款困境：為什麼 Stripe 在台灣行不通',
-        body: 'Stripe 沙盒測試一切正常，但要真正收錢、把台幣打進台灣銀行帳戶，你會發現一個問題：\n\nStripe 目前不支援台灣作為收款方（Merchant）的國家。你可以用 Stripe 收外幣，但無法把錢出金到台灣的銀行。\n\n這不是帳號設定問題，是 Stripe 的業務政策。台灣的獨立開發者、創作者想收款，就得找其他出路。',
-        warning: '這個限制在 Stripe 文件裡不太顯眼，通常要等到真的要出金才發現。如果你的目標市場是台灣，開始之前就要確認你選的金流支援台灣出金。',
-      },
-      {
-        title: '嘗試 TapPay 遇到的問題（status 735 實錄）',
-        body: '台灣本土金流首選之一是 TapPay。我照官方文件串接，前端 SDK 載入、setupSDK、card.setup、getPrime 流程都照做，結果 getPrime 一直回傳 status 735。\n\n官方文件沒有 735 的說明。查了一圈，可能原因：\n\n1. 你的 App 帳號沒有被 TapPay 後台啟用\n2. 你的網域沒有在 TapPay 後台正確綁定\n3. Sandbox App Key 和 Production App Key 是分開的，填錯就 735\n\n我試遍了公開的 demo 憑證（App ID 11327）、自己申請的帳號憑證，換過 Merchant ID，移除 MetaMask 排除 SES lockdown 干擾，最後確認：demo App 只允許 TapPay 自己的域名，自己的帳號需要聯繫客服手動開通。',
-        code: {
-          lang: 'text',
-          content: `// 你在 console 看到的 TapPay 錯誤長這樣：
-[TapPay getPrime] { status: 735, msg: 'Invalid arguments : app_key' }
-
-// 排查順序：
-1. 確認 NEXT_PUBLIC_TAPPAY_APP_KEY 是你自己帳號的 key，不是 demo 的
-2. 確認 App ID 對應的 App Key（portal → 應用程式管理）
-3. 確認網域有加到 TapPay 後台的白名單
-4. 如果以上都對，聯繫 TapPay 客服確認帳號有沒有被啟用`,
-        },
-        warning: 'TapPay 的 sandbox 憑證和 production 憑證是完全不同的。文件裡的範例 credentials（App ID 11327）只允許特定網域，不能直接拿來用在自己的專案。',
-      },
-      {
-        title: '最終方案：Gumroad 30 分鐘搞定收款',
-        body: 'TapPay 卡關之後，我決定先讓產品上線，而不是繼續花時間 debug 金流。\n\nGumroad 是一個針對創作者設計的銷售平台。你建立一個產品頁、設定價格、拿到付款連結，就完成了。不需要任何後端程式碼，也不需要申請商業帳號。\n\n操作步驟：\n1. 到 gumroad.com 建立帳號\n2. + New Product → 選「Course or tutorial」\n3. 設定名稱、價格（NT$2640）、描述\n4. Publish 之後你會拿到一個付款連結（格式是 xxx.gumroad.com/l/yyy）\n5. 把 landing page 上所有「購課」按鈕的 href 換成這個連結\n\n出金方面：Gumroad 支援 PayPal 和直接銀行轉帳。台灣銀行需要填 SWIFT/BIC code，可以在銀行官網查到。\n\nGumroad 抽佣約 10%，換來的是零開發時間、立即上線、不用維護付款後端。作為 MVP 的第一步，這個 tradeoff 完全合理。',
-        tip: '如果之後量大了，可以再換回自建金流。但產品還沒賣出去之前，用 Gumroad 先驗證市場需求，遠比把時間花在金流上更值得。',
       },
     ],
   },
