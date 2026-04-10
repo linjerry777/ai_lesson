@@ -493,17 +493,17 @@ git push
   // ── ch06 ─────────────────────────────────────────────────────────────────
   {
     id: 'ch06',
-    title: 'Debug 實錄：500、session 消失、CORS',
+    title: 'Debug 實錄：500、session 消失、purchases 查不到',
     duration: '約 60 分',
     description:
       '登入成功，點購課，白畫面，500 error。Vercel log 什麼都沒顯示。這種 debug 才是真實開發的日常。\n\n' +
       '我建了一個 /api/debug，直接回傳當前的 user session、env var 狀態、Supabase 連線狀態。三十秒定位問題。\n\n' +
-      '這章整理了這個專案踩過的所有坑：session 為什麼在線上不見了、CORS 怎麼設、Supabase cookie 在不同 domain 的行為。',
+      '這章整理了這個專案踩過的所有坑：session 為什麼在線上不見了、purchases 查不到怎麼排查、用 /api/debug 三十秒定位問題。',
     keyPoints: [
       '怎麼讀 Vercel function logs——找到真正的錯誤',
       '/api/debug 的設計：30 秒確認 session 與 env 狀態',
-      'session 為什麼在線上消失——cookie domain 問題',
-      'CORS 設定與 Supabase 跨 domain cookie 行為',
+      'session 為什麼在線上消失——Supabase Site URL 設定',
+      '付款成功但進不了 dashboard——RLS 和 serviceClient',
     ],
     steps: [
       {
