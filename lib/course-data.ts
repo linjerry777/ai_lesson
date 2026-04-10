@@ -452,14 +452,13 @@ git push -u origin main`,
         warning: '確認 .gitignore 裡有 .env.local！否則你的所有 API key 就公開在 GitHub 上了。',
       },
       {
-        title: '安裝 Vercel CLI 並部署',
+        title: '用 Vercel CLI 連結專案並部署',
+        body: 'ch00 已裝好 Vercel CLI。在專案資料夾裡直接跑：',
         code: {
           lang: 'bash',
-          content: `npm install -g vercel
-vercel`,
+          content: `vercel`,
         },
         tip: '跑 vercel 指令後會問你幾個問題，選 Link to GitHub repo，找到你剛才建的 repo 連起來。之後每次 git push，Vercel 自動重新部署。',
-        screenshot: 'vercel-function-logs.png',
       },
       {
         title: '把所有 env var 加到 Vercel',
