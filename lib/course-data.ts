@@ -69,24 +69,37 @@ export const lessons: Lesson[] = [
         warning: 'Node.js 和 Git 如果沒有裝，Claude 會給你下載連結，照著裝完之後重新貼一次這段確認。',
       },
       {
-        title: '安裝 Vercel CLI 和 Stripe CLI',
-        body: '分兩步驟安裝。\n\n**第一步：Vercel CLI（用 npm 安裝）**\n在 Claude Code Desktop 貼這段：',
+        title: '安裝 Vercel CLI',
+        body: '在 Claude Code Desktop 裡貼這段，讓它幫你安裝部署工具：',
         claude: `請幫我安裝 Vercel CLI：
 1. 執行 npm install -g vercel
 2. 安裝完執行 vercel --version 確認有沒有成功
 告訴我結果。`,
-        warning: '**第二步：Stripe CLI 要另外裝，不是用 npm。**\n\n`npm install -g stripe` 裝的是 Stripe 的 Node.js SDK（程式碼裡 `require("stripe")` 用的），不是命令列工具。這兩個是完全不同的東西。\n\nWindows 安裝 Stripe CLI 的方式：\n\n**方法一（推薦）— 用 Scoop：**\n```\nscoop install stripe\n```\n\n**方法二 — 用 winget：**\n```\nwinget install Stripe.StripeCLI\n```\n\n**方法三 — 手動下載：**\n去 https://github.com/stripe/stripe-cli/releases 下載最新的 Windows 版（stripe_x.x.x_windows_x86_64.zip），解壓後把 stripe.exe 放到 PATH 裡。\n\n安裝完在終端機執行 `stripe --version` 確認成功。',
-        tip: 'Stripe CLI 在 ch04 本機測試 Webhook 才會用到（`stripe listen --forward-to localhost:3000/api/webhooks/stripe`）。現在先裝好，到時候直接用。',
+      },
+      {
+        title: '安裝 Stripe CLI（Windows 專用步驟）',
+        body: 'Stripe CLI 不是用 npm 裝的。`npm install -g stripe` 裝的是程式碼裡用的 SDK，不是這個命令列工具。兩個是完全不同的東西。\n\n在 Claude Code Desktop 裡貼這段，讓它幫你用 Windows 的方式安裝：',
+        claude: `幫我在 Windows 上安裝 Stripe CLI（不是 npm 的 stripe 套件，是官方命令列工具）。
+請依序確認：
+1. 先確認電腦有沒有裝 winget（執行 winget --version）
+2. 有的話執行 winget install Stripe.StripeCLI
+3. 如果 winget 不能用，確認有沒有 scoop，有的話執行 scoop install stripe
+4. 安裝完執行 stripe --version 確認成功
+告訴我結果。`,
+        tip: 'Stripe CLI 在 ch04 本機測試 Webhook 才會用到（stripe listen --forward-to localhost:3000/api/webhooks/stripe）。現在先裝好，到時候直接用。',
       },
       {
         title: '認識 Claude Code 的技能系統（Skill）',
-        body: 'Claude Code Desktop 內建了很多專業技能，輸入 / 就能看到清單。這堂課最常用的是 UI 設計技能：',
+        body: '在 Claude Code Desktop 輸入 / 可以看到所有內建技能的清單。這堂課最常用到的幾個：',
         code: {
           lang: 'text',
           content: `/ui-ux-pro-max   → 啟用 UI/UX 設計模式，讓 Claude 生出更精緻的介面
-/simplify        → 檢查並優化你剛寫好的程式碼`,
+/simplify        → 檢查並優化你剛寫好的程式碼，去掉不必要的複雜度
+/commit          → 自動幫你寫 git commit message，不用自己想
+/debug           → 系統化 debug 模式，Claude 會一步步找出錯誤原因
+/review-pr       → 檢查你的程式碼有沒有問題，上線前跑一遍`,
         },
-        tip: '每次想讓介面更好看，直接輸入 /ui-ux-pro-max，然後告訴 Claude 你想改哪個頁面的設計。不需要自己懂 CSS。',
+        tip: '技能會持續更新。直接在 Claude Code 輸入 / 查看最新的完整清單，每個技能都有說明。不用背，需要的時候查就好。',
       },
     ],
   },
