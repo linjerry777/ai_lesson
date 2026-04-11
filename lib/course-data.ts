@@ -26,7 +26,7 @@ export const lessons: Lesson[] = [
       '五個必要帳號：Google、GitHub、Claude、Supabase、Vercel',
       '安裝 Claude Code Desktop（GUI 介面，比 CLI 更直觀）',
       '用 Claude Code Desktop 安裝 Node.js 和 Git',
-      '安裝 Vercel CLI（ch05 部署用）和 Stripe CLI（ch04 本機測試 Webhook 用）',
+      '安裝 Vercel CLI（npm 安裝）和 Stripe CLI（Windows 用 scoop 或 winget 另外裝，不是 npm）',
     ],
     steps: [
       {
@@ -70,12 +70,13 @@ export const lessons: Lesson[] = [
       },
       {
         title: '安裝 Vercel CLI 和 Stripe CLI',
-        body: '在 Claude Code Desktop 裡貼這段，讓它幫你安裝後續章節需要的工具：',
-        claude: `請幫我安裝以下工具：
-1. 執行 npm install -g vercel 安裝 Vercel CLI
-2. 執行 npm install -g stripe 安裝 Stripe CLI
-3. 安裝完執行 vercel --version 和 stripe --version 確認有沒有裝成功
+        body: '分兩步驟安裝。\n\n**第一步：Vercel CLI（用 npm 安裝）**\n在 Claude Code Desktop 貼這段：',
+        claude: `請幫我安裝 Vercel CLI：
+1. 執行 npm install -g vercel
+2. 安裝完執行 vercel --version 確認有沒有成功
 告訴我結果。`,
+        warning: '**第二步：Stripe CLI 要另外裝，不是用 npm。**\n\n`npm install -g stripe` 裝的是 Stripe 的 Node.js SDK（程式碼裡 `require("stripe")` 用的），不是命令列工具。這兩個是完全不同的東西。\n\nWindows 安裝 Stripe CLI 的方式：\n\n**方法一（推薦）— 用 Scoop：**\n```\nscoop install stripe\n```\n\n**方法二 — 用 winget：**\n```\nwinget install Stripe.StripeCLI\n```\n\n**方法三 — 手動下載：**\n去 https://github.com/stripe/stripe-cli/releases 下載最新的 Windows 版（stripe_x.x.x_windows_x86_64.zip），解壓後把 stripe.exe 放到 PATH 裡。\n\n安裝完在終端機執行 `stripe --version` 確認成功。',
+        tip: 'Stripe CLI 在 ch04 本機測試 Webhook 才會用到（`stripe listen --forward-to localhost:3000/api/webhooks/stripe`）。現在先裝好，到時候直接用。',
       },
       {
         title: '認識 Claude Code 的技能系統（Skill）',
