@@ -58,35 +58,41 @@ export const lessons: Lesson[] = [
         tip: 'Claude Code Desktop 需要訂閱 Claude Pro（約 $20/月）才能使用。這是這堂課唯一需要付費的工具。',
       },
       {
-        title: '用 Claude Code Desktop 安裝 Node.js 和 Git',
-        body: '打開 Claude Code Desktop，把下面這段貼進去，讓 Claude 幫你確認和安裝環境：',
-        claude: `請幫我確認開發環境，依序做以下事情：
+        title: '切換到 Code 模式，選一個資料夾',
+        body: 'Claude Code Desktop 有三個分頁：Chat、Cowork、Code。\n\n這堂課全程使用 Code 分頁——它讓 Claude 直接操作你電腦上的檔案，寫程式碼、建專案都在這裡。\n\n點上方的「Code」切換過去，然後點左下角「Select folder」選一個你要放專案的資料夾（例如桌面或 Documents）。',
+        warning: '如果切到 Code 分頁出現紅色錯誤訊息「Git is required for local sessions」——這表示 Git 還沒有裝。\n\n去這裡下載安裝 Git for Windows：https://git-scm.com/download/win\n\n安裝完之後重新開啟 Claude Code Desktop，再切到 Code 分頁就可以了。',
+        tip: '注意：Chat 分頁的 Claude 是跑在 Linux 雲端容器裡，不是你的 Windows 電腦。所以 winget、scoop 這些 Windows 工具在 Chat 裡無法使用。只有 Code 分頁是直接在你的本機執行的。',
+      },
+      {
+        title: '確認 Node.js 有沒有裝',
+        body: '選好資料夾後，在 Code 分頁貼這段讓 Claude 幫你確認：',
+        claude: `請幫我確認開發環境：
 1. 執行 node -v 確認有沒有裝 Node.js
-2. 執行 git --version 確認有沒有裝 Git
-3. 如果沒有裝 Node.js，告訴我去哪裡下載（選 LTS 版本）
-4. 如果沒有裝 Git，告訴我去哪裡下載
-5. 全部確認好之後告訴我可以開始了`,
-        warning: 'Node.js 和 Git 如果沒有裝，Claude 會給你下載連結，照著裝完之後重新貼一次這段確認。',
+2. 如果沒有裝，告訴我去哪裡下載（選 LTS 版本）
+3. 確認好之後告訴我可以開始了`,
+        warning: 'Node.js 如果沒有裝，Claude 會給你下載連結，照著裝完重開終端機之後，重新貼一次這段確認。',
       },
       {
         title: '安裝 Vercel CLI',
-        body: '在 Claude Code Desktop 裡貼這段，讓它幫你安裝部署工具：',
+        body: '在 Code 分頁貼這段：',
         claude: `請幫我安裝 Vercel CLI：
 1. 執行 npm install -g vercel
 2. 安裝完執行 vercel --version 確認有沒有成功
 告訴我結果。`,
       },
       {
-        title: '安裝 Stripe CLI（Windows 專用步驟）',
-        body: 'Stripe CLI 不是用 npm 裝的。`npm install -g stripe` 裝的是程式碼裡用的 SDK，不是這個命令列工具。兩個是完全不同的東西。\n\n在 Claude Code Desktop 裡貼這段，讓它幫你用 Windows 的方式安裝：',
-        claude: `幫我在 Windows 上安裝 Stripe CLI（不是 npm 的 stripe 套件，是官方命令列工具）。
-請依序確認：
-1. 先確認電腦有沒有裝 winget（執行 winget --version）
-2. 有的話執行 winget install Stripe.StripeCLI
-3. 如果 winget 不能用，確認有沒有 scoop，有的話執行 scoop install stripe
-4. 安裝完執行 stripe --version 確認成功
-告訴我結果。`,
-        tip: 'Stripe CLI 在 ch04 本機測試 Webhook 才會用到（stripe listen --forward-to localhost:3000/api/webhooks/stripe）。現在先裝好，到時候直接用。',
+        title: '安裝 Stripe CLI',
+        body: 'Stripe CLI 要在你的 Windows 本機安裝，不是透過 Claude Code。\n\n打開「終端機」或「PowerShell」，執行下面其中一個指令：',
+        code: {
+          lang: 'bash',
+          content: `# 方法一（推薦）— 用 winget：
+winget install Stripe.StripeCLI
+
+# 方法二 — 用 Scoop（如果有裝）：
+scoop install stripe`,
+        },
+        warning: '不要在 Claude Code 的 Chat 分頁貼這個指令——Chat 是 Linux 環境，winget 跑不起來。要在你的 Windows 終端機直接執行。',
+        tip: 'Stripe CLI 在 ch04 本機測試 Webhook 才會用到（stripe listen --forward-to localhost:3000/api/webhooks/stripe）。安裝完執行 stripe --version 確認成功，到時候直接用。',
       },
       {
         title: '認識 Claude Code 的技能系統（Skill）',
