@@ -109,10 +109,10 @@ export const lessons: Lesson[] = [
       {
         title: '建立 Next.js 專案',
         body: '打開 Claude Code Desktop，選一個你想放專案的資料夾，然後貼這段給它：',
-        claude: `幫我建立一個 Next.js 15 的專案，名稱叫 ai-lesson。
+        claude: `幫我建立一個 Next.js 16 的專案，名稱叫 ai-lesson。
 問到設定的時候 TypeScript 選 Yes、Tailwind 選 Yes，其他都選預設值。
 建完之後進入專案資料夾，告訴我成功了。`,
-        tip: '版本指定 15，避免裝到最新版遇到不相容問題。如果 Claude 問你要放在哪個位置，告訴它你想放的資料夾路徑就好。',
+        tip: '這堂課用 Next.js 16 + Tailwind v4。Tailwind v4 的設定方式和以前不一樣：不需要 tailwind.config.ts，改在 globals.css 裡用 @import "tailwindcss" 和 @theme 定義自訂顏色。如果 Claude 問你要放在哪個位置，告訴它你想放的資料夾路徑就好。',
       },
       {
         title: '告訴 Claude 你要什麼樣的網站',
@@ -122,7 +122,7 @@ https://ailesson-two.vercel.app/
 
 把課程名稱、文案換成我的內容，整體版型、配色、風格都照這個網站做。
 建完之後告訴我怎麼在瀏覽器預覽。`,
-        warning: '不要一次叫它做太多。先讓它建好整體、能在瀏覽器看到之後，再慢慢調整細節。',
+        warning: '不要一次叫它做太多。先讓它建好整體、能在瀏覽器看到之後，再慢慢調整細節。如果 build 出現「找不到 brand-500 顏色」或網頁沒有橘色，告訴 Claude：「幫我在 globals.css 的 @theme 裡定義 brand-50 到 brand-900 的橘色系顏色，用 oklch 格式」，它會補上去。',
         tip: '想讓 UI 更精緻的話，輸入 /ui-ux-pro-max 啟用設計模式，再告訴 Claude 你想改哪個區塊。',
       },
       {
@@ -186,7 +186,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000`,
 - 導覽列右上角：還沒登入顯示「登入」按鈕，登入後顯示我的 email 和「登出」按鈕
 
 .env.local 裡已經有 Supabase 的設定了。`,
-        warning: '導覽列需要同時讀取登入狀態（Server）和處理登出點擊（Client）。如果 Claude 生出來的 Navbar 有錯，告訴它：「Navbar 需要拆成 Server Component 讀取用戶資訊，加上 Client Component 處理登出按鈕」。',
+        warning: '導覽列需要同時讀取登入狀態（Server）和處理登出點擊（Client）。如果 Claude 生出來的 Navbar 有錯，告訴它：「Navbar 需要拆成 Server Component 讀取用戶資訊，加上 Client Component 處理登出按鈕」。\n\n如果 build 出現 `Parameter \'cookiesToSet\' implicitly has an \'any\' type` 這個 TypeScript 錯誤，告訴 Claude：「幫我修正 supabase/server.ts 和 middleware.ts 裡 setAll 的型別，參數要明確標注為 { name: string; value: string; options?: object }[]」。',
       },
       {
         title: '去 Google Cloud Console 開 OAuth 憑證',
@@ -286,7 +286,7 @@ StripeConnectionError: An error occurred with our connection to Stripe.
 - 所有環境變數有沒有設定好
 
 環境變數只顯示「已設定」或「未設定」就好，不要把實際的值顯示出來。`,
-        tip: '部署完之後，遇到任何問題先打開 /api/debug 看。沒登入或 env 顯示「未設定」，就知道問題在哪了。',
+        tip: '部署完之後，遇到任何問題先打開 /api/debug 看。沒登入或 env 顯示「未設定」，就知道問題在哪了。\n\n⚠️ 現在打開 /api/debug，「購買紀錄」那欄可能會顯示查詢錯誤——這是正常的，因為 purchases 資料表要在 ch04 才會建立。env 和登入狀態正常就沒問題了。',
       },
       {
         title: '本機測試 vs 線上環境的差異',
@@ -341,24 +341,8 @@ STRIPE_PRICE_ID=price_...（剛才複製的 Price ID）`,
         },
       },
       {
-        title: '叫 Claude 把 Stripe 付款接起來',
-        claude: `幫我把 Stripe 付款接起來。請參考這個網站的付款流程和成功頁設計：https://ailesson-two.vercel.app/
-
-我要的功能：
-1. 點「購課」按鈕 → 跳到 Stripe 付款頁
-2. 付款成功 → 跳到 /success 頁面，顯示「購課成功」和「開始學習」按鈕（設計參考 https://ailesson-two.vercel.app/success）
-3. 付款完成後，把購買紀錄存進 Supabase
-4. 已買過的用戶再點購課按鈕，直接進 /dashboard，不用重複付款
-
-.env.local 裡已有 STRIPE_SECRET_KEY 和 STRIPE_PRICE_ID。
-幣別是台幣（TWD），台幣不需要除以 100。
-
-⚠️ 重要：Webhook handler 裡讀取 request body 要用 request.text()，不是 request.json()，不然 Stripe signature 驗證會失敗。`,
-        warning: 'Webhook 如果沒有觸發，先去 Vercel Function Logs 看錯誤訊息。最常見的原因是 STRIPE_WEBHOOK_SECRET 填錯、或 request body 用錯方式讀取。',
-      },
-      {
         title: '在 Supabase 建立購買紀錄資料表',
-        body: '打開 Supabase SQL Editor，把下面這段 SQL 貼上去執行（這段是 Claude 幫我們生成的，直接用就好）：',
+        body: '在叫 Claude 寫程式碼之前，先把資料表建好。打開 Supabase SQL Editor，把下面這段 SQL 貼上去執行：',
         link: { text: '打開 Supabase SQL Editor', url: 'https://supabase.com/dashboard/project/_/sql/new' },
         code: {
           lang: 'sql',
@@ -379,6 +363,23 @@ create policy "Users can view own purchases"
   on purchases for select
   using (auth.uid() = user_id);`,
         },
+        tip: '先建表再寫程式碼，這樣 /api/debug 的購買紀錄查詢也會正常了。',
+      },
+      {
+        title: '叫 Claude 把 Stripe 付款接起來',
+        claude: `幫我把 Stripe 付款接起來。請參考這個網站的付款流程和成功頁設計：https://ailesson-two.vercel.app/
+
+我要的功能：
+1. 點「購課」按鈕 → 跳到 Stripe 付款頁
+2. 付款成功 → 跳到 /success 頁面，顯示「購課成功」和「開始學習」按鈕（設計參考 https://ailesson-two.vercel.app/success）
+3. 付款完成後，把購買紀錄存進 Supabase
+4. 已買過的用戶再點購課按鈕，直接進 /dashboard，不用重複付款
+
+.env.local 裡已有 STRIPE_SECRET_KEY 和 STRIPE_PRICE_ID。
+幣別是台幣（TWD），台幣不需要除以 100。
+
+⚠️ 重要：Webhook handler 裡讀取 request body 要用 request.text()，不是 request.json()，不然 Stripe signature 驗證會失敗。`,
+        warning: 'Webhook 如果沒有觸發，先去 Vercel Function Logs 看錯誤訊息。最常見的原因是 STRIPE_WEBHOOK_SECRET 填錯、或 request body 用錯方式讀取。\n\n如果 TypeScript 出現 `apiVersion` 相關的型別錯誤，告訴 Claude：「把 Stripe 初始化的 apiVersion 改成已安裝 SDK 支援的版本，或是直接拿掉 apiVersion 讓 TypeScript 自動推斷」。',
       },
       {
         title: '在 Stripe 設定 Webhook（完成 ch05 部署後再做這步）',
