@@ -152,6 +152,7 @@ export default function CoursePage({ userEmail, videoUrls }: Props) {
           <div className="p-6 max-w-4xl">
             <LessonView
               lesson={active}
+              lessonNumber={activeIdx + 1}
               videoUrl={videoUrls[active.id] ?? null}
               isDone={completed.has(active.id)}
               onToggleDone={() => toggleComplete(active.id)}
@@ -168,6 +169,7 @@ export default function CoursePage({ userEmail, videoUrls }: Props) {
 // ── 單章節內容 ──────────────────────────────────────────────────────────────
 function LessonView({
   lesson,
+  lessonNumber,
   videoUrl,
   isDone,
   onToggleDone,
@@ -175,6 +177,7 @@ function LessonView({
   isLast,
 }: {
   lesson: Lesson
+  lessonNumber: number
   videoUrl: string | null
   isDone: boolean
   onToggleDone: () => void
@@ -184,7 +187,7 @@ function LessonView({
   return (
     <div>
       <p className="text-brand-500 text-xs font-semibold uppercase tracking-wider mb-2">
-        {lesson.id.replace('ch', 'Chapter ')}
+        Chapter {String(lessonNumber).padStart(2, '0')}
       </p>
 
       <h1 className="text-2xl font-black text-gray-900 mb-1">{lesson.title}</h1>
