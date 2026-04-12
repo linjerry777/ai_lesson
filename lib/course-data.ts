@@ -210,15 +210,14 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000`,
       },
       {
         title: '去 Google Cloud Console 開 OAuth 憑證',
-        body: '1. 打開 Google Cloud Console\n2. 左上角選或建立一個專案\n3. 左側選單 → APIs & Services → Credentials\n4. 點「+ CREATE CREDENTIALS」→「OAuth client ID」\n5. Application type 選「Web application」\n6. Authorized redirect URIs 加這兩個：',
+        body: '1. 打開 Google Cloud Console\n2. 左上角選或建立一個專案\n3. 左側選單 → APIs & Services → Credentials\n4. 點「+ CREATE CREDENTIALS」→「OAuth client ID」\n5. Application type 選「Web application」\n6. Authorized redirect URIs 現在先加本機這一個就好：',
         link: { text: '打開 Google Cloud Console', url: 'https://console.cloud.google.com/apis/credentials' },
         code: {
           lang: 'text',
-          content: `http://localhost:3000/auth/callback
-https://你的線上網址.vercel.app/auth/callback`,
+          content: `http://localhost:3000/auth/callback`,
         },
         screenshot: 'google-cloud-oauth-credentials.png',
-        warning: '兩個都要加！本機一個、線上一個。少加一個，那個環境的登入就壞掉。建完複製 Client ID 和 Client Secret。',
+        warning: '⚠️ 現在只加本機的就好。Vercel 線上網址在 ch05 部署後才有，到時候再回來這裡補加：https://你的網址.vercel.app/auth/callback。少加一個，那個環境的登入就壞掉。建完複製 Client ID 和 Client Secret。',
       },
       {
         title: '在 Supabase 啟用 Google 登入',
@@ -229,10 +228,10 @@ https://你的線上網址.vercel.app/auth/callback`,
       },
       {
         title: '設定 Supabase Site URL（最多人忘記的一步）',
-        body: '這個沒設好，登入完成後 OAuth code 會跑到錯的地方。\n\n→ Authentication → URL Configuration\n→ Site URL 改成你的網址\n→ Redirect URLs 加入 http://localhost:3000/**',
+        body: '這個沒設好，登入完成後 OAuth code 會跑到錯的地方。\n\n→ Authentication → URL Configuration\n→ Site URL 現在填 http://localhost:3000（本機開發用）\n→ Redirect URLs 加入 http://localhost:3000/**',
         link: { text: '打開 Supabase URL Configuration', url: 'https://supabase.com/dashboard/project/_/auth/url-configuration' },
         screenshot: 'supabase-site-url.png',
-        warning: '這個就是我踩了兩小時的坑。Site URL 預設是 localhost:3000，部署到線上之後一定要改成你的 Vercel 網址，否則線上登入會一直 redirect 回 localhost。',
+        warning: '⚠️ 現在先填 localhost。部署到 Vercel 後（ch05），一定要回來把 Site URL 改成你的 Vercel 網址，並在 Redirect URLs 補加 https://你的網址.vercel.app/**，否則線上登入會一直 redirect 回 localhost。',
       },
     ],
   },
@@ -464,28 +463,29 @@ git push -u origin main`,
         warning: '確認 .gitignore 裡有 .env.local！否則你的所有 API key 就公開在 GitHub 上了。',
       },
       {
-        title: '用 Vercel CLI 連結專案並部署',
+        title: '用 Vercel CLI 連結專案（先連結，不急著部署）',
         body: 'ch00 已裝好 Vercel CLI。在專案資料夾裡直接跑：',
         code: {
           lang: 'bash',
           content: `vercel`,
         },
-        tip: '跑 vercel 指令後會問你幾個問題，選 Link to GitHub repo，找到你剛才建的 repo 連起來。之後每次 git push，Vercel 自動重新部署。',
+        tip: '跑 vercel 指令後會問你幾個問題，選 Link to GitHub repo，找到你剛才建的 repo 連起來。這步主要是連結專案，拿到你的 .vercel.app 網址，先複製起來備用。',
+        warning: '⚠️ 先連結拿網址就好，還不要急著確認部署。下一步先把 env var 全部加好，再正式部署，不然上線的網站會因為缺 env 噴錯。',
       },
       {
-        title: '先加所有 env var 到 Vercel，再重新部署',
-        body: '⚠️ 順序很重要：先加 env，再 deploy。不然 Vercel 上的網站會因為缺 env 噴錯。\n\n1. 打開 Vercel Dashboard → 你的專案 → Settings → Environment Variables\n2. 把 .env.local 裡的 Supabase、Stripe 等所有變數一個一個加進去\n3. 記得把這兩個改成線上版本：',
+        title: '先把所有 env var 加到 Vercel，再正式部署',
+        body: '⚠️ 順序很重要：先加 env，再 deploy。\n\n1. 打開 Vercel Dashboard → 你的專案 → Settings → Environment Variables\n2. 把 .env.local 裡的 Supabase、Stripe 等所有變數一個一個手動貼上（記得換行符地獄警告，不要用 CLI）\n3. 記得把這兩個改成線上版本：',
         link: { text: '打開 Vercel Environment Variables', url: 'https://vercel.com/dashboard' },
         code: {
           lang: 'text',
           content: `NEXT_PUBLIC_SITE_URL → https://你的網址.vercel.app
-STRIPE_WEBHOOK_SECRET → Stripe Dashboard 線上 webhook 的 secret
+STRIPE_WEBHOOK_SECRET → 等 Stripe 正式 webhook 建好後再填（下一步）
 
-# 加完 env 之後，重新部署讓設定生效：
+# 加完 env 之後，正式部署：
 vercel --prod`,
         },
         screenshot: 'vercel-env-vars.png',
-        warning: 'Vercel 的 env var 加完之後，現有的部署不會自動套用——一定要重新部署（vercel --prod）才會生效。',
+        warning: 'Vercel 的 env var 加完後，一定要執行 vercel --prod 重新部署才會生效。',
       },
       {
         title: '部署完更新 Supabase Site URL 和 Stripe 正式 Webhook',
