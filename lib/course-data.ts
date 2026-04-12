@@ -272,9 +272,9 @@ STRIPE_WEBHOOK_SECRET=whsec_...`,
         warning: '.env.local 絕對不能 commit 到 git！確認專案裡的 .gitignore 有包含 .env.local 這一行。',
       },
       {
-        title: '把 env var 加到 Vercel（一定要用 Dashboard 手動貼，不要用指令）',
-        body: '直接在 Vercel 網站貼上。\n\n1. 打開你的 Vercel 專案\n2. 點上方 Settings → Environment Variables\n3. 一個一個手動加，直接複製貼上值',
-        link: { text: '打開 Vercel Dashboard', url: 'https://vercel.com/dashboard' },
+        title: '⚠️ 之後加到 Vercel 時——一定要用 Dashboard 手動貼，不要用指令',
+        body: '⚠️ 這步是給 ch05 部署時的提醒，現在不需要操作。Vercel 專案在 ch05 才會建立。\n\n記住一個原則：以後把 env var 加到 Vercel 時，一律用 Vercel 網站手動貼，不要用終端機指令。\n\n操作方式（ch05 部署完再做）：\n1. 打開你的 Vercel 專案\n2. 點上方 Settings → Environment Variables\n3. 一個一個手動加，直接複製貼上值',
+        link: { text: '打開 Vercel Dashboard（ch05 部署後再開）', url: 'https://vercel.com/dashboard' },
         screenshot: 'vercel-env-vars.png',
         warning: '⚠️ 換行符地獄警告：絕對不要用終端機指令（echo、printf、pipe）把值傳給 Vercel。Windows 的 echo 會在字串尾端自動加上換行符 \\n，Stripe 拿到帶換行符的 key 會直接拒收，錯誤訊息是 Invalid character in header。一律手動在 Vercel Dashboard 貼上，貼完確認值的結尾沒有 ¶ 符號。',
       },
@@ -402,16 +402,16 @@ create policy "Users can view own purchases"
         warning: 'Webhook 如果沒有觸發，先去 Vercel Function Logs 看錯誤訊息。最常見的原因是 STRIPE_WEBHOOK_SECRET 填錯、或 request body 用錯方式讀取。\n\n如果 TypeScript 出現 `apiVersion` 相關的型別錯誤，告訴 Claude：「把 Stripe 初始化的 apiVersion 改成已安裝 SDK 支援的版本，或是直接拿掉 apiVersion 讓 TypeScript 自動推斷」。',
       },
       {
-        title: '在 Stripe 設定 Webhook（完成 ch05 部署後再做這步）',
-        body: '⚠️ 這步需要 Vercel 線上網址，請先完成 ch05 部署取得網址後，再回來做這步。\n\n1. Stripe Dashboard → Developers → Webhooks → + Add endpoint\n2. Endpoint URL 填入你的線上網址\n3. Events 只勾選「checkout.session.completed」\n4. 建立後複製 Signing secret（whsec_xxx）加到 Vercel env',
-        link: { text: '打開 Stripe Webhooks', url: 'https://dashboard.stripe.com/test/webhooks' },
+        title: '本機測試 Webhook（用 stripe listen）',
+        body: '在正式部署前，先用 stripe CLI 在本機測試 webhook 流程。打開另一個終端機視窗執行：',
         code: {
-          lang: 'text',
-          content: `Endpoint URL：
-https://你的網址.vercel.app/api/webhooks/stripe`,
+          lang: 'bash',
+          content: `stripe listen --forward-to localhost:3000/api/webhooks/stripe
+# 執行後終端機會顯示一組 whsec_... 本機 webhook secret
+# 把這個值填進 .env.local 的 STRIPE_WEBHOOK_SECRET`,
         },
-        screenshot: 'stripe-webhook-setup.png',
-        warning: 'Signing secret 有兩個版本：本機用 stripe listen 產生的（臨時的），和 Stripe Dashboard 線上 webhook 的（永久的）。Vercel 上要填線上版本的。',
+        warning: '⚠️ stripe listen 產生的 webhook secret 是本機暫時版，只在本機有效。部署到 Vercel 後，要在 Stripe Dashboard 建立正式 webhook endpoint，把那個 secret 更新進 Vercel env。這個步驟在 ch05 部署後做。',
+        tip: 'stripe listen 跑著的時候，去瀏覽器點購課 → 用測試卡付款，終端機會顯示 webhook 有沒有送到你的 handler。',
       },
       {
         title: '用測試卡把整條流程跑一遍',
@@ -473,20 +473,25 @@ git push -u origin main`,
         tip: '跑 vercel 指令後會問你幾個問題，選 Link to GitHub repo，找到你剛才建的 repo 連起來。之後每次 git push，Vercel 自動重新部署。',
       },
       {
-        title: '把所有 env var 加到 Vercel',
-        body: '1. 打開 Vercel Dashboard → 你的專案 → Settings → Environment Variables\n2. 把 .env.local 裡的所有變數一個一個加進去\n3. 記得把這兩個改成線上版本：',
+        title: '先加所有 env var 到 Vercel，再重新部署',
+        body: '⚠️ 順序很重要：先加 env，再 deploy。不然 Vercel 上的網站會因為缺 env 噴錯。\n\n1. 打開 Vercel Dashboard → 你的專案 → Settings → Environment Variables\n2. 把 .env.local 裡的 Supabase、Stripe 等所有變數一個一個加進去\n3. 記得把這兩個改成線上版本：',
         link: { text: '打開 Vercel Environment Variables', url: 'https://vercel.com/dashboard' },
         code: {
           lang: 'text',
           content: `NEXT_PUBLIC_SITE_URL → https://你的網址.vercel.app
-STRIPE_WEBHOOK_SECRET → Stripe Dashboard 線上 webhook 的 secret`,
+STRIPE_WEBHOOK_SECRET → Stripe Dashboard 線上 webhook 的 secret
+
+# 加完 env 之後，重新部署讓設定生效：
+vercel --prod`,
         },
         screenshot: 'vercel-env-vars.png',
+        warning: 'Vercel 的 env var 加完之後，現有的部署不會自動套用——一定要重新部署（vercel --prod）才會生效。',
       },
       {
-        title: '部署完記得同步更新 Supabase Site URL',
-        body: '拿到 Vercel 給你的固定網址之後，記得回去 Supabase 改：\n\n→ Authentication → URL Configuration\n→ Site URL 改成 https://你的網址.vercel.app\n→ Redirect URLs 加入 https://你的網址.vercel.app/**',
+        title: '部署完更新 Supabase Site URL 和 Stripe 正式 Webhook',
+        body: '拿到 Vercel 固定網址後，這兩個地方要同步更新，不然 Google 登入跟付款都會壞。\n\n**Supabase（Google 登入會壞）：**\n→ Authentication → URL Configuration\n→ Site URL 改成 https://你的網址.vercel.app\n→ Redirect URLs 加入 https://你的網址.vercel.app/**\n\n**Stripe 正式 Webhook（付款成功但 DB 不更新）：**\n1. Stripe Dashboard → Developers → Webhooks → + Add endpoint\n2. Endpoint URL 填：https://你的網址.vercel.app/api/webhooks/stripe\n3. Events 只勾「checkout.session.completed」\n4. 建立後複製 Signing secret（whsec_xxx）\n5. 回 Vercel Settings → Environment Variables → 把 STRIPE_WEBHOOK_SECRET 換成這個新的 secret\n6. 重新執行 vercel --prod 讓新 secret 生效',
         link: { text: '打開 Supabase URL Configuration', url: 'https://supabase.com/dashboard/project/_/auth/url-configuration' },
+        warning: 'STRIPE_WEBHOOK_SECRET 有兩個版本：ch04 本機用 stripe listen 產生的（暫時），和這裡 Stripe Dashboard 線上 webhook 的（正式）。Vercel 上一定要換成正式版本。',
       },
       {
         title: '之後的標準流程就這三行',
