@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import { lessons, COURSE_TITLE, type Lesson } from '@/lib/course-data'
+import type { Lesson } from '@/lib/course-data'
 import Link from 'next/link'
 import { CheckCircle, Circle, PlayCircle, LogOut, BookOpen, Clock, ChevronRight } from 'lucide-react'
 import StepGuide from './StepGuide'
@@ -11,9 +11,14 @@ import StepGuide from './StepGuide'
 interface Props {
   userEmail: string
   videoUrls: Record<string, string>
+  /** Course content — passed in so a single dashboard renders any product. */
+  lessons: Lesson[]
+  courseTitle: string
+  /** 'cohort' tier unlocks community / live elements (placeholder for now). */
+  tier?: 'self' | 'cohort'
 }
 
-export default function CoursePage({ userEmail, videoUrls }: Props) {
+export default function CoursePage({ userEmail, videoUrls, lessons, courseTitle, tier = 'self' }: Props) {
   const [activeId, setActiveId] = useState(lessons[0].id)
   const [completed, setCompleted] = useState<Set<string>>(new Set())
   const router = useRouter()
@@ -43,7 +48,12 @@ export default function CoursePage({ userEmail, videoUrls }: Props) {
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <div className="w-7 h-7 bg-brand-500 rounded-lg flex items-center justify-center text-white font-black text-xs">AI</div>
-            <span className="font-bold text-gray-900 text-sm">{COURSE_TITLE}</span>
+            <span className="font-bold text-gray-900 text-sm">{courseTitle}</span>
+            {tier === 'cohort' && (
+              <span className="ml-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-brand-500 text-white">
+                Cohort
+              </span>
+            )}
           </Link>
           <div className="flex items-center gap-4">
             <div className="hidden sm:flex items-center gap-2 text-xs text-gray-500">

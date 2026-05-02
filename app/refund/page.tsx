@@ -33,7 +33,7 @@ export default function RefundPage() {
             <li>購課日期或訂單編號</li>
           </ul>
           <p className="text-gray-600 mt-3">
-            我們將在 <strong>3 個工作天內</strong>回覆並處理退款。退款金額依 Gumroad 平台退款方式返還。
+            我們將在 <strong>3 個工作天內</strong>回覆並處理退款。退款金額依 Stripe 平台退款方式返還（一般 5-10 個工作天回到原付款方式）。
           </p>
         </section>
 

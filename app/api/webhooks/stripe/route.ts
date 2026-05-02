@@ -21,6 +21,10 @@ export async function POST(request: NextRequest) {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object
     const userId = session.metadata?.user_id
+    // Defaults preserve back-compat for any legacy session created before
+    // multi-product metadata existed.
+    const productId = session.metadata?.product_id ?? 'claude-code'
+    const tier = session.metadata?.tier ?? 'self'
 
     if (!userId) {
       console.error('[webhook/stripe] missing user_id in metadata')
@@ -35,6 +39,8 @@ export async function POST(request: NextRequest) {
         amount: session.amount_total,
         currency: session.currency,
         status: 'completed',
+        product_id: productId,
+        tier,
       }, { onConflict: 'stripe_session_id' })
 
     if (error) {

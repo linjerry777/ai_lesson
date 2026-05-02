@@ -40,12 +40,12 @@ export default function Testimonials() {
         {/* Header */}
         <div className="text-center mb-12">
           <p className="text-brand-500 font-semibold text-sm mb-2 uppercase tracking-wider">
-            學員回饋
+            學完能解決的問題
           </p>
           <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">
-            學完之後，你可以做到什麼
+            你會在這幾個情境裡看到自己
           </h2>
-          <p className="text-gray-500 text-sm">以下為學員預期學習成果示例</p>
+          <p className="text-gray-500 text-sm">下方是課程針對的 4 種典型卡點</p>
         </div>
 
         {/* Cards */}

@@ -18,7 +18,7 @@ export default function PrivacyPage() {
             <li>購課紀錄（購買時間、金額、幣別）</li>
           </ul>
           <p className="text-gray-600 mt-3">
-            我們<strong>不儲存</strong>任何信用卡資訊。付款流程由 Gumroad 負責，本站不接觸卡片資料。
+            我們<strong>不儲存</strong>任何信用卡資訊。付款流程由 Stripe 負責，本站不接觸卡片資料。
           </p>
         </section>
 
@@ -40,7 +40,7 @@ export default function PrivacyPage() {
           <ul className="list-disc pl-5 mt-2 space-y-1 text-gray-600">
             <li><strong>Supabase</strong>：用於使用者驗證與資料儲存</li>
             <li><strong>Google OAuth</strong>：用於第三方登入</li>
-            <li><strong>Gumroad</strong>：用於付款處理</li>
+            <li><strong>Stripe</strong>：用於付款處理</li>
             <li><strong>Vercel</strong>：用於網站託管</li>
           </ul>
         </section>

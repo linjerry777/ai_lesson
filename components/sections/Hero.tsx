@@ -68,14 +68,11 @@ export default function Hero() {
 
             {/* Trust */}
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-              <span className="flex items-center gap-1.5">
-                <span className="text-yellow-400">★★★★★</span>
-                <span>4.9 評分</span>
-              </span>
-              <span className="text-gray-300">|</span>
-              <span>1,200+ 學員</span>
-              <span className="text-gray-300">|</span>
               <span>🔒 7 天退費保證</span>
+              <span className="text-gray-300">|</span>
+              <span>📺 永久觀看</span>
+              <span className="text-gray-300">|</span>
+              <span>🆕 課程持續更新</span>
             </div>
           </div>
 

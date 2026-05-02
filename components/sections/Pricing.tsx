@@ -13,7 +13,7 @@ const includes = [
 ]
 
 const badges = [
-  { icon: Shield, text: '安全付款', sub: 'Gumroad 加密保護' },
+  { icon: Shield, text: '安全付款', sub: 'Stripe 加密保護' },
   { icon: RefreshCw, text: '7 天退費', sub: '未觀看全額退款' },
   { icon: Infinity, text: '永久觀看', sub: '課程持續更新' },
 ]

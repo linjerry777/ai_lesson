@@ -38,7 +38,7 @@ export default function TermsPage() {
         <section className="mb-8">
           <h2 className="text-xl font-bold text-gray-800 mb-3">四、付款</h2>
           <p className="text-gray-600 leading-relaxed">
-            購課透過 Gumroad 平台完成付款。本服務不儲存任何付款卡片資訊。付款完成後，你的 Email 所對應帳號將自動開通課程存取權。
+            購課透過 Stripe 平台完成付款。本服務不儲存任何付款卡片資訊。付款完成後，你的登入 Email 所對應帳號將自動開通課程存取權。
           </p>
         </section>
 
