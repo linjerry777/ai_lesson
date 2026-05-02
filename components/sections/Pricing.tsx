@@ -48,13 +48,12 @@ export default function Pricing() {
               <div className="text-center mb-8">
                 <div className="flex items-baseline justify-center gap-3 mb-1">
                   <span className="text-5xl font-black text-gray-900">NT$990</span>
-                  <span className="text-lg text-gray-400">≈ £24</span>
                 </div>
                 <p className="text-gray-400">
                   原 <span className="line-through">NT$2,640</span>
                   <span className="ml-2 text-green-600 font-semibold">純文字版上線價</span>
                 </p>
-                <p className="text-xs text-gray-400 mt-1">一次買斷，永久存取</p>
+                <p className="text-xs text-gray-400 mt-1">一次買斷，永久存取 · TWD 結帳</p>
               </div>
 
               {/* Includes */}
