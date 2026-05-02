@@ -48,7 +48,7 @@ export default async function OG() {
           >
             網課小韭菜
           </span>
-          <span style={{ color: '#9a3412' }}>· 一次買斷，永久觀看</span>
+          <span style={{ color: '#9a3412' }}>· 純文字實戰手冊 · 永久存取</span>
         </div>
 
         {/* Headline */}

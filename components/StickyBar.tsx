@@ -25,7 +25,7 @@ export default function StickyBar() {
           <div className="flex items-center justify-between gap-4">
             <div className="hidden sm:block">
               <p className="font-semibold text-gray-900 text-sm">Claude Code 實戰工作流</p>
-              <p className="text-xs text-gray-500">40+ 單元 · 6+ 小時 · 永久觀看</p>
+              <p className="text-xs text-gray-500">7 章 · 60+ 操作步驟 · 永久存取</p>
             </div>
             <div className="flex items-center gap-3 ml-auto">
               <div className="text-right">

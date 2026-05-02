@@ -10,7 +10,7 @@ export default function TermsPage() {
         <section className="mb-8">
           <h2 className="text-xl font-bold text-gray-800 mb-3">一、服務說明</h2>
           <p className="text-gray-600 leading-relaxed">
-            「網課小韭菜」（以下簡稱「本服務」）提供線上課程影片供購課學員自行觀看學習。購課後，你可在本平台永久存取你所購買的課程內容。
+            「網課小韭菜」（以下簡稱「本服務」）提供線上文字課程（含操作步驟、程式碼範例與截圖）供購課學員自行學習。購課後，你可在本平台永久存取你所購買的課程內容。
           </p>
         </section>
 
@@ -26,10 +26,10 @@ export default function TermsPage() {
         <section className="mb-8">
           <h2 className="text-xl font-bold text-gray-800 mb-3">三、智慧財產權</h2>
           <p className="text-gray-600 leading-relaxed">
-            課程所有內容（影片、文字、程式碼範例）的著作權屬於「網課小韭菜」。購課後你取得個人學習授權，但<strong>不得</strong>：
+            課程所有內容（文字、截圖、程式碼範例、Claude prompt 模板）的著作權屬於「網課小韭菜」。購課後你取得個人學習授權，但<strong>不得</strong>：
           </p>
           <ul className="list-disc pl-5 mt-2 space-y-1 text-gray-600">
-            <li>錄製、複製或散布課程影片</li>
+            <li>截圖、複製或散布課程內容</li>
             <li>將課程內容用於商業轉售</li>
             <li>分享登入帳號讓未購課者存取</li>
           </ul>

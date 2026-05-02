@@ -10,7 +10,6 @@ import StepGuide from './StepGuide'
 
 interface Props {
   userEmail: string
-  videoUrls: Record<string, string>
   /** Course content — passed in so a single dashboard renders any product. */
   lessons: Lesson[]
   courseTitle: string
@@ -18,7 +17,7 @@ interface Props {
   tier?: 'self' | 'cohort'
 }
 
-export default function CoursePage({ userEmail, videoUrls, lessons, courseTitle, tier = 'self' }: Props) {
+export default function CoursePage({ userEmail, lessons, courseTitle, tier = 'self' }: Props) {
   const [activeId, setActiveId] = useState(lessons[0].id)
   const [completed, setCompleted] = useState<Set<string>>(new Set())
   const router = useRouter()
@@ -93,7 +92,6 @@ export default function CoursePage({ userEmail, videoUrls, lessons, courseTitle,
             {lessons.map((lesson, idx) => {
               const isActive    = lesson.id === activeId
               const isDone      = completed.has(lesson.id)
-              const hasVideo    = !!videoUrls[lesson.id]
 
               return (
                 <button
@@ -111,7 +109,7 @@ export default function CoursePage({ userEmail, videoUrls, lessons, courseTitle,
                     ) : isActive ? (
                       <PlayCircle size={16} className="text-brand-500" />
                     ) : (
-                      <Circle size={16} className={hasVideo ? 'text-gray-300' : 'text-gray-200'} />
+                      <Circle size={16} className="text-gray-300" />
                     )}
                   </div>
 
@@ -120,9 +118,6 @@ export default function CoursePage({ userEmail, videoUrls, lessons, courseTitle,
                       <span className="text-[10px] font-mono text-brand-400 font-bold">
                         {String(idx + 1).padStart(2, '0')}
                       </span>
-                      {!hasVideo && (
-                        <span className="text-[9px] bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded">即將上線</span>
-                      )}
                     </div>
                     <p className={`text-xs font-medium leading-snug ${isActive ? 'text-brand-700' : 'text-gray-700'}`}>
                       {lesson.title}
@@ -163,7 +158,6 @@ export default function CoursePage({ userEmail, videoUrls, lessons, courseTitle,
             <LessonView
               lesson={active}
               lessonNumber={activeIdx + 1}
-              videoUrl={videoUrls[active.id] ?? null}
               isDone={completed.has(active.id)}
               onToggleDone={() => toggleComplete(active.id)}
               onNext={() => { if (activeIdx < lessons.length - 1) setActiveId(lessons[activeIdx + 1].id) }}
@@ -180,7 +174,6 @@ export default function CoursePage({ userEmail, videoUrls, lessons, courseTitle,
 function LessonView({
   lesson,
   lessonNumber,
-  videoUrl,
   isDone,
   onToggleDone,
   onNext,
@@ -188,7 +181,6 @@ function LessonView({
 }: {
   lesson: Lesson
   lessonNumber: number
-  videoUrl: string | null
   isDone: boolean
   onToggleDone: () => void
   onNext: () => void
@@ -204,27 +196,6 @@ function LessonView({
       <p className="text-sm text-gray-400 flex items-center gap-1 mb-6">
         <Clock size={13} /> {lesson.duration}
       </p>
-
-      {/* Video player */}
-      <div className="aspect-video bg-gray-900 rounded-2xl overflow-hidden mb-6 shadow-lg">
-        {videoUrl ? (
-          <video
-            key={videoUrl}
-            src={videoUrl}
-            controls
-            controlsList="nodownload"
-            onContextMenu={e => e.preventDefault()}
-            className="w-full h-full"
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-3">
-            <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center">
-              <PlayCircle size={32} className="text-white/40" />
-            </div>
-            <p className="text-white/40 text-sm">影片準備中，即將上線</p>
-          </div>
-        )}
-      </div>
 
       {/* Description */}
       <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-4">

@@ -2,11 +2,11 @@ import { Check, X } from 'lucide-react'
 
 const rows = [
   { label: '費用', self: '免費', coach: 'NT$30,000+', course: 'NT$2,640' },
-  { label: '時間投入', self: '3–6 個月', coach: '2–4 週', course: '6 小時' },
+  { label: '時間投入', self: '3–6 個月', coach: '2–4 週', course: '4–8 小時' },
   { label: '方法論完整性', self: false, coach: '有限', course: true },
   { label: '業界實戰案例', self: false, coach: '視情況', course: true },
   { label: '高階工具 (MCP/Hook)', self: false, coach: false, course: true },
-  { label: '永久觀看 + 更新', self: false, coach: false, course: true },
+  { label: '永久存取 + 更新', self: false, coach: false, course: true },
   { label: '立即可用的工作流', self: false, coach: '需整理', course: true },
 ]
 

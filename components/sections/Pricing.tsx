@@ -9,13 +9,15 @@ const includes = [
   '完整 Debug 實錄：500、session 消失、env 地獄',
   '可複用架構模板，下一個專案直接套',
   '每章附詳細操作步驟 + 可複製 Claude 指令',
-  '永久觀看，未來更新免費獲取',
+  '60+ step-by-step 步驟 + 50+ Claude prompt 模板',
+  '純文字 + 截圖實戰手冊（無影片，能搜尋、能複製）',
+  '永久存取，未來更新免費獲取',
 ]
 
 const badges = [
   { icon: Shield, text: '安全付款', sub: 'Stripe 加密保護' },
-  { icon: RefreshCw, text: '7 天退費', sub: '未觀看全額退款' },
-  { icon: Infinity, text: '永久觀看', sub: '課程持續更新' },
+  { icon: RefreshCw, text: '7 天退費', sub: '7 天內全額退款' },
+  { icon: Infinity, text: '永久存取', sub: '課程持續更新' },
 ]
 
 export default function Pricing() {
@@ -52,7 +54,7 @@ export default function Pricing() {
                   原價 <span className="line-through">£125</span>
                   <span className="ml-2 text-green-600 font-semibold">限時優惠</span>
                 </p>
-                <p className="text-xs text-gray-400 mt-1">一次買斷，永久觀看</p>
+                <p className="text-xs text-gray-400 mt-1">一次買斷，永久存取</p>
               </div>
 
               {/* Includes */}

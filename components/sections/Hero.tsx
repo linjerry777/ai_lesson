@@ -56,7 +56,7 @@ export default function Hero() {
                   <span className="text-3xl font-black text-gray-900">NT$2,640</span>
                   <span className="text-gray-400 line-through text-lg">NT$5,000</span>
                 </div>
-                <p className="text-xs text-gray-500 mt-0.5">一次買斷，永久觀看</p>
+                <p className="text-xs text-gray-500 mt-0.5">一次買斷，永久存取</p>
               </div>
               <a
                 href="#pricing"
@@ -70,7 +70,7 @@ export default function Hero() {
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
               <span>🔒 7 天退費保證</span>
               <span className="text-gray-300">|</span>
-              <span>📺 永久觀看</span>
+              <span>📖 純文字 + 截圖實戰手冊</span>
               <span className="text-gray-300">|</span>
               <span>🆕 課程持續更新</span>
             </div>
