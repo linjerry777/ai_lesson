@@ -1,7 +1,7 @@
 import { Check, X } from 'lucide-react'
 
 const rows = [
-  { label: '費用', self: '免費', coach: 'NT$30,000+', course: 'NT$2,640' },
+  { label: '費用', self: '免費', coach: 'NT$30,000+', course: 'NT$990' },
   { label: '時間投入', self: '3–6 個月', coach: '2–4 週', course: '4–8 小時' },
   { label: '方法論完整性', self: false, coach: '有限', course: true },
   { label: '業界實戰案例', self: false, coach: '視情況', course: true },

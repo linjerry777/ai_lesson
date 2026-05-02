@@ -57,7 +57,7 @@ const courseJsonLd = {
   },
   offers: {
     '@type': 'Offer',
-    price: '2640',
+    price: '990',
     priceCurrency: 'TWD',
     availability: 'https://schema.org/InStock',
     url: `${SITE_URL}/#pricing`,

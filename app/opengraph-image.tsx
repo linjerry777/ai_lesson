@@ -127,9 +127,9 @@ export default async function OG() {
               fontWeight: 800,
             }}
           >
-            <span style={{ fontSize: 44 }}>NT$2,640</span>
+            <span style={{ fontSize: 44 }}>NT$990</span>
             <span style={{ color: '#9ca3af', fontSize: 22, textDecoration: 'line-through' }}>
-              NT$5,000
+              NT$2,640
             </span>
           </span>
         </div>

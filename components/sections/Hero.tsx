@@ -53,10 +53,10 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6">
               <div>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black text-gray-900">NT$2,640</span>
-                  <span className="text-gray-400 line-through text-lg">NT$5,000</span>
+                  <span className="text-3xl font-black text-gray-900">NT$990</span>
+                  <span className="text-gray-400 line-through text-lg">NT$2,640</span>
                 </div>
-                <p className="text-xs text-gray-500 mt-0.5">一次買斷，永久存取</p>
+                <p className="text-xs text-gray-500 mt-0.5">純文字版限時上線價 · 一次買斷</p>
               </div>
               <a
                 href="#pricing"
