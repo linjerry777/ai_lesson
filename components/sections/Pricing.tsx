@@ -9,7 +9,7 @@ const includes = [
   '完整 Debug 實錄：500、session 消失、env 地獄',
   '可複用架構模板，下一個專案直接套',
   '每章附詳細操作步驟 + 可複製 Claude 指令',
-  '60+ step-by-step 步驟 + 50+ Claude prompt 模板',
+  '40+ step-by-step 操作步驟 + 9 個可複製 Claude 指令',
   '純文字 + 截圖實戰手冊（無影片，能搜尋、能複製）',
   '永久存取，未來更新免費獲取',
 ]

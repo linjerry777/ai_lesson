@@ -129,7 +129,7 @@ export default function Navbar() {
                   href="#pricing"
                   className="bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
                 >
-                  立即購課 NT$2,640
+                  立即購課 NT$990
                 </a>
               </>
             )}
@@ -189,7 +189,7 @@ export default function Navbar() {
                 className="block bg-brand-500 text-white text-center text-sm font-semibold px-4 py-3 rounded-lg"
                 onClick={() => setMenuOpen(false)}
               >
-                立即購課 NT$2,640
+                立即購課 NT$990
               </a>
             </>
           )}

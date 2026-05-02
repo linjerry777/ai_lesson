@@ -19,9 +19,9 @@ const stages = [
   },
   {
     num: '04',
-    title: '金流串接：Stripe 實作 + 台灣付款方案全紀錄',
-    desc: '從 Stripe 沙盒串接開始，到發現台灣出金限制、嘗試 TapPay 遇到 status 735、最終用 Gumroad + License Key 搞定收款。真實踩坑全紀錄。',
-    items: ['Stripe Checkout Session 與 Webhook 完整實作', 'Stripe 台灣出金限制：為什麼行不通', 'TapPay status 735 踩坑與排查過程', 'Gumroad License Key 啟用流程實作'],
+    title: '金流串接：Stripe Checkout + Webhook 完整實作',
+    desc: 'Stripe 沙盒帳號從 0 開到能收 TWD 990 的完整路徑：Product/Price 建立、Webhook 簽名驗證、purchases 表寫入、4242 測試卡端到端跑一輪。',
+    items: ['Stripe 帳號註冊 + Product/Price 建立（TWD 帳務）', 'Checkout Session API + 已購用戶 redirect dashboard', 'Webhook 簽名驗證 + request.text() 必坑', 'purchases 表設計 + RLS 與 service client 取捨', '台灣出金 fallback：Gumroad 退路（附錄）'],
   },
   {
     num: '05',
