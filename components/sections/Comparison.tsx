@@ -1,13 +1,13 @@
 import { Check, X } from 'lucide-react'
 
 const rows = [
-  { label: '費用', self: '免費', coach: 'NT$30,000+', course: 'NT$990' },
-  { label: '時間投入', self: '3–6 個月', coach: '2–4 週', course: '4–8 小時' },
-  { label: '方法論完整性', self: false, coach: '有限', course: true },
-  { label: '業界實戰案例', self: false, coach: '視情況', course: true },
-  { label: '高階工具 (MCP/Hook)', self: false, coach: false, course: true },
-  { label: '永久存取 + 更新', self: false, coach: false, course: true },
-  { label: '立即可用的工作流', self: false, coach: '需整理', course: true },
+  { label: '費用', self: '免費但耗時', coach: 'NT$30,000+', course: 'NT$990' },
+  { label: '學習方式', self: '自己撞牆', coach: '有人帶', course: '照流程做' },
+  { label: '交付結果', self: '不一定完成', coach: '看教練品質', course: '可收款網站模板' },
+  { label: '登入 / 金流 / 部署', self: false, coach: true, course: true },
+  { label: '每章驗收清單', self: false, coach: '不一定', course: true },
+  { label: 'Debug 急救格式', self: false, coach: '不一定', course: true },
+  { label: '適合完全零基礎', self: false, coach: '可能', course: false },
 ]
 
 export default function Comparison() {
@@ -16,10 +16,10 @@ export default function Comparison() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
-            為什麼選這堂課？
+            你不是缺工具清單，是缺一條可驗收的流程
           </h2>
           <p className="text-gray-400">
-            跟其他學習路徑相比，你能更快、更便宜地真正掌握 AI 開發工作流。
+            這堂課不承諾零基礎無痛變工程師，而是把 AI 實作流程整理成可以跟做、可以檢查、可以 debug 的產品路線。
           </p>
         </div>
 
@@ -29,10 +29,10 @@ export default function Comparison() {
               <tr>
                 <th className="text-left text-gray-400 text-sm font-normal pb-4 pr-6 w-1/4" />
                 <th className="text-center pb-4 px-4">
-                  <div className="text-gray-400 text-sm">自學摸索</div>
+                  <div className="text-gray-400 text-sm">自己摸索</div>
                 </th>
                 <th className="text-center pb-4 px-4">
-                  <div className="text-gray-400 text-sm">找顧問 / 培訓</div>
+                  <div className="text-gray-400 text-sm">一對一教練</div>
                 </th>
                 <th className="text-center pb-4 px-4">
                   <div className="bg-brand-500 rounded-xl px-4 py-2">

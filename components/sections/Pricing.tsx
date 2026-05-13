@@ -1,7 +1,7 @@
 import { CheckCircle, Shield, RefreshCw, Infinity } from 'lucide-react'
 
 const includes = [
-  '7 章完整課程，真實建站全過程',
+  '8 個階段完整課程，真實建站全過程',
   'Landing Page → 登入 → 付款 → 部署，一條龍',
   'Google OAuth 完整串接與踩坑紀錄',
   '金流串接完整實作 + 台灣付款方案踩坑',
@@ -9,7 +9,7 @@ const includes = [
   '完整 Debug 實錄：500、session 消失、env 地獄',
   '可複用架構模板，下一個專案直接套',
   '每章附詳細操作步驟 + 可複製 Claude 指令',
-  '40+ step-by-step 操作步驟 + 9 個可複製 Claude 指令',
+  '50+ step-by-step 操作步驟 + 13 個可複製 Claude 指令',
   '純文字 + 截圖實戰手冊（無影片，能搜尋、能複製）',
   '永久存取，未來更新免費獲取',
 ]
@@ -29,9 +29,9 @@ export default function Pricing() {
             立即開始
           </p>
           <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">
-            現在加入，開始你的 AI 工程師之旅
+            不是看懂工具，而是做出能收款的網站
           </h2>
-          <p className="text-gray-500">一次投資，永久提升你的工程師競爭力。</p>
+          <p className="text-gray-500">文字實戰手冊，照流程完成登入、付款、部署與 debug。</p>
         </div>
 
         <div className="max-w-lg mx-auto">

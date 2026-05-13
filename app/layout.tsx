@@ -10,15 +10,15 @@ const inter = Inter({
 })
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ailesson-two.vercel.app'
-const TITLE = 'Claude Code 實戰工作流 | 打造 AI 時代的工程師超能力'
+const TITLE = 'Claude Code 實戰工作流 | 做出可登入、可付款、可部署的產品網站'
 const DESCRIPTION =
-  '不是工具功能大全——是矽谷工程師真正在用的 AI 開發方法論。帶你從需求拆解到部署，完整學習 Claude Code × MCP × Hook × Sub-Agent，真正交付成果。'
+  '一堂文字版 AI 實作課：用 Claude Code 建出 Landing Page、Google 登入、Stripe 付款、購買紀錄、Dashboard 與 Vercel 部署流程。'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: TITLE,
   description: DESCRIPTION,
-  keywords: ['Claude Code', 'AI 開發', 'MCP', 'Hook', 'Sub-Agent', '工程師', 'AI 工作流'],
+  keywords: ['Claude Code', 'AI 開發', 'Stripe Checkout', 'Supabase Auth', 'Vercel 部署', 'AI 工作流'],
   alternates: { canonical: '/' },
   openGraph: {
     title: TITLE,
@@ -36,7 +36,6 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-// JSON-LD Course schema → Google rich results。價格依 Hero 顯示的 NT$2,640。
 const courseJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Course',

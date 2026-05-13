@@ -107,6 +107,21 @@ scoop install stripe`,
         },
         tip: '技能會持續更新。直接在 Claude Code 輸入 / 查看最新的完整清單，每個技能都有說明。不用背，需要的時候查就好。',
       },
+      {
+        title: '本章驗收：你準備好開工了嗎？',
+        body: '進入下一章前，請先確認下面每一項都完成。少一項都先停下來補，不然後面遇到錯誤時會很難判斷是程式碼問題，還是環境還沒準備好。',
+        code: {
+          lang: 'text',
+          content: `□ 可以打開 Claude Code Desktop，並切到 Code 分頁
+□ Code 分頁已經選好一個專案資料夾
+□ Claude 可以在本機執行 node -v，並看到版本號
+□ Git 已安裝，Code 分頁不再顯示 Git is required
+□ vercel --version 可以正常顯示版本
+□ stripe --version 可以在 Windows 終端機正常顯示版本
+□ 你知道 Chat 分頁不是本機，Windows 指令要在 Code 分頁或 PowerShell 執行`,
+        },
+        warning: '如果你是完全沒有程式背景的人，這章是第一個門檻。卡住時不要硬往下做，先把錯誤訊息完整貼給 Claude，請它用「Windows 新手」的角度一步一步帶你檢查。',
+      },
     ],
   },
 
@@ -153,8 +168,28 @@ https://ailesson-two.vercel.app/
 第二行「這個網站」（用橘色 brand-500）
 第三行「是 Claude Code 做的」
 
-然後在 Hero 右側加一個深色 terminal 風格的裝飾方塊，裡面顯示幾行假的 claude 指令輸出，讓人一看就知道這是 AI 生的。`,
+        然後在 Hero 右側加一個深色 terminal 風格的裝飾方塊，裡面顯示幾行假的 claude 指令輸出，讓人一看就知道這是 AI 生的。`,
         tip: '每次改完你覺得沒問題，就執行一次 git commit 存檔。改壞了還能 revert 回來。',
+      },
+      {
+        title: '本章驗收：首頁真的跑起來',
+        body: '這章不要求你一次做出完美設計，只要求你有一個能在瀏覽器打開、能被 Claude 繼續修改的 Next.js 專案。',
+        code: {
+          lang: 'text',
+          content: `□ npm run dev 可以正常啟動
+□ 瀏覽器打開 http://localhost:3000 可以看到首頁
+□ 首頁至少有 Hero、課程大綱、價格、FAQ 幾個區塊
+□ 改一段文案後，瀏覽器會熱更新
+□ 執行 git status 可以看到你改過的檔案
+□ 已經做過一次 git add / git commit 存檔`,
+        },
+        claude: `請幫我檢查目前 Next.js 專案是否已經達到第一章驗收標準：
+1. npm run dev 能不能跑
+2. 首頁有哪些 section
+3. 有沒有明顯的 console error 或 build error
+4. 哪些檔案應該先 git commit
+
+請不要重寫整個專案，只做檢查與必要修正。`,
       },
     ],
   },
@@ -232,6 +267,27 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000`,
         link: { text: '打開 Supabase URL Configuration', url: 'https://supabase.com/dashboard/project/_/auth/url-configuration' },
         screenshot: 'supabase-site-url.png',
         warning: '⚠️ 現在先填 localhost。部署到 Vercel 後（ch05），一定要回來把 Site URL 改成你的 Vercel 網址，並在 Redirect URLs 補加 https://你的網址.vercel.app/**，否則線上登入會一直 redirect 回 localhost。',
+      },
+      {
+        title: '本章驗收：Google 登入跑完一次',
+        body: '不要只看按鈕有出現。一定要真的按 Google 登入，完成授權，再回到你的網站。',
+        code: {
+          lang: 'text',
+          content: `□ /login 頁面有 Google 登入按鈕
+□ 點 Google 登入後會跳到 Google 授權畫面
+□ 授權後會回到 http://localhost:3000/auth/callback
+□ 最後會進入 /dashboard 或顯示已登入狀態
+□ Navbar 或 dashboard 能顯示你的 email
+□ Supabase Auth > Users 裡看得到這個使用者`,
+        },
+        claude: `我的 Google 登入流程卡住了。請你用系統化方式幫我檢查：
+1. Supabase URL / anon key / service role key 是否正確
+2. Google Cloud redirect URI 是否包含 http://localhost:3000/auth/callback
+3. Supabase Provider 裡的 Client ID / Secret 是否正確
+4. Supabase Site URL 和 Redirect URLs 是否正確
+5. auth callback route 是否正確處理 code exchange
+
+請先列出最可能的 3 個原因，再逐項檢查，不要直接重寫整個 auth。`,
       },
     ],
   },
@@ -323,6 +379,21 @@ STRIPE_SECRET_KEY=sk_live_...（上線後換成正式模式）
 STRIPE_WEBHOOK_SECRET=whsec_...（Stripe Dashboard 線上 webhook 的 secret）`,
         },
       },
+      {
+        title: '本章驗收：env 可以被安全檢查',
+        body: '這章的重點不是把所有第三方服務接完，而是讓你有一個安全的檢查工具。之後任何錯誤，先看 /api/debug。',
+        code: {
+          lang: 'text',
+          content: `□ .env.local 存在，而且沒有被 commit
+□ .gitignore 有包含 .env.local
+□ /api/debug 可以打開
+□ /api/debug 不會顯示任何完整 secret，只顯示 SET / MISSING
+□ Supabase 相關 env 都是 SET
+□ Stripe 相關 env 如果還沒到 ch04，可以先是 MISSING
+□ 你知道本機 webhook secret 和線上 webhook secret 是不同的`,
+        },
+        warning: '如果 /api/debug 直接把 key 印出來，立刻叫 Claude 改掉。debug 頁只能顯示狀態，不能顯示實際密鑰。',
+      },
     ],
   },
 
@@ -344,10 +415,10 @@ STRIPE_WEBHOOK_SECRET=whsec_...（Stripe Dashboard 線上 webhook 的 secret）`
     steps: [
       {
         title: '在 Stripe 建立商品和價格',
-        body: '1. 打開 Stripe Dashboard（確認左下角是 Test mode）\n2. 左側 Product catalog → + Add product\n3. 填入課程名稱\n4. 價格填 2640，幣別選 TWD，選「One time」\n5. 建立後點進商品，複製 Price ID（格式是 price_xxx）',
+        body: '1. 打開 Stripe Dashboard（確認左下角是 Test mode）\n2. 左側 Product catalog → + Add product\n3. 填入課程名稱\n4. 價格填 990，幣別選 TWD，選「One time」\n5. 建立後點進商品，複製 Price ID（格式是 price_xxx）',
         link: { text: '打開 Stripe Product Catalog', url: 'https://dashboard.stripe.com/test/products' },
         screenshot: 'stripe-create-product.png',
-        warning: 'TWD（台幣）在 Stripe 是 zero-decimal 幣別，金額直接填 2640，不是 264000。跟美元不同，千萬不要除以 100。',
+        warning: 'TWD（台幣）在 Stripe 是 zero-decimal 幣別，金額直接填 990，不是 99000。跟美元不同，千萬不要除以 100。',
       },
       {
         title: '把 Stripe keys 補入 .env.local',
@@ -428,6 +499,29 @@ Webhook 收到 → purchases 表新增一筆
         },
         tip: '付款後如果進不了 dashboard，去 /api/debug 確認 myPurchase 有沒有值。沒有的話可能是 webhook 沒打進來，去 Stripe Dashboard → Webhooks 看有沒有成功送達。',
       },
+      {
+        title: '本章驗收：付款真的解鎖課程',
+        body: '這章一定要端到端跑完。只做到 Stripe Checkout 頁面跳出來，還不算完成。',
+        code: {
+          lang: 'text',
+          content: `□ 點購課按鈕會進入 Stripe Checkout
+□ 測試卡 4242 付款成功
+□ 成功後回到 /success
+□ stripe listen 終端機有收到 checkout.session.completed
+□ Supabase purchases 表新增一筆資料
+□ 再點一次購課，已購用戶會直接進 /dashboard
+□ /api/debug 的 myPurchase 不再是 null`,
+        },
+        claude: `我的 Stripe 付款流程沒有完整解鎖 dashboard。請幫我照這個順序排查：
+1. Checkout session metadata 裡有沒有 user_id
+2. Webhook handler 是否用 request.text() 驗證 signature
+3. STRIPE_WEBHOOK_SECRET 是否是目前 stripe listen 顯示的 whsec
+4. purchases 表是否存在，欄位是否符合程式碼
+5. 寫入 purchases 時是否用了 service role client
+6. dashboard 查詢 purchases 的條件是否和 webhook 寫入一致
+
+請先找原因，不要直接重構付款流程。`,
+      },
     ],
   },
 
@@ -503,6 +597,21 @@ git commit -m "fix: 你改了什麼"
 git push
 # 等 30 秒，Vercel 自動部署好了`,
         },
+      },
+      {
+        title: '本章驗收：線上版可登入、可付款、可解鎖',
+        body: '正式上線前，請用 Vercel 網址完整跑一次，不要只測 localhost。線上能跑才代表產品能賣。',
+        code: {
+          lang: 'text',
+          content: `□ Vercel 網址首頁能打開
+□ 線上 Google 登入能成功回到 Vercel 網址，不會回 localhost
+□ 線上 /api/debug 顯示 siteUrl 是 Vercel 網址
+□ Stripe Dashboard 已建立正式 webhook endpoint
+□ Vercel 的 STRIPE_WEBHOOK_SECRET 已換成正式 webhook secret
+□ 測試付款成功後，Supabase purchases 有資料
+□ 付款後可以進入 /dashboard 看到課程內容`,
+        },
+        warning: '最常見的線上錯誤是：Supabase 還指向 localhost、Google Cloud 少加 Vercel callback、Vercel env 改完沒有重新部署。',
       },
     ],
   },
@@ -587,6 +696,55 @@ git push
         },
         tip: 'user 是 null → session 問題，看步驟 3。myPurchase 是 null 但有付款 → 去 Stripe Dashboard 確認 webhook 有沒有成功送達。',
       },
+      {
+        title: '急救包：把錯誤貼給 Claude 的固定格式',
+        body: '門外漢最常犯的錯，是只跟 AI 說「壞掉了」。你要把環境、操作、錯誤訊息、預期結果一次貼完整，Claude 才能穩定幫你修。',
+        code: {
+          lang: 'text',
+          content: `問題描述：
+我正在做到第 __ 章第 __ 步，目標是 __。
+
+我做了什麼：
+1. __
+2. __
+3. __
+
+目前結果：
+__
+
+預期結果：
+__
+
+錯誤訊息或 log：
+\`\`\`
+貼完整錯誤，不要只貼最後一行
+\`\`\`
+
+/api/debug 結果：
+\`\`\`json
+貼 SET / MISSING 狀態，不要貼 secret
+\`\`\``,
+        },
+        claude: `請你先不要重寫功能。請根據我提供的錯誤訊息，用「最小修改」原則排查：
+1. 先判斷問題屬於 env、auth、database、Stripe webhook、還是 deployment
+2. 列出最可能的 3 個原因
+3. 每次只改一個地方
+4. 改完告訴我要跑哪個指令或打開哪個頁面驗證
+5. 如果需要我去後台設定，請用一步一步 checklist 說明`,
+      },
+      {
+        title: '本章驗收：你能自己定位 80% 的錯誤',
+        body: '完成這章後，你不需要記住所有錯誤，但要知道第一時間去哪裡看。',
+        code: {
+          lang: 'text',
+          content: `□ 500 error 先看 Vercel Function Logs
+□ 登入問題先看 Supabase URL Configuration 和 Google redirect URI
+□ 付款成功但沒解鎖，先看 Stripe Webhooks 和 purchases 表
+□ env 問題先看 /api/debug
+□ 每次求助 AI 時，能貼完整錯誤與操作步驟
+□ 修完一個問題後會立刻驗證，而不是一次改十個地方`,
+        },
+      },
     ],
   },
 
@@ -669,6 +827,19 @@ git commit -m "init: start from template"`,
 □ Stripe Webhook：指向新的 Vercel 網址`,
         },
         tip: '這個 checklist 大概花 30 分鐘，比從零開始省了幾天。',
+      },
+      {
+        title: '本章驗收：你能把模板變成第二個產品',
+        body: '這章完成後，你應該不是只有一個課程網站，而是知道怎麼把同一套架構複製到下一個產品。',
+        code: {
+          lang: 'text',
+          content: `□ 你能說出這個模板的四個模組：Landing、Auth、Payment、Dashboard
+□ 你知道換產品時哪些地方要改文案，哪些地方要改資料表
+□ 你知道每個新產品都要有新的 Supabase / Stripe / Vercel 設定
+□ 你知道不能沿用舊專案的 webhook secret
+□ 你能用 checklist 開出第二個產品草稿
+□ 你知道什麼時候該請 Claude 改文案，什麼時候該請 Claude 改架構`,
+        },
       },
     ],
   },

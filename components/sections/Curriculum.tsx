@@ -1,45 +1,51 @@
 const stages = [
   {
+    num: '00',
+    title: '準備工作：帳號與本機環境',
+    desc: '先把 Claude Code Desktop、Node.js、Git、Vercel CLI、Stripe CLI 準備好，並確認哪些指令該在本機執行。',
+    items: ['帳號清單', '本機工具安裝', 'Claude Code 分頁差異', '開工前驗收'],
+  },
+  {
     num: '01',
-    title: '從想法到 Landing Page，一個指令',
-    desc: '你現在看到的整個課程銷售頁——Hero、Pain Points、課程大綱、學員回饋、定價、FAQ——全部是這樣生出來的。',
-    items: ['需求描述怎麼寫 AI 才看得懂', '版面結構規劃與 Tailwind 設計系統', '每個 Section 的生成與調整過程', '為什麼「改一點」比「重新生」更快'],
+    title: '從想法到 Landing Page',
+    desc: '把模糊需求拆成 Claude Code 能執行的指令，產出首頁、課程大綱、價格、FAQ 等基本銷售頁。',
+    items: ['需求描述', 'Next.js 專案', 'Tailwind 視覺', '首頁驗收'],
   },
   {
     num: '02',
-    title: 'Supabase 登入：Google OAuth 踩坑全記錄',
-    desc: '理論上三行程式就能搞定，實際上你會踩到 redirect URL 白名單、Site URL 設定錯、cookie 沒帶到。我們全踩過。',
-    items: ['Supabase 專案建立與 Vercel 整合', 'Google OAuth Client 設定（正確姿勢）', 'Callback URL 為什麼一直跑到首頁', 'Magic Link 備用方案'],
+    title: 'Google 登入：Supabase Auth 實作',
+    desc: '完成 Supabase 專案、Google OAuth、callback route、Site URL 與 redirect URL 設定。',
+    items: ['Supabase keys', 'Google OAuth', 'Callback URL', '登入驗收'],
   },
   {
     num: '03',
-    title: '環境變數地獄：那個 \\n 差點毀了一切',
-    desc: '用 echo 把 API key 傳給 Vercel，結果 key 的結尾多了一個換行符。Stripe 直接拒收，回傳 500。全過程在這章。',
-    items: ['echo vs printf 的差異（血淚教訓）', 'Vercel env var 的正確設定方式', '怎麼用 debug route 診斷 env 問題', '本機 .env.local 與線上環境的同步'],
+    title: '環境變數與 /api/debug',
+    desc: '整理本機與線上 env 差異，避開 Windows 換行符地獄，建立安全的 debug route。',
+    items: ['.env.local', 'Vercel env', '不洩漏 secret', 'debug 驗收'],
   },
   {
     num: '04',
-    title: '金流串接：Stripe Checkout + Webhook 完整實作',
-    desc: 'Stripe 沙盒帳號從 0 開到能收 TWD 990 的完整路徑：Product/Price 建立、Webhook 簽名驗證、purchases 表寫入、4242 測試卡端到端跑一輪。',
-    items: ['Stripe 帳號註冊 + Product/Price 建立（TWD 帳務）', 'Checkout Session API + 已購用戶 redirect dashboard', 'Webhook 簽名驗證 + request.text() 必坑', 'purchases 表設計 + RLS 與 service client 取捨', '台灣出金 fallback：Gumroad 退路（附錄）'],
+    title: 'Stripe Checkout + Webhook',
+    desc: '建立 TWD 990 商品、Checkout Session、Webhook handler、purchases 表，並用測試卡完整跑通。',
+    items: ['Stripe 商品', 'Webhook 簽名', 'purchases 表', '付款解鎖驗收'],
   },
   {
     num: '05',
-    title: 'Vercel 部署：push code = 自動更新',
-    desc: '從 git init 到 GitHub 連動到 Vercel 自動部署，加上固定域名設定。每次改完 code 一個 push 就上線。',
-    items: ['git init + GitHub repo 建立', 'vercel CLI 部署與環境綁定', '固定 alias vs 每次換 URL 的差異', 'CI/CD：commit → push → 自動部署'],
+    title: 'Vercel 部署與正式環境設定',
+    desc: '推上 GitHub，連接 Vercel，補線上 env，更新 Supabase Site URL 與 Stripe 正式 webhook。',
+    items: ['GitHub repo', 'Vercel 部署', '線上 env', '正式版驗收'],
   },
   {
     num: '06',
-    title: '完整 Debug 實錄：500、CORS、Session 消失',
-    desc: '這是其他課不敢教的部分。我們遇到的每一個錯誤——500 on /api/checkout、session 沒帶到、domain 設錯——全在這章。',
-    items: ['怎麼讀 Vercel function logs', '500 error 的三種來源', 'Session cookie 為什麼在線上不見了', 'debug route 的設計與使用'],
+    title: 'Debug 急救包',
+    desc: '用 Vercel logs、/api/debug、Stripe Webhooks、Supabase 設定定位常見問題，並學會把錯誤貼給 Claude 修。',
+    items: ['500 error', 'Session 消失', '付款沒解鎖', '求助格式'],
   },
   {
     num: '07',
-    title: '同樣的方法，套到你自己的專案',
-    desc: '這整套流程不只能做課程網站。SaaS、作品集、工具型產品——你學到的是一個可以複製的建站方法論。',
-    items: ['架構模板的複用邏輯', '哪些部分換掉、哪些直接套', '從 landing page 到完整產品的延伸路徑', '下一步：把你自己的想法建出來'],
+    title: '把模板改成你的第二個產品',
+    desc: '拆解 Landing、Auth、Payment、Dashboard 四個模組，學會複製架構到下一個產品。',
+    items: ['模板拆解', '換文案', '換資料表', '新專案 checklist'],
   },
 ]
 
@@ -47,20 +53,18 @@ export default function Curriculum() {
   return (
     <section id="curriculum" className="py-20 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="text-center mb-14">
           <p className="text-brand-500 font-semibold text-sm mb-2 uppercase tracking-wider">
             課程大綱
           </p>
           <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">
-            7 章，從零到一個真實產品
+            8 個階段，做出一個可收款產品網站
           </h2>
-          <p className="text-gray-600 max-w-xl mx-auto">
-            不是理論，不是假示範。每一章都是建這個網站時實際發生的過程。
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            這不是工具功能清單，而是一條從開發環境、頁面、登入、付款、部署到 debug 的完整交付流程。
           </p>
         </div>
 
-        {/* Stages */}
         <div className="space-y-4">
           {stages.map((stage) => (
             <StageCard key={stage.num} {...stage} />
