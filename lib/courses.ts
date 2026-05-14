@@ -15,6 +15,11 @@ import {
   COURSE_SUBTITLE as claudeCodeSubtitle,
   type Lesson,
 } from './course-data'
+import {
+  lessons as codexRemotionLessons,
+  COURSE_TITLE as codexRemotionTitle,
+  COURSE_SUBTITLE as codexRemotionSubtitle,
+} from './codex-remotion-data'
 
 export type Tier = 'self' | 'cohort'
 
@@ -38,6 +43,16 @@ export const courses = {
       // self-serve tier so existing deployments keep working with no change.
       self: 'STRIPE_PRICE_ID',
       cohort: 'STRIPE_PRICE_ID_CC_COHORT',
+    },
+  },
+  'codex-remotion': {
+    slug: 'codex-remotion',
+    title: codexRemotionTitle,
+    subtitle: codexRemotionSubtitle,
+    lessons: codexRemotionLessons,
+    stripePriceEnv: {
+      self: 'STRIPE_PRICE_ID_CODEX_REMOTION',
+      cohort: 'STRIPE_PRICE_ID_CODEX_REMOTION_COHORT',
     },
   },
 } satisfies Record<string, Course>

@@ -1,42 +1,49 @@
 import { redirect } from 'next/navigation'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
-import { getCourse, DEFAULT_PRODUCT } from '@/lib/courses'
-import CoursePage from './CoursePage'
+import { DEFAULT_PRODUCT, getCourse, type Tier } from '@/lib/courses'
+import CoursePage, { type CourseOption } from './CoursePage'
+
+interface PurchaseRow {
+  id: string
+  product_id?: string | null
+  tier?: Tier | null
+}
 
 export default async function DashboardPage() {
   const supabase = await createClient()
 
-  // 檢查登入
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // 檢查購買 — service client bypasses RLS
   const serviceClient = createServiceClient()
-  const { data: purchase } = await serviceClient
+  const { data: purchases } = await serviceClient
     .from('purchases')
     .select('id, product_id, tier')
     .eq('user_id', user.id)
     .eq('status', 'completed')
     .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
 
-  if (!purchase) redirect('/#pricing')
+  if (!purchases?.length) redirect('/#pricing')
 
-  // 找對應的課程內容；migration 跑前的舊 row 沒 product_id → fallback to default
-  const course =
-    getCourse((purchase as { product_id?: string }).product_id) ??
-    getCourse(DEFAULT_PRODUCT)!
+  const seen = new Set<string>()
+  const courses: CourseOption[] = []
 
-  // 純文字課程 — 不再從 Supabase Storage 讀影片簽名 URL。
-  // 之後想加 video bonus 再從 course.lessons 為基礎重新拉。
+  for (const purchase of purchases as PurchaseRow[]) {
+    const course = getCourse(purchase.product_id) ?? getCourse(DEFAULT_PRODUCT)
+    if (!course || seen.has(course.slug)) continue
 
-  return (
-    <CoursePage
-      userEmail={user.email ?? ''}
-      courseTitle={course.title}
-      lessons={course.lessons}
-      tier={(purchase as { tier?: 'self' | 'cohort' }).tier ?? 'self'}
-    />
-  )
+    seen.add(course.slug)
+    courses.push({
+      slug: course.slug,
+      title: course.title,
+      lessons: course.lessons,
+      tier: purchase.tier ?? 'self',
+    })
+  }
+
+  if (!courses.length) redirect('/#pricing')
+
+  return <CoursePage userEmail={user.email ?? ''} courses={courses} />
 }

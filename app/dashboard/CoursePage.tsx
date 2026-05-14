@@ -1,36 +1,53 @@
 'use client'
 
-import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
-import type { Lesson } from '@/lib/course-data'
+import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { CheckCircle, Circle, PlayCircle, LogOut, BookOpen, Clock, ChevronRight } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { BookOpen, CheckCircle, ChevronRight, Circle, Clock, LogOut, PlayCircle } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
+import type { Lesson } from '@/lib/course-data'
 import StepGuide from './StepGuide'
+
+export interface CourseOption {
+  slug: string
+  title: string
+  lessons: Lesson[]
+  tier: 'self' | 'cohort'
+}
 
 interface Props {
   userEmail: string
-  /** Course content — passed in so a single dashboard renders any product. */
-  lessons: Lesson[]
-  courseTitle: string
-  /** 'cohort' tier unlocks community / live elements (placeholder for now). */
-  tier?: 'self' | 'cohort'
+  courses: CourseOption[]
 }
 
-export default function CoursePage({ userEmail, lessons, courseTitle, tier = 'self' }: Props) {
-  const [activeId, setActiveId] = useState(lessons[0].id)
+export default function CoursePage({ userEmail, courses }: Props) {
+  const [activeCourseSlug, setActiveCourseSlug] = useState(courses[0]?.slug ?? '')
+  const activeCourse = useMemo(
+    () => courses.find((course) => course.slug === activeCourseSlug) ?? courses[0],
+    [activeCourseSlug, courses],
+  )
+
+  const [activeLessonByCourse, setActiveLessonByCourse] = useState<Record<string, string>>({})
   const [completed, setCompleted] = useState<Set<string>>(new Set())
   const router = useRouter()
   const supabase = createClient()
 
-  const active    = lessons.find(l => l.id === activeId)!
-  const activeIdx = lessons.findIndex(l => l.id === activeId)
-  const progress  = Math.round((completed.size / lessons.length) * 100)
+  const lessons = activeCourse.lessons
+  const activeId = activeLessonByCourse[activeCourse.slug] ?? lessons[0].id
+  const active = lessons.find((lesson) => lesson.id === activeId) ?? lessons[0]
+  const activeIdx = lessons.findIndex((lesson) => lesson.id === active.id)
+  const completedCount = lessons.filter((lesson) => completed.has(`${activeCourse.slug}:${lesson.id}`)).length
+  const progress = Math.round((completedCount / lessons.length) * 100)
+
+  const setActiveLesson = (lessonId: string) => {
+    setActiveLessonByCourse((prev) => ({ ...prev, [activeCourse.slug]: lessonId }))
+  }
 
   const toggleComplete = (id: string) => {
-    setCompleted(prev => {
+    const key = `${activeCourse.slug}:${id}`
+    setCompleted((prev) => {
       const next = new Set(prev)
-      next.has(id) ? next.delete(id) : next.add(id)
+      next.has(key) ? next.delete(key) : next.add(key)
       return next
     })
   }
@@ -41,30 +58,34 @@ export default function CoursePage({ userEmail, lessons, courseTitle, tier = 'se
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Top nav */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <div className="w-7 h-7 bg-brand-500 rounded-lg flex items-center justify-center text-white font-black text-xs">AI</div>
-            <span className="font-bold text-gray-900 text-sm">{courseTitle}</span>
-            {tier === 'cohort' && (
-              <span className="ml-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-brand-500 text-white">
+    <div className="flex min-h-screen flex-col bg-gray-50">
+      <header className="sticky top-0 z-10 border-b border-gray-200 bg-white">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
+          <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-80">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-500 text-xs font-black text-white">
+              AI
+            </div>
+            <span className="max-w-[52vw] truncate text-sm font-bold text-gray-900">
+              {activeCourse.title}
+            </span>
+            {activeCourse.tier === 'cohort' && (
+              <span className="rounded bg-brand-500 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
                 Cohort
               </span>
             )}
           </Link>
+
           <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 text-xs text-gray-500">
-              <div className="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                <div className="h-full bg-brand-500 rounded-full transition-all" style={{ width: `${progress}%` }} />
+            <div className="hidden items-center gap-2 text-xs text-gray-500 sm:flex">
+              <div className="h-1.5 w-24 overflow-hidden rounded-full bg-gray-200">
+                <div className="h-full rounded-full bg-brand-500 transition-all" style={{ width: `${progress}%` }} />
               </div>
               <span>{progress}% 完成</span>
             </div>
-            <span className="text-xs text-gray-400 hidden sm:block">{userEmail}</span>
+            <span className="hidden text-xs text-gray-400 sm:block">{userEmail}</span>
             <button
               onClick={handleSignOut}
-              className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors"
+              className="flex items-center gap-1.5 text-xs text-gray-500 transition-colors hover:text-gray-700"
             >
               <LogOut size={14} />
               登出
@@ -73,37 +94,55 @@ export default function CoursePage({ userEmail, lessons, courseTitle, tier = 'se
         </div>
       </header>
 
-      <div className="flex flex-1 max-w-7xl mx-auto w-full">
-        {/* ── Sidebar ── */}
-        <aside className="w-72 shrink-0 bg-white border-r border-gray-200 overflow-y-auto hidden md:block">
-          <div className="p-4 border-b border-gray-100">
-            <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-              <BookOpen size={13} />
-              <span>{lessons.length} 個章節</span>
-              <span className="text-gray-300">·</span>
-              <span>{completed.size} 已完成</span>
+      <div className="mx-auto flex w-full max-w-7xl flex-1">
+        <aside className="hidden w-72 shrink-0 overflow-y-auto border-r border-gray-200 bg-white md:block">
+          {courses.length > 1 && (
+            <div className="border-b border-gray-100 p-4">
+              <p className="mb-2 text-xs font-semibold text-gray-500">我的課程</p>
+              <div className="space-y-2">
+                {courses.map((course) => (
+                  <button
+                    key={course.slug}
+                    onClick={() => setActiveCourseSlug(course.slug)}
+                    className={`w-full rounded-xl border px-3 py-2 text-left text-xs font-semibold transition-colors ${
+                      course.slug === activeCourse.slug
+                        ? 'border-brand-300 bg-brand-50 text-brand-700'
+                        : 'border-gray-200 text-gray-600 hover:border-brand-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    {course.title}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
-              <div className="h-full bg-brand-500 rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
+          )}
+
+          <div className="border-b border-gray-100 p-4">
+            <div className="mb-2 flex items-center gap-2 text-xs text-gray-500">
+              <BookOpen size={13} />
+              <span>{lessons.length} 章課程</span>
+              <span className="text-gray-300">·</span>
+              <span>{completedCount} 已完成</span>
+            </div>
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+              <div className="h-full rounded-full bg-brand-500 transition-all duration-500" style={{ width: `${progress}%` }} />
             </div>
           </div>
 
           <nav className="py-2">
             {lessons.map((lesson, idx) => {
-              const isActive    = lesson.id === activeId
-              const isDone      = completed.has(lesson.id)
+              const isActive = lesson.id === active.id
+              const isDone = completed.has(`${activeCourse.slug}:${lesson.id}`)
 
               return (
                 <button
                   key={lesson.id}
-                  onClick={() => setActiveId(lesson.id)}
-                  className={`w-full text-left px-4 py-3 flex items-start gap-3 transition-colors group
-                    ${isActive
-                      ? 'bg-brand-50 border-r-2 border-brand-500'
-                      : 'hover:bg-gray-50 border-r-2 border-transparent'
-                    }`}
+                  onClick={() => setActiveLesson(lesson.id)}
+                  className={`group flex w-full items-start gap-3 border-r-2 px-4 py-3 text-left transition-colors ${
+                    isActive ? 'border-brand-500 bg-brand-50' : 'border-transparent hover:bg-gray-50'
+                  }`}
                 >
-                  <div className="mt-0.5 flex-shrink-0">
+                  <div className="mt-0.5 shrink-0">
                     {isDone ? (
                       <CheckCircle size={16} className="text-brand-500" />
                     ) : isActive ? (
@@ -113,16 +152,14 @@ export default function CoursePage({ userEmail, lessons, courseTitle, tier = 'se
                     )}
                   </div>
 
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5 mb-0.5">
-                      <span className="text-[10px] font-mono text-brand-400 font-bold">
-                        {String(idx + 1).padStart(2, '0')}
-                      </span>
-                    </div>
+                  <div className="min-w-0 flex-1">
+                    <span className="mb-0.5 block font-mono text-[10px] font-bold text-brand-400">
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
                     <p className={`text-xs font-medium leading-snug ${isActive ? 'text-brand-700' : 'text-gray-700'}`}>
                       {lesson.title}
                     </p>
-                    <p className="text-[10px] text-gray-400 mt-0.5 flex items-center gap-1">
+                    <p className="mt-0.5 flex items-center gap-1 text-[10px] text-gray-400">
                       <Clock size={9} />
                       {lesson.duration}
                     </p>
@@ -133,34 +170,50 @@ export default function CoursePage({ userEmail, lessons, courseTitle, tier = 'se
           </nav>
         </aside>
 
-        {/* ── Main content ── */}
         <main className="flex-1 overflow-y-auto">
-          {/* Mobile chapter picker */}
-          <div className="md:hidden bg-white border-b border-gray-200 px-4 py-2 overflow-x-auto">
+          {courses.length > 1 && (
+            <div className="border-b border-gray-200 bg-white px-4 py-2 md:hidden">
+              <select
+                value={activeCourse.slug}
+                onChange={(event) => setActiveCourseSlug(event.target.value)}
+                className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-700"
+              >
+                {courses.map((course) => (
+                  <option key={course.slug} value={course.slug}>
+                    {course.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <div className="overflow-x-auto border-b border-gray-200 bg-white px-4 py-2 md:hidden">
             <div className="flex gap-2">
-              {lessons.map((l, i) => (
+              {lessons.map((lesson, idx) => (
                 <button
-                  key={l.id}
-                  onClick={() => setActiveId(l.id)}
-                  className={`flex-shrink-0 text-xs px-3 py-1.5 rounded-full border transition-colors
-                    ${l.id === activeId
-                      ? 'bg-brand-500 text-white border-brand-500'
+                  key={lesson.id}
+                  onClick={() => setActiveLesson(lesson.id)}
+                  className={`shrink-0 rounded-full border px-3 py-1.5 text-xs transition-colors ${
+                    lesson.id === active.id
+                      ? 'border-brand-500 bg-brand-500 text-white'
                       : 'border-gray-200 text-gray-600 hover:border-brand-300'
-                    }`}
+                  }`}
                 >
-                  {String(i + 1).padStart(2, '0')}
+                  {String(idx + 1).padStart(2, '0')}
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="p-6 max-w-4xl">
+          <div className="max-w-4xl p-6">
             <LessonView
               lesson={active}
               lessonNumber={activeIdx + 1}
-              isDone={completed.has(active.id)}
+              isDone={completed.has(`${activeCourse.slug}:${active.id}`)}
               onToggleDone={() => toggleComplete(active.id)}
-              onNext={() => { if (activeIdx < lessons.length - 1) setActiveId(lessons[activeIdx + 1].id) }}
+              onNext={() => {
+                if (activeIdx < lessons.length - 1) setActiveLesson(lessons[activeIdx + 1].id)
+              }}
               isLast={activeIdx === lessons.length - 1}
             />
           </div>
@@ -170,7 +223,6 @@ export default function CoursePage({ userEmail, lessons, courseTitle, tier = 'se
   )
 }
 
-// ── 單章節內容 ──────────────────────────────────────────────────────────────
 function LessonView({
   lesson,
   lessonNumber,
@@ -188,63 +240,59 @@ function LessonView({
 }) {
   return (
     <div>
-      <p className="text-brand-500 text-xs font-semibold uppercase tracking-wider mb-2">
+      <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-brand-500">
         Chapter {String(lessonNumber).padStart(2, '0')}
       </p>
 
-      <h1 className="text-2xl font-black text-gray-900 mb-1">{lesson.title}</h1>
-      <p className="text-sm text-gray-400 flex items-center gap-1 mb-6">
+      <h1 className="mb-1 text-2xl font-black text-gray-900">{lesson.title}</h1>
+      <p className="mb-6 flex items-center gap-1 text-sm text-gray-400">
         <Clock size={13} /> {lesson.duration}
       </p>
 
-      {/* Description */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-4">
-        <h2 className="font-bold text-gray-900 mb-3 text-sm">這章在學什麼</h2>
-        <div className="text-gray-600 text-sm leading-relaxed mb-5 space-y-3">
-          {lesson.description.split('\n\n').map((para, i) => (
-            <p key={i}>{para}</p>
+      <div className="mb-4 rounded-2xl border border-gray-200 bg-white p-6">
+        <h2 className="mb-3 text-sm font-bold text-gray-900">這堂課你會做什麼</h2>
+        <div className="mb-5 space-y-3 text-sm leading-relaxed text-gray-600">
+          {lesson.description.split('\n\n').map((paragraph, idx) => (
+            <p key={idx}>{paragraph}</p>
           ))}
         </div>
 
-        <h2 className="font-bold text-gray-900 mb-3 text-sm">重點內容</h2>
+        <h2 className="mb-3 text-sm font-bold text-gray-900">重點整理</h2>
         <ul className="space-y-2">
-          {lesson.keyPoints.map(pt => (
-            <li key={pt} className="flex items-start gap-2.5 text-sm text-gray-700">
-              <ChevronRight size={15} className="text-brand-400 mt-0.5 flex-shrink-0" />
-              {pt}
+          {lesson.keyPoints.map((point) => (
+            <li key={point} className="flex items-start gap-2.5 text-sm text-gray-700">
+              <ChevronRight size={15} className="mt-0.5 shrink-0 text-brand-400" />
+              {point}
             </li>
           ))}
         </ul>
       </div>
 
-      {/* Step guide */}
       {lesson.steps?.length > 0 && <StepGuide steps={lesson.steps} />}
 
-      {/* Actions */}
-      <div className="flex items-center gap-3 mt-4">
+      <div className="mt-4 flex items-center gap-3">
         <button
           onClick={onToggleDone}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors
-            ${isDone
-              ? 'bg-brand-50 text-brand-600 border border-brand-200 hover:bg-brand-100'
+          className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors ${
+            isDone
+              ? 'border border-brand-200 bg-brand-50 text-brand-600 hover:bg-brand-100'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
+          }`}
         >
           <CheckCircle size={15} />
-          {isDone ? '已完成 ✓' : '標記完成'}
+          {isDone ? '已完成' : '標記完成'}
         </button>
 
-        {!isLast && (
+        {!isLast ? (
           <button
             onClick={onNext}
-            className="flex items-center gap-2 px-4 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-sm font-semibold transition-colors ml-auto"
+            className="ml-auto flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600"
           >
             下一章
             <ChevronRight size={15} />
           </button>
-        )}
-        {isLast && (
-          <p className="text-sm text-gray-400 ml-auto">🎉 全部章節完成！</p>
+        ) : (
+          <p className="ml-auto text-sm text-gray-400">這堂課完成了。</p>
         )}
       </div>
     </div>

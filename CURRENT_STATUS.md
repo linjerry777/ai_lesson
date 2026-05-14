@@ -1,15 +1,17 @@
 # ai_lesson Current Status
 
-Last updated: 2026-05-13
+Last updated: 2026-05-14
 
 This repo is the AI course / paid learning platform. It is currently a text-first course product, not a video-hosting product.
 
 ## Current Product State
 
 - Stack: Next.js 14 App Router, TypeScript, Tailwind CSS, Supabase Auth/DB, Stripe Checkout + webhook, Vercel.
-- Current offer: Claude Code product-shipping workflow course, text-only edition around NT$990.
-- Course content lives mainly in `lib/course-data.ts`.
-- Product registry lives in `lib/courses.ts`; checkout/dashboard are already multi-product aware.
+- Current offers:
+  - Claude Code product-shipping workflow course, text-only edition around NT$990.
+  - Codex + Image2 + Remotion角色動畫工作流, text-first course around NT$1490.
+- Course content lives in `lib/course-data.ts` and `lib/codex-remotion-data.ts`.
+- Product registry lives in `lib/courses.ts`; checkout/dashboard are multi-product aware.
 - Dashboard intentionally does not fetch videos from Supabase Storage right now.
 - `CLAUDE.md` was previously empty; use this file as the durable handoff state.
 
@@ -30,6 +32,16 @@ Updated on 2026-05-13:
 - Corrected Stripe lesson amount from TWD 2640 to current TWD 990 offer.
 - Landing copy now emphasizes "can login, can pay, can deploy" instead of vague AI superpower claims.
 - FAQ explicitly says the course is not suitable for complete non-programmers.
+
+Updated on 2026-05-14:
+
+- Added second course product: `codex-remotion`.
+- Added course content in `lib/codex-remotion-data.ts`.
+- Landing pricing now shows two product cards.
+- Dashboard now supports multiple purchased courses and lets the learner switch courses.
+- New Stripe env vars needed before real checkout works:
+  - `STRIPE_PRICE_ID_CODEX_REMOTION`
+  - `STRIPE_PRICE_ID_CODEX_REMOTION_COHORT`
 
 ## Local Working Tree Notes
 
