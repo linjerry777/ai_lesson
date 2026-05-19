@@ -32,7 +32,10 @@ export async function middleware(request: NextRequest) {
 
   // Protect /dashboard routes
   if (request.nextUrl.pathname.startsWith('/dashboard') && !user) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    const next = `${request.nextUrl.pathname}${request.nextUrl.search}`
+    return NextResponse.redirect(
+      new URL(`/login?next=${encodeURIComponent(next)}`, request.url),
+    )
   }
 
   return supabaseResponse

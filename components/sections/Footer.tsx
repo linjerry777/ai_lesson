@@ -22,6 +22,7 @@ export default function Footer() {
               <p className="text-white font-semibold mb-3 text-xs uppercase tracking-wider">課程</p>
               <ul className="space-y-2">
                 <li><a href="#curriculum" className="hover:text-white transition-colors text-xs">課程大綱</a></li>
+                <li><a href="/market" className="hover:text-white transition-colors text-xs">市場分析</a></li>
                 <li><a href="#instructor" className="hover:text-white transition-colors text-xs">關於講師</a></li>
                 <li><a href="#pricing" className="hover:text-white transition-colors text-xs">立即購課</a></li>
                 <li><a href="#faq" className="hover:text-white transition-colors text-xs">常見問題</a></li>

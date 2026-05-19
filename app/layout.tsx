@@ -10,15 +10,15 @@ const inter = Inter({
 })
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ailesson-two.vercel.app'
-const TITLE = 'Claude Code 實戰工作流 | 做出可登入、可付款、可部署的產品網站'
+const TITLE = 'AI 實作課程路線 | 從免費入門到可收款產品網站'
 const DESCRIPTION =
-  '一堂文字版 AI 實作課：用 Claude Code 建出 Landing Page、Google 登入、Stripe 付款、購買紀錄、Dashboard 與 Vercel 部署流程。'
+  '免費預備課先補終端機、Git、env 與 AI 協作基礎，再用 Claude Code 建出 Landing Page、Google 登入、Stripe 付款、購買紀錄、Dashboard 與 Vercel 部署流程。'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: TITLE,
   description: DESCRIPTION,
-  keywords: ['Claude Code', 'AI 開發', 'Stripe Checkout', 'Supabase Auth', 'Vercel 部署', 'AI 工作流'],
+  keywords: ['Claude Code', 'AI 實作課', 'AI 開發', 'Stripe Checkout', 'Supabase Auth', 'Vercel 部署', 'AI 工作流'],
   alternates: { canonical: '/' },
   openGraph: {
     title: TITLE,

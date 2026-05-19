@@ -1,7 +1,7 @@
 const stats = [
-  { value: '8', label: '完整階段' },
+  { value: '4', label: '免費入門章節' },
+  { value: '8', label: '主課完整階段' },
   { value: '50+', label: 'step-by-step 操作步驟' },
-  { value: '13', label: '可複製 Claude 指令' },
   { value: '1', label: '可上線的真實產品' },
 ]
 

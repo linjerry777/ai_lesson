@@ -1,14 +1,22 @@
 import { createClient } from '@/lib/supabase/server'
+import { normalizeRedirectPath } from '@/lib/safe-redirect'
 import { redirect } from 'next/navigation'
 import LoginForm from './LoginForm'
 
-export default async function LoginPage() {
+interface LoginPageProps {
+  searchParams?: {
+    next?: string
+  }
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const next = normalizeRedirectPath(searchParams?.next)
   const supabase = await createClient()
   const { data: { session } } = await supabase.auth.getSession()
 
   // Already logged in → send to checkout (redirects to dashboard if already purchased)
   if (session) {
-    redirect('/api/checkout')
+    redirect(next)
   }
 
   return (
@@ -25,7 +33,7 @@ export default async function LoginPage() {
           </p>
         </div>
 
-        <LoginForm />
+        <LoginForm nextPath={next} />
 
         <p className="text-center text-xs text-gray-400 mt-6">
           登入即代表你同意我們的{' '}

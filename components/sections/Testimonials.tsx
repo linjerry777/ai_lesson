@@ -1,35 +1,33 @@
-const testimonials = [
+import { Bug, CreditCard, FileStack, Rocket } from 'lucide-react'
+
+const scenarios = [
   {
-    name: '張小明',
-    role: '前端工程師 / 新創公司',
-    avatar: '張',
+    title: '你不是缺更多 AI 工具，而是缺一條能跑完的路線',
+    role: '適合：想做產品網站的人',
+    icon: Rocket,
     quote:
-      '以前買了一堆課都是教 Todo List，看完還是做不出東西。這堂課直接帶我從零把一個能收錢的網站建起來，Google 登入、Stripe 付款全部串好，第一次感覺真的學會了。',
-    stars: 5,
+      '很多課教你用 AI 產生漂亮頁面，但沒有帶你處理登入、付款、購買紀錄、Dashboard、部署。這堂主課把路線收斂成一個可上線網站。',
   },
   {
-    name: '林佳音',
-    role: '接案工程師',
-    avatar: '林',
+    title: '你會卡在 env、OAuth、Webhook，不是卡在語法',
+    role: '適合：自學時常被環境問題卡住的人',
+    icon: Bug,
     quote:
-      'Debug 那章救了我。環境變數地獄、session 在線上消失、webhook 沒反應——這些都是我之前自學時卡最久的地方，這章全部講清楚了。部署完第一次沒踩坑。',
-    stars: 5,
+      '課程把環境變數、Google redirect URI、Stripe webhook secret、Vercel logs 放進正式章節，不把真正會卡住的地方藏在「自行排除」。',
   },
   {
-    name: '陳志偉',
-    role: '後端工程師 / 電商公司',
-    avatar: '陳',
+    title: '你需要知道付款成功後，資料到底寫到哪裡',
+    role: '適合：想把 AI 生成網站變成可收款產品的人',
+    icon: CreditCard,
     quote:
-      '跟著課程一個下午就把整個網站建起來部署上線。Stripe webhook 那段講得很細，之前自己串接一直搞不定 purchases 表沒更新，這章看完三十分鐘就解決了。',
-    stars: 5,
+      '不是只跳出 Stripe Checkout 就算完成。主課要求你跑完付款成功、webhook 收到、purchases 寫入、Dashboard 解鎖的端到端流程。',
   },
   {
-    name: '王建宇',
-    role: '全端工程師 / 外商公司',
-    avatar: '王',
+    title: '你最後拿到的不是知識點，而是一個可複用模板',
+    role: '適合：想把同一套架構換成下一個產品的人',
+    icon: FileStack,
     quote:
-      '最後一章把整套架構拆開說明怎麼複用，直接幫我省掉下一個接案專案八成的建設時間。這堂課買的不只是知識，是一個可以一直套的模板。CP 值很高。',
-    stars: 5,
+      '最後會拆解 Landing、Auth、Payment、Dashboard 四個模組，讓你知道下一個專案要換文案、換資料表、換價格，哪些地方不用重做。',
   },
 ]
 
@@ -50,29 +48,17 @@ export default function Testimonials() {
 
         {/* Cards */}
         <div className="grid md:grid-cols-2 gap-5">
-          {testimonials.map((t) => (
+          {scenarios.map((scenario) => (
             <div
-              key={t.name}
+              key={scenario.title}
               className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm"
             >
-              {/* Stars */}
-              <div className="text-yellow-400 text-sm mb-3">
-                {'★'.repeat(t.stars)}
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-500">
+                <scenario.icon size={20} />
               </div>
-              {/* Quote */}
-              <p className="text-gray-700 text-sm leading-relaxed mb-5">
-                &ldquo;{t.quote}&rdquo;
-              </p>
-              {/* Author */}
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold text-sm">
-                  {t.avatar}
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900 text-sm">{t.name}</p>
-                  <p className="text-gray-400 text-xs">{t.role}</p>
-                </div>
-              </div>
+              <h3 className="mb-2 text-base font-black text-gray-900">{scenario.title}</h3>
+              <p className="mb-4 text-xs font-semibold text-brand-500">{scenario.role}</p>
+              <p className="text-gray-600 text-sm leading-relaxed">{scenario.quote}</p>
             </div>
           ))}
         </div>

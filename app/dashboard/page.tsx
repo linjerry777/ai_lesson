@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
-import { DEFAULT_PRODUCT, getCourse, type Tier } from '@/lib/courses'
+import { FREE_PRODUCT, getCourse, type Tier } from '@/lib/courses'
 import CoursePage, { type CourseOption } from './CoursePage'
 
 interface PurchaseRow {
@@ -9,7 +9,13 @@ interface PurchaseRow {
   tier?: Tier | null
 }
 
-export default async function DashboardPage() {
+interface DashboardPageProps {
+  searchParams?: {
+    course?: string
+  }
+}
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const supabase = await createClient()
 
   const {
@@ -25,13 +31,22 @@ export default async function DashboardPage() {
     .eq('status', 'completed')
     .order('created_at', { ascending: false })
 
-  if (!purchases?.length) redirect('/#pricing')
-
   const seen = new Set<string>()
   const courses: CourseOption[] = []
+  const starterCourse = getCourse(FREE_PRODUCT)
 
-  for (const purchase of purchases as PurchaseRow[]) {
-    const course = getCourse(purchase.product_id) ?? getCourse(DEFAULT_PRODUCT)
+  if (starterCourse) {
+    seen.add(starterCourse.slug)
+    courses.push({
+      slug: starterCourse.slug,
+      title: starterCourse.title,
+      lessons: starterCourse.lessons,
+      tier: 'free',
+    })
+  }
+
+  for (const purchase of (purchases ?? []) as PurchaseRow[]) {
+    const course = getCourse(purchase.product_id)
     if (!course || seen.has(course.slug)) continue
 
     seen.add(course.slug)
@@ -45,5 +60,11 @@ export default async function DashboardPage() {
 
   if (!courses.length) redirect('/#pricing')
 
-  return <CoursePage userEmail={user.email ?? ''} courses={courses} />
+  return (
+    <CoursePage
+      userEmail={user.email ?? ''}
+      courses={courses}
+      initialCourseSlug={searchParams?.course}
+    />
+  )
 }

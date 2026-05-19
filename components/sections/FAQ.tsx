@@ -6,7 +6,7 @@ import { ChevronDown } from 'lucide-react'
 const faqs = [
   {
     q: '完全不會寫程式可以買嗎？',
-    a: '不建議。這堂課不是零基礎入門課，適合至少看得懂基本檔案結構、願意照著指令安裝工具、遇到錯誤能複製 log 問 AI 的人。如果你完全沒碰過 npm、Git、env，會需要更多時間補基礎。',
+    a: '可以先不要買。請先上免費的「AI 實作入門預備課」，完成最後的 checklist：能打開 terminal、知道 Git / Node / env 是什麼、能貼完整錯誤訊息給 AI。五項都能打勾，再買 Claude Code 主課會比較穩。',
   },
   {
     q: '我需要什麼程度才比較適合？',
@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     q: '課程總共包含什麼？',
-    a: '8 個階段的純文字 + 截圖實戰手冊，包含 50+ 個 step-by-step 操作步驟、13 個可直接貼給 Claude Code 的指令、每章驗收清單，以及 Google 登入、Stripe webhook、Vercel env 等常見錯誤排查。實作時間約 4-8 小時，依照你的熟悉程度而定。',
+    a: '目前有三段：免費預備課、Claude Code 產品實戰主課，以及 Codex + Image2 + Remotion 進階工作流。Claude Code 主課是 8 個階段的純文字 + 截圖實戰手冊，包含 50+ 個 step-by-step 操作步驟、可直接貼給 AI 的指令、每章驗收清單，以及 Google 登入、Stripe webhook、Vercel env 等常見錯誤排查。',
   },
   {
     q: '為什麼不是影片課？',
@@ -34,7 +34,11 @@ const faqs = [
   },
   {
     q: '購買後如何開始？',
-    a: '購買完成後，用購課時的 Email 登入即可閱讀所有章節。建議先從 ch00 準備工具開始，照每章最後的驗收清單確認完成，再進下一章。',
+    a: '如果你還不確定程度，先登入免費預備課。購買完成後，用購課時的 Email 登入即可在 Dashboard 切換已取得的課程。建議先從免費預備課或 ch00 準備工具開始，照每章最後的驗收清單確認完成，再進下一章。',
+  },
+  {
+    q: 'Claude Code 主課和 Remotion 進階課要一起買嗎？',
+    a: '不用。想做網站、接案模板、小產品，先買 Claude Code 主課。想做 AI 內容生產、角色動畫、長片工作流，再買 Codex + Image2 + Remotion。兩門課是不同路線，不是強迫加購。',
   },
 ]
 

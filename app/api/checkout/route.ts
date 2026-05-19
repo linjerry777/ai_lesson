@@ -4,6 +4,7 @@ import { getStripe } from '@/lib/stripe'
 import {
   DEFAULT_PRODUCT,
   DEFAULT_TIER,
+  getCourse,
   isValidProduct,
   isValidTier,
   resolveStripePriceId,
@@ -22,6 +23,11 @@ export async function GET(request: NextRequest) {
 
     const productId = isValidProduct(rawProduct) ? rawProduct : DEFAULT_PRODUCT
     const tier = isValidTier(rawTier) ? rawTier : DEFAULT_TIER
+    const course = getCourse(productId)
+
+    if (course?.isFree) {
+      return NextResponse.redirect(new URL(`/dashboard?course=${productId}`, SITE_URL))
+    }
 
     const priceLookup = resolveStripePriceId(productId, tier)
     if (!priceLookup) {
@@ -50,7 +56,7 @@ export async function GET(request: NextRequest) {
       .maybeSingle()
 
     if (purchase) {
-      return NextResponse.redirect(new URL('/dashboard', SITE_URL))
+      return NextResponse.redirect(new URL(`/dashboard?course=${productId}`, SITE_URL))
     }
 
     // ── 4. Stripe Checkout Session ─────────────────────────────────────

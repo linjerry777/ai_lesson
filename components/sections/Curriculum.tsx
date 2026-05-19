@@ -1,5 +1,11 @@
 const stages = [
   {
+    num: 'FREE',
+    title: '免費預備課：新手先補 AI 實作基礎',
+    desc: '先理解 terminal、Node、Git、專案結構、.env.local 與錯誤求救格式，確認自己適不適合進主課。',
+    items: ['工具地圖', '專案結構', 'env 安全', 'AI 求救格式'],
+  },
+  {
     num: '00',
     title: '準備工作：帳號與本機環境',
     desc: '先把 Claude Code Desktop、Node.js、Git、Vercel CLI、Stripe CLI 準備好，並確認哪些指令該在本機執行。',
@@ -58,7 +64,7 @@ export default function Curriculum() {
             課程大綱
           </p>
           <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">
-            8 個階段，做出一個可收款產品網站
+            免費預備課 + 8 個階段，做出一個可收款產品網站
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
             這不是工具功能清單，而是一條從開發環境、頁面、登入、付款、部署到 debug 的完整交付流程。

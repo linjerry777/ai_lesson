@@ -20,6 +20,11 @@ import {
   COURSE_TITLE as codexRemotionTitle,
   COURSE_SUBTITLE as codexRemotionSubtitle,
 } from './codex-remotion-data'
+import {
+  lessons as starterLessons,
+  COURSE_TITLE as starterTitle,
+  COURSE_SUBTITLE as starterSubtitle,
+} from './starter-course-data'
 
 export type Tier = 'self' | 'cohort'
 
@@ -28,11 +33,19 @@ export interface Course {
   title: string
   subtitle: string
   lessons: Lesson[]
+  isFree?: boolean
   /** Env var name that stores the Stripe price id for each tier. */
-  stripePriceEnv: Record<Tier, string>
+  stripePriceEnv?: Record<Tier, string>
 }
 
 export const courses = {
+  'starter-free': {
+    slug: 'starter-free',
+    title: starterTitle,
+    subtitle: starterSubtitle,
+    lessons: starterLessons,
+    isFree: true,
+  },
   'claude-code': {
     slug: 'claude-code',
     title: claudeCodeTitle,
@@ -60,6 +73,7 @@ export const courses = {
 export type ProductSlug = keyof typeof courses
 
 export const DEFAULT_PRODUCT: ProductSlug = 'claude-code'
+export const FREE_PRODUCT: ProductSlug = 'starter-free'
 export const DEFAULT_TIER: Tier = 'self'
 
 export function getCourse(slug: string | null | undefined): Course | null {
@@ -74,6 +88,7 @@ export function resolveStripePriceId(
 ): { priceId: string; envKey: string } | null {
   const course = getCourse(slug)
   if (!course) return null
+  if (course.isFree || !course.stripePriceEnv) return null
   const envKey = course.stripePriceEnv[tier]
   const raw = process.env[envKey]
   const trimmed = raw?.trim()

@@ -142,6 +142,28 @@ scoop install stripe`,
     ],
     steps: [
       {
+        title: '先寫一頁需求單，不要直接叫 AI 開工',
+        body: '新手最容易失敗的地方，是一開始只說「幫我做一個網站」。Claude 會猜很多東西，猜錯之後你也不知道哪裡錯。先用下面這份需求單，把產品、受眾、頁面區塊和驗收標準寫清楚。',
+        code: {
+          lang: 'text',
+          content: `產品名稱：
+這個產品賣給誰：
+學員/客戶最想解決的問題：
+首頁需要哪些區塊：
+價格：
+付款後要看到什麼：
+這一章完成後，我應該看到什麼：`,
+        },
+        claude: `我想做一個線上課程銷售網站。請先幫我把需求整理成一頁規格，不要寫程式。
+
+請包含：
+1. 首頁需要哪些 section
+2. 每個 section 的目的
+3. 第一版只需要做到哪些功能
+4. 什麼算完成，什麼先不要做`,
+        tip: '如果這份需求單寫不出來，不要急著進 Next.js。先把受眾、價格、付款後交付內容想清楚，後面會少很多返工。',
+      },
+      {
         title: '建立 Next.js 專案',
         body: '打開 Claude Code Desktop，選一個你想放專案的資料夾，然後貼這段給它：',
         claude: `幫我建立一個 Next.js 16 的專案，名稱叫 ai-lesson。
@@ -413,6 +435,13 @@ STRIPE_WEBHOOK_SECRET=whsec_...（Stripe Dashboard 線上 webhook 的 secret）`
       '用測試卡 4242 把整條付款流程端到端跑通',
     ],
     steps: [
+      {
+        title: '先建立 Stripe 帳號，並確認你在 Test mode',
+        body: '如果你還沒有 Stripe 帳號，先到 stripe.com 註冊。這章先用測試模式，不需要真的收款，也不需要馬上完成正式營業資料審核。登入後請確認 Dashboard 左下角或上方切換在 Test mode。',
+        link: { text: '打開 Stripe Dashboard', url: 'https://dashboard.stripe.com/' },
+        warning: '本章所有操作都先用 Test mode。不要拿 live secret key 測試，也不要把正式 key 貼給 AI。正式上線的 webhook secret 會在 ch05 部署後再設定。',
+        tip: '如果 Stripe 要你補公司或個人資料，先完成能進 Dashboard 的基本註冊即可。真的要上線收款前，再依 Stripe 的指示完成正式帳戶啟用。',
+      },
       {
         title: '在 Stripe 建立商品和價格',
         body: '1. 打開 Stripe Dashboard（確認左下角是 Test mode）\n2. 左側 Product catalog → + Add product\n3. 填入課程名稱\n4. 價格填 990，幣別選 TWD，選「One time」\n5. 建立後點進商品，複製 Price ID（格式是 price_xxx）',
@@ -797,6 +826,29 @@ __
 
 品牌色保持橘色，版面結構不變，只換內容。`,
         tip: '把 [括號內的東西] 換成你自己的產品描述，然後貼給 Claude。它會幫你把所有文案一次換完。也可以先用 /ui-ux-pro-max 讓 Claude 自動優化整體視覺。',
+      },
+      {
+        title: '把你的內容先整理成資料，不要先改畫面',
+        body: '如果你的下一個產品也是課程、電子書、模板包或會員內容，請先把內容整理成資料結構，再交給 Claude 改 dashboard。這樣比較不會把文案散落在十幾個元件裡，之後也比較好改。',
+        code: {
+          lang: 'ts',
+          content: `export const productContent = {
+  title: '你的產品名稱',
+  subtitle: '一句話說明交付結果',
+  modules: [
+    {
+      id: 'm01',
+      title: '第一個模組',
+      outcome: '學完會得到什麼',
+      steps: ['步驟 1', '步驟 2', '步驟 3'],
+    },
+  ],
+}`,
+        },
+        claude: `請先不要改 UI。請幫我把我的新產品內容整理成 TypeScript 資料檔，格式包含 title、subtitle、modules、每個 module 的 outcome 和 steps。
+
+整理完後，再告訴我 dashboard 需要改哪些元件來讀這份資料。`,
+        tip: '先資料化，再改 UI。這個順序會讓你之後新增第二門課、第二個產品、第二種 dashboard 時容易很多。',
       },
       {
         title: '從這個模板開始新專案',

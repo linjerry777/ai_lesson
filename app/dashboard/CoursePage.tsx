@@ -12,16 +12,20 @@ export interface CourseOption {
   slug: string
   title: string
   lessons: Lesson[]
-  tier: 'self' | 'cohort'
+  tier: 'free' | 'self' | 'cohort'
 }
 
 interface Props {
   userEmail: string
   courses: CourseOption[]
+  initialCourseSlug?: string
 }
 
-export default function CoursePage({ userEmail, courses }: Props) {
-  const [activeCourseSlug, setActiveCourseSlug] = useState(courses[0]?.slug ?? '')
+export default function CoursePage({ userEmail, courses, initialCourseSlug }: Props) {
+  const initialCourse = courses.some((course) => course.slug === initialCourseSlug)
+    ? initialCourseSlug!
+    : courses[0]?.slug ?? ''
+  const [activeCourseSlug, setActiveCourseSlug] = useState(initialCourse)
   const activeCourse = useMemo(
     () => courses.find((course) => course.slug === activeCourseSlug) ?? courses[0],
     [activeCourseSlug, courses],
@@ -71,6 +75,11 @@ export default function CoursePage({ userEmail, courses }: Props) {
             {activeCourse.tier === 'cohort' && (
               <span className="rounded bg-brand-500 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
                 Cohort
+              </span>
+            )}
+            {activeCourse.tier === 'free' && (
+              <span className="rounded bg-green-500 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+                Free
               </span>
             )}
           </Link>

@@ -1,6 +1,6 @@
 # ai_lesson Current Status
 
-Last updated: 2026-05-14
+Last updated: 2026-05-19
 
 This repo is the AI course / paid learning platform. It is currently a text-first course product, not a video-hosting product.
 
@@ -8,9 +8,10 @@ This repo is the AI course / paid learning platform. It is currently a text-firs
 
 - Stack: Next.js 14 App Router, TypeScript, Tailwind CSS, Supabase Auth/DB, Stripe Checkout + webhook, Vercel.
 - Current offers:
+  - Free beginner primer: AI implementation basics before paid courses.
   - Claude Code product-shipping workflow course, text-only edition around NT$990.
   - Codex + Image2 + Remotion角色動畫工作流, text-first course around NT$1490.
-- Course content lives in `lib/course-data.ts` and `lib/codex-remotion-data.ts`.
+- Course content lives in `lib/starter-course-data.ts`, `lib/course-data.ts`, and `lib/codex-remotion-data.ts`.
 - Product registry lives in `lib/courses.ts`; checkout/dashboard are multi-product aware.
 - Dashboard intentionally does not fetch videos from Supabase Storage right now.
 - `CLAUDE.md` was previously empty; use this file as the durable handoff state.
@@ -42,6 +43,24 @@ Updated on 2026-05-14:
 - New Stripe env vars needed before real checkout works:
   - `STRIPE_PRICE_ID_CODEX_REMOTION`
   - `STRIPE_PRICE_ID_CODEX_REMOTION_COHORT`
+
+Updated on 2026-05-19:
+
+- Added free beginner primer product: `starter-free`.
+- Free course content lives in `lib/starter-course-data.ts`.
+- Logged-in users can read the free course in Dashboard without a purchase record.
+- Dashboard supports `?course=<slug>` so free and paid CTAs can open the intended course.
+- Login/OAuth callback now preserves safe `next` paths with query strings, so buying `codex-remotion` after login no longer falls back to the default course checkout.
+- `.env.local.example` now includes `STRIPE_PRICE_ID_CODEX_REMOTION` and `STRIPE_PRICE_ID_CODEX_REMOTION_COHORT`.
+- Added public course market analysis feature at `/market`.
+- `/market` includes 2026 course demand signals, source links, and an interactive competitor course analyzer.
+- Reworked landing-page sales path into a clearer ladder: free primer → recommended Claude Code main course → Codex/Image2/Remotion advanced route.
+- Replaced testimonial-style cards with honest "common stuck points" scenario cards to avoid fake social-proof signals.
+- Added course-content safety rails:
+  - ch01 now starts with a one-page requirements brief before asking AI to generate the site.
+  - ch04 now includes Stripe account/Test mode setup before product and Price ID creation.
+  - ch07 now teaches structuring future product content as data before changing UI.
+- Navbar and metadata now lead with the lower-friction free primer instead of only pushing the NT$990 checkout.
 
 ## Local Working Tree Notes
 

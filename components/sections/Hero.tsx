@@ -1,10 +1,11 @@
 import { CheckCircle, Zap } from 'lucide-react'
 
 const bullets = [
-  '從 Landing Page 到 Google 登入、Stripe 付款、Vercel 部署',
-  '每章都有「做到這裡應該看到什麼」驗收清單',
-  '附錯誤排查格式，讓你知道怎麼把問題貼給 Claude 修',
-  '不是零基礎神課，而是帶你做出一個真的能收款的產品網站',
+  '免費預備課先確認你能不能跟 AI 做實作，不急著付款',
+  '主課帶你做出 Landing Page、Google 登入、Stripe 付款、Dashboard、Vercel 部署',
+  '每章都有驗收清單：做到這裡應該看到什麼、卡住要貼什麼給 AI',
+  '不是工具介紹課，而是一條可以重複套用到下一個產品的交付流程',
+  '進階路線再延伸到 Codex + Image2 + Remotion 的 AI 內容工廠',
 ]
 
 export default function Hero() {
@@ -15,21 +16,21 @@ export default function Hero() {
           <div>
             <div className="inline-flex items-center gap-2 bg-brand-50 border border-brand-200 text-brand-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
               <Zap size={12} className="fill-brand-500 text-brand-500" />
-              適合有一點工程基礎，想用 AI 真的交付產品的人
+              先免費入門，再做出可收款網站，最後擴成 AI 內容工廠
             </div>
 
             <h1 className="text-4xl sm:text-5xl font-black text-gray-900 leading-tight mb-4">
-              用 Claude Code
+              從 AI 新手
               <br />
-              <span className="text-brand-500">做出可收款網站</span>
+              <span className="text-brand-500">到可交付作品</span>
               <br />
-              而不是只看工具教學
+              別再只看工具教學
             </h1>
 
             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              這是一堂文字版實戰課。你會照著流程，用 Claude Code 建出一個
+              這是一套文字版 AI 實作路線。你可以先用免費預備課確認自己跟得上；準備好之後，用 Claude Code 建出一個
               <strong className="text-gray-900"> 有登入、金流、購買紀錄、Dashboard、部署流程 </strong>
-              的真實產品網站。遇到 bug 也不跳過，直接把 debug 方法放進課程。
+              的真實產品網站。想做內容生產，再進階到 Codex、Image2、Remotion 的影片工作流。
             </p>
 
             <ul className="space-y-3 mb-8">
@@ -47,20 +48,28 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6">
               <div>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black text-gray-900">NT$990</span>
-                  <span className="text-gray-400 line-through text-lg">NT$2,640</span>
+                  <span className="text-3xl font-black text-gray-900">免費開始</span>
+                  <span className="text-gray-400 text-lg">主課 NT$990</span>
                 </div>
-                <p className="text-xs text-gray-500 mt-0.5">文字實戰版，購買後永久存取</p>
+                <p className="text-xs text-gray-500 mt-0.5">先完成入門 checklist，再決定是否購買主課</p>
               </div>
               <a
-                href="#pricing"
+                href="/login?next=%2Fdashboard%3Fcourse%3Dstarter-free"
                 className="bg-brand-500 hover:bg-brand-600 text-white font-bold px-8 py-4 rounded-xl text-base transition-colors shadow-lg shadow-brand-500/25 hover:shadow-brand-600/25"
               >
-                開始學習
+                先上免費預備課
+              </a>
+              <a
+                href="#pricing"
+                className="border border-gray-200 bg-white px-8 py-4 text-base font-bold text-gray-700 transition-colors hover:border-brand-200 hover:text-brand-600 rounded-xl"
+              >
+                看課程方案
               </a>
             </div>
 
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+              <span>免費預備課</span>
+              <span className="text-gray-300">|</span>
               <span>8 階段完整流程</span>
               <span className="text-gray-300">|</span>
               <span>50+ 操作步驟</span>
@@ -101,8 +110,8 @@ export default function Hero() {
             </div>
 
             <div className="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg border border-gray-100 px-4 py-3">
-              <p className="text-xs text-gray-500">課程定位</p>
-              <p className="text-2xl font-black text-brand-500">實戰交付</p>
+              <p className="text-xs text-gray-500">學習路線</p>
+              <p className="text-2xl font-black text-brand-500">免費 → 主課 → 進階</p>
             </div>
           </div>
         </div>
