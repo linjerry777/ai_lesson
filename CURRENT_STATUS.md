@@ -21,6 +21,7 @@ AI Lesson is a text-first course platform. It is not a video-hosting product.
 - As of this audit, AI Lesson has 0 purchases, 0 pending external entitlements, and 0 claimed external entitlements in the shared project.
 - Vercel Production had empty Supabase values. `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` were restored from the verified local shared-project configuration on 2026-07-16.
 - `AI_LESSON_PAYMENTS_ENABLED=false` is set in Vercel Production. Direct paid checkout is blocked server-side and paid CTA buttons are disabled.
+- Production deployment `dpl_GNeqSzQMKxZnL7PWKGVaG4y845oh` is Ready and aliased to `https://ailesson-two.vercel.app`.
 
 ## Payment State
 
@@ -55,6 +56,12 @@ AI Lesson is a text-first course platform. It is not a video-hosting product.
 - `/login`: Google and Email controls render at 390px; Google OAuth reaches the Google authorization page with the local callback preserved.
 - Unauthenticated `/dashboard?course=starter-free` redirects to login and preserves the safe `next` path.
 - With a one-time local session for an existing Supabase user, the free Dashboard renders on mobile and desktop, shows all 4 primer chapters, and has no console warning/error, overlay, or horizontal overflow.
+- Production smoke at `https://ailesson-two.vercel.app` confirms:
+  - homepage and login render with zero console errors or warnings;
+  - both paid CTAs remain disabled;
+  - direct paid checkout redirects to `payments_unavailable` and the pricing section;
+  - unauthenticated Dashboard preserves its `next` path;
+  - Google OAuth reaches Google's authorization page with the production callback URL.
 
 ## Missing Or Intentionally Deferred
 
