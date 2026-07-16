@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Menu, X, LogOut, BookOpen } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
@@ -26,7 +27,7 @@ export default function Navbar() {
       setUser(session?.user ?? null)
     })
     return () => subscription.unsubscribe()
-  }, [])
+  }, [supabase])
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -92,9 +93,12 @@ export default function Navbar() {
                 {/* Avatar + name */}
                 <div className="flex items-center gap-2 pl-3 border-l border-gray-200">
                   {avatarUrl && !avatarError ? (
-                    <img
+                    <Image
                       src={avatarUrl}
                       alt={displayName}
+                      width={32}
+                      height={32}
+                      unoptimized
                       className="w-8 h-8 rounded-full object-cover ring-2 ring-brand-100"
                       onError={() => setAvatarError(true)}
                     />
@@ -113,6 +117,7 @@ export default function Navbar() {
                   onClick={handleLogout}
                   className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-red-500 transition-colors"
                   title="登出"
+                  aria-label="登出"
                 >
                   <LogOut size={15} />
                 </button>
@@ -140,7 +145,8 @@ export default function Navbar() {
           <button
             className="md:hidden p-2 text-gray-600"
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
+            aria-label={menuOpen ? '關閉選單' : '開啟選單'}
+            aria-expanded={menuOpen}
           >
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -169,7 +175,10 @@ export default function Navbar() {
                 <span className="text-sm text-gray-700 font-medium truncate">{displayName}</span>
               </div>
               <button
-                onClick={() => { handleLogout(); setMenuOpen(false) }}
+                onClick={() => {
+                  void handleLogout()
+                  setMenuOpen(false)
+                }}
                 className="w-full flex items-center justify-center gap-2 border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-colors"
               >
                 <LogOut size={15} />

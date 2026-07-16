@@ -4,13 +4,15 @@ import { redirect } from 'next/navigation'
 import LoginForm from './LoginForm'
 
 interface LoginPageProps {
-  searchParams?: {
+  searchParams?: Promise<{
     next?: string
-  }
+    error?: string
+  }>
 }
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const next = normalizeRedirectPath(searchParams?.next)
+  const query = await searchParams
+  const next = normalizeRedirectPath(query?.next)
   const supabase = await createClient()
   const { data: { session } } = await supabase.auth.getSession()
 
@@ -33,7 +35,10 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           </p>
         </div>
 
-        <LoginForm nextPath={next} />
+        <LoginForm
+          nextPath={next}
+          initialError={query?.error ? '登入沒有完成，請再試一次。' : undefined}
+        />
 
         <p className="text-center text-xs text-gray-400 mt-6">
           登入即代表你同意我們的{' '}

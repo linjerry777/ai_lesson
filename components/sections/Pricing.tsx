@@ -1,4 +1,5 @@
-import { BookOpen, CheckCircle, Infinity, RefreshCw, Shield, Sparkles, Video } from 'lucide-react'
+import { BookOpen, CheckCircle, FileSearch, Infinity, Shield, Sparkles, Video } from 'lucide-react'
+import { resolveStripePriceId } from '@/lib/courses'
 
 const products = [
   {
@@ -7,7 +8,6 @@ const products = [
     title: 'AI 實作入門預備課',
     description: '先補終端機、Git、env、專案結構與 AI 求救格式，再決定要不要進主課。',
     price: '免費',
-    original: '',
     icon: BookOpen,
     href: '/login?next=%2Fdashboard%3Fcourse%3Dstarter-free',
     cta: '免費開始',
@@ -27,7 +27,6 @@ const products = [
     title: 'Claude Code 實戰課',
     description: '從零做出可部署的 SaaS：登入、資料庫、付款、部署與 debug 流程。',
     price: 'NT$990',
-    original: 'NT$2,640',
     icon: Sparkles,
     href: '/api/checkout?product=claude-code&tier=self',
     cta: '取得主課',
@@ -47,7 +46,6 @@ const products = [
     title: 'Codex + Image2 + Remotion 角色動畫工作流',
     description: '把 Codex、Image2、CliRelay、Remotion 串成可重複生產的長片系統。',
     price: 'NT$1,490',
-    original: 'NT$3,600',
     icon: Video,
     href: '/api/checkout?product=codex-remotion&tier=self',
     cta: '取得進階課',
@@ -64,12 +62,15 @@ const products = [
 ]
 
 const badges = [
-  { icon: Shield, text: 'Stripe 安全付款', sub: '正式金流與 webhook' },
-  { icon: RefreshCw, text: '7 天退款', sub: '不適合就退款' },
+  { icon: Shield, text: 'Stripe Sandbox', sub: '測試流程，不會扣款' },
+  { icon: FileSearch, text: '文字實作手冊', sub: '可搜尋、複製與更新' },
   { icon: Infinity, text: '永久存取', sub: '課程更新可回看' },
 ]
 
 export default function Pricing() {
+  const isStripeSandbox = process.env.STRIPE_SECRET_KEY?.trim().startsWith('sk_test_') ?? false
+  const paymentsEnabled = process.env.AI_LESSON_PAYMENTS_ENABLED === 'true'
+
   return (
     <section id="pricing" className="bg-white py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -83,10 +84,26 @@ export default function Pricing() {
           <p className="text-gray-500">
             完全新手先走免費預備課。想做產品網站，選 Claude Code 主課。已經能操作本機工具、想做 AI 影片工作流，再選進階課。
           </p>
+          {!paymentsEnabled && (
+            <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+              目前可直接使用免費預備課；付費課已定價，但付款入口暫停，尚未開放正式收款。
+            </p>
+          )}
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
-          {products.map((product) => (
+          {products.map((product) => {
+            const isFree = product.slug === 'starter-free'
+            const hasCheckout = isFree || (
+              paymentsEnabled && Boolean(resolveStripePriceId(product.slug, 'self'))
+            )
+            const ctaLabel = isFree
+              ? product.cta
+              : hasCheckout && isStripeSandbox
+                ? 'Sandbox 測試結帳'
+                : product.cta
+
+            return (
             <article
               key={product.slug}
               className={`relative flex h-full flex-col overflow-hidden rounded-3xl border-2 bg-white ${
@@ -123,13 +140,14 @@ export default function Pricing() {
                   <div className="mb-1 flex items-end gap-3">
                     <span className="text-5xl font-black text-gray-900">{product.price}</span>
                   </div>
-                  {product.original ? (
-                    <p className="text-sm text-gray-400">
-                      原價 <span className="line-through">{product.original}</span>
-                      <span className="ml-2 font-semibold text-green-600">早鳥一次買斷</span>
+                  {isFree ? (
+                    <p className="text-sm font-semibold text-green-600">登入後立即閱讀</p>
+                  ) : hasCheckout ? (
+                    <p className="text-sm font-semibold text-amber-700">
+                      {isStripeSandbox ? 'Sandbox 展示價，不會實際扣款' : '一次買斷'}
                     </p>
                   ) : (
-                    <p className="text-sm font-semibold text-green-600">登入後立即閱讀</p>
+                    <p className="text-sm font-semibold text-gray-500">付款入口設定中</p>
                   )}
                 </div>
 
@@ -142,15 +160,25 @@ export default function Pricing() {
                   ))}
                 </ul>
 
-                <a
-                  href={product.href}
-                  className="block w-full rounded-xl bg-brand-500 px-6 py-4 text-center text-base font-bold text-white shadow-lg shadow-brand-500/25 transition-colors hover:bg-brand-600"
-                >
-                  {product.cta}
-                </a>
+                {hasCheckout ? (
+                  <a
+                    href={product.href}
+                    className="block w-full rounded-xl bg-brand-500 px-6 py-4 text-center text-base font-bold text-white shadow-lg shadow-brand-500/25 transition-colors hover:bg-brand-600"
+                  >
+                    {ctaLabel}
+                  </a>
+                ) : (
+                  <span
+                    aria-disabled="true"
+                    className="block w-full cursor-not-allowed rounded-xl bg-gray-100 px-6 py-4 text-center text-base font-bold text-gray-500"
+                  >
+                    尚未開放
+                  </span>
+                )}
               </div>
             </article>
-          ))}
+            )
+          })}
         </div>
 
         <div className="mt-8 flex flex-wrap justify-center gap-6">

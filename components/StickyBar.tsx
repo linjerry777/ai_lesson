@@ -29,7 +29,7 @@ export default function StickyBar() {
             </div>
             <div className="flex items-center gap-3 ml-auto">
               <div className="hidden text-right sm:block">
-                <span className="text-xs text-gray-400 line-through block">NT$2,640</span>
+                <span className="block text-xs text-gray-400">主課定價</span>
                 <span className="text-lg font-bold text-brand-500">NT$990</span>
               </div>
               <a

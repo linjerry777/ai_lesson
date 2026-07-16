@@ -128,8 +128,8 @@ export default async function OG() {
             }}
           >
             <span style={{ fontSize: 44 }}>NT$990</span>
-            <span style={{ color: '#9ca3af', fontSize: 22, textDecoration: 'line-through' }}>
-              NT$2,640
+            <span style={{ color: '#9ca3af', fontSize: 20 }}>
+              Sandbox demo
             </span>
           </span>
         </div>

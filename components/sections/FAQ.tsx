@@ -66,6 +66,8 @@ export default function FAQ() {
               <button
                 className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                aria-expanded={openIndex === i}
+                aria-controls={`faq-answer-${i}`}
               >
                 <span className="font-semibold text-gray-900 text-sm">{faq.q}</span>
                 <ChevronDown
@@ -76,7 +78,7 @@ export default function FAQ() {
                 />
               </button>
               {openIndex === i && (
-                <div className="px-6 pb-5">
+                <div id={`faq-answer-${i}`} className="px-6 pb-5">
                   <p className="text-gray-600 text-sm leading-relaxed">{faq.a}</p>
                 </div>
               )}

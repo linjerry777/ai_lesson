@@ -52,13 +52,14 @@ const courseJsonLd = {
   hasCourseInstance: {
     '@type': 'CourseInstance',
     courseMode: 'online',
-    courseWorkload: 'PT4H',
   },
   offers: {
     '@type': 'Offer',
     price: '990',
     priceCurrency: 'TWD',
-    availability: 'https://schema.org/InStock',
+    availability: process.env.STRIPE_SECRET_KEY?.trim().startsWith('sk_test_')
+      ? 'https://schema.org/PreOrder'
+      : 'https://schema.org/InStock',
     url: `${SITE_URL}/#pricing`,
   },
 }
@@ -69,7 +70,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
         />
       </head>

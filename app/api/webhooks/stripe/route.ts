@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getStripe } from '@/lib/stripe'
 import { createServiceClient } from '@/lib/supabase/server'
+import { buildStripePurchaseRecord, purchaseUpsert } from '@/lib/purchase-entitlements'
 
 export async function POST(request: NextRequest) {
   const body = await request.text()
@@ -20,28 +21,17 @@ export async function POST(request: NextRequest) {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object
-    const userId = session.metadata?.user_id
-    // Defaults preserve back-compat for any legacy session created before
-    // multi-product metadata existed.
-    const productId = session.metadata?.product_id ?? 'claude-code'
-    const tier = session.metadata?.tier ?? 'self'
-
-    if (!userId) {
-      console.error('[webhook/stripe] missing user_id in metadata')
-      return NextResponse.json({ error: 'Missing user_id' }, { status: 400 })
+    let upsert
+    try {
+      upsert = purchaseUpsert(buildStripePurchaseRecord(session))
+    } catch (error) {
+      console.error('[webhook/stripe] invalid entitlement metadata:', error)
+      return NextResponse.json({ error: 'Invalid entitlement metadata' }, { status: 400 })
     }
 
     const { error } = await createServiceClient()
       .from('purchases')
-      .upsert({
-        user_id: userId,
-        stripe_session_id: session.id,
-        amount: session.amount_total,
-        currency: session.currency,
-        status: 'completed',
-        product_id: productId,
-        tier,
-      }, { onConflict: 'stripe_session_id' })
+      .upsert(upsert.values, upsert.options)
 
     if (error) {
       console.error('[webhook/stripe] db insert error:', error)

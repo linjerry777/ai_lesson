@@ -21,6 +21,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
+/.playwright-mcp/
+/supabase/.temp/
 
 # local env files
 .env*.local

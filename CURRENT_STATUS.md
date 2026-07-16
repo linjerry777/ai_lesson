@@ -1,119 +1,80 @@
 # ai_lesson Current Status
 
-Last updated: 2026-05-19
+Last updated: 2026-07-16
 
-This repo is the AI course / paid learning platform. It is currently a text-first course product, not a video-hosting product.
+AI Lesson is a text-first course platform. It is not a video-hosting product.
 
-## Current Product State
+## Real And Verified
 
-- Stack: Next.js 14 App Router, TypeScript, Tailwind CSS, Supabase Auth/DB, Stripe Checkout + webhook, Vercel.
-- Current offers:
-  - Free beginner primer: AI implementation basics before paid courses.
-  - Claude Code product-shipping workflow course, text-only edition around NT$990.
-  - Codex + Image2 + Remotion角色動畫工作流, text-first course around NT$1490.
+- Stack: Next.js 16.2.10, React 19.2.4, TypeScript, Tailwind CSS, Supabase Auth/Postgres, Stripe SDK, and Vercel.
+- Public products:
+  - `starter-free`: AI 實作入門預備課, 4 chapters, available after login without a purchase.
+  - `claude-code`: Claude Code 實戰工作流, 8-stage text course, listed at NT$990.
+  - `codex-remotion`: Codex + Image2 + Remotion 角色動畫工作流, text course, listed at NT$1,490.
 - Course content lives in `lib/starter-course-data.ts`, `lib/course-data.ts`, and `lib/codex-remotion-data.ts`.
-- Product registry lives in `lib/courses.ts`; checkout/dashboard are multi-product aware.
-- Dashboard intentionally does not fetch videos from Supabase Storage right now.
-- `CLAUDE.md` was previously empty; use this file as the durable handoff state.
+- The registry in `lib/courses.ts` is the source of truth for product slugs, lessons, tiers, and Stripe Price env names.
+- Shared Supabase project `jerry-platform` is reachable from local credentials.
+- Supabase Auth settings return 200; Google and Email providers are enabled.
+- AI Lesson reads and writes purchases with `app_id = 'ai-lesson'`.
+- OAuth callback registers app membership and attempts CommercePilot entitlement claims without making login depend on the external bridge.
+- External claims normalize purchaser email, validate provider/product/tier, use an app-scoped synthetic session id, and are retry-safe through the `(app_id, stripe_session_id)` upsert boundary.
+- As of this audit, AI Lesson has 0 purchases, 0 pending external entitlements, and 0 claimed external entitlements in the shared project.
+- Vercel Production had empty Supabase values. `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` were restored from the verified local shared-project configuration on 2026-07-16.
+- `AI_LESSON_PAYMENTS_ENABLED=false` is set in Vercel Production. Direct paid checkout is blocked server-side and paid CTA buttons are disabled.
 
-## Course Positioning
+## Payment State
 
-- This is not a zero-basis programming course.
-- Target learner: has basic engineering literacy, can follow terminal/setup steps, and can paste errors/logs into Claude for repair.
-- Core promise: use Claude Code to build a real product website with Landing Page, Google login, Stripe Checkout/Webhook, purchase records, dashboard unlock, and Vercel deployment.
-- Avoid over-promising MCP / Hook / Sub-Agent as the main course. Those are future advanced modules or separate products.
+- The only locally available Stripe secret is a Sandbox key, and Stripe reports that key as expired.
+- No Checkout Session, charge, customer, or order was created during this audit.
+- The old Vercel Stripe variable names exist, but their Production values were empty when pulled on 2026-07-16.
+- The landing page therefore labels paid courses honestly as priced but not open for payment.
+- Do not set `AI_LESSON_PAYMENTS_ENABLED=true` until all of the following are verified together:
+  - a current `sk_test_` secret;
+  - active TWD Price IDs for both public paid products;
+  - a matching `whsec_` secret for `checkout.session.completed` at `/api/webhooks/stripe`;
+  - one non-charging Sandbox end-to-end entitlement test.
 
-## Latest Course Upgrade
+## Automated Verification
 
-Updated on 2026-05-13:
+- `npm run lint`: pass, zero warnings.
+- `npm run typecheck`: pass.
+- `npm run test`: 4 files, 20 tests, all pass.
+- `npm run build`: pass on Next.js 16.2.10.
+- Covered boundaries:
+  - checkout product/tier selection and fallback;
+  - safe internal `next` redirects;
+  - Stripe metadata validation, legacy defaults, and app/session upsert key;
+  - external entitlement normalization, validation, claim, and idempotency.
+- `npm audit --omit=dev` has no high or critical finding. Three moderate entries remain because Next 16.2.10 bundles PostCSS 8.4.31; npm's suggested automatic fix incorrectly downgrades Next to 9 and must not be used.
 
-- Course now presents itself as an 8-stage workflow from ch00 to ch07.
-- Added per-chapter validation/checkpoint steps in `lib/course-data.ts`.
-- Added stronger rescue prompts and a fixed bug-report format for learners who get stuck.
-- Corrected Stripe lesson amount from TWD 2640 to current TWD 990 offer.
-- Landing copy now emphasizes "can login, can pay, can deploy" instead of vague AI superpower claims.
-- FAQ explicitly says the course is not suitable for complete non-programmers.
+## Browser Evidence
 
-Updated on 2026-05-14:
+- Local homepage: desktop and exact 390x844 mobile load with no horizontal overflow or error overlay.
+- Public pricing shows free access plus two disabled paid CTAs; no unsupported testimonial section is present.
+- `/market`: title, analyzer controls, and 6 external source links render at 390px without overflow.
+- `/login`: Google and Email controls render at 390px; Google OAuth reaches the Google authorization page with the local callback preserved.
+- Unauthenticated `/dashboard?course=starter-free` redirects to login and preserves the safe `next` path.
+- With a one-time local session for an existing Supabase user, the free Dashboard renders on mobile and desktop, shows all 4 primer chapters, and has no console warning/error, overlay, or horizontal overflow.
 
-- Added second course product: `codex-remotion`.
-- Added course content in `lib/codex-remotion-data.ts`.
-- Landing pricing now shows two product cards.
-- Dashboard now supports multiple purchased courses and lets the learner switch courses.
-- New Stripe env vars needed before real checkout works:
-  - `STRIPE_PRICE_ID_CODEX_REMOTION`
-  - `STRIPE_PRICE_ID_CODEX_REMOTION_COHORT`
+## Missing Or Intentionally Deferred
 
-Updated on 2026-05-19:
+- Stripe Sandbox must be re-keyed and re-verified before paid checkout can be enabled.
+- The CommercePilot entitlement path has automated coverage but no real pending order row exists for a live integration smoke test.
+- Dashboard completion state is currently client memory only; it is not persisted per learner.
+- Cohort Price IDs and cohort operations remain intentionally unconfigured.
+- No real payment or real customer purchase has been validated.
 
-- Added free beginner primer product: `starter-free`.
-- Free course content lives in `lib/starter-course-data.ts`.
-- Logged-in users can read the free course in Dashboard without a purchase record.
-- Dashboard supports `?course=<slug>` so free and paid CTAs can open the intended course.
-- Login/OAuth callback now preserves safe `next` paths with query strings, so buying `codex-remotion` after login no longer falls back to the default course checkout.
-- `.env.local.example` now includes `STRIPE_PRICE_ID_CODEX_REMOTION` and `STRIPE_PRICE_ID_CODEX_REMOTION_COHORT`.
-- Added public course market analysis feature at `/market`.
-- `/market` includes 2026 course demand signals, source links, and an interactive competitor course analyzer.
-- Reworked landing-page sales path into a clearer ladder: free primer → recommended Claude Code main course → Codex/Image2/Remotion advanced route.
-- Replaced testimonial-style cards with honest "common stuck points" scenario cards to avoid fake social-proof signals.
-- Added course-content safety rails:
-  - ch01 now starts with a one-page requirements brief before asking AI to generate the site.
-  - ch04 now includes Stripe account/Test mode setup before product and Price ID creation.
-  - ch07 now teaches structuring future product content as data before changing UI.
-- Navbar and metadata now lead with the lower-friction free primer instead of only pushing the NT$990 checkout.
+## Working Tree Boundaries
 
-## Local Working Tree Notes
-
-- Before editing, run `git status --short` and do not clean up unrelated untracked files unless Jerry asks.
-- Known untracked files seen on 2026-05-13:
-  - `.playwright-mcp/*`
+- `.playwright-mcp/`, `*.log`, and `supabase/.temp/` are ignored as generated local artifacts.
+- Existing untracked user documents are preserved and intentionally excluded from delivery commits:
   - `docs/superpowers/plans/2026-04-12-subtitle-gui.md`
   - `docs/text-pivot-audit.md`
-  - `CLAUDE.md`
+- Never commit `.env.local`, `.env.vercel.local`, `.vercel/`, service-role keys, Stripe secrets, or OAuth credentials.
 
-## Cross-Project Tech Now Available
+## Next Steps
 
-These are available in Jerry's workspace and should inform future course/content/product decisions:
-
-- Codex / Codex CLI is now a serious implementation path, not only Claude Code.
-- CliRelay / OpenAI-compatible local bridge is available in some projects for using ChatGPT/Codex-side capabilities from local apps.
-- Image2 is the strongest current visual generation path. Use it for high-quality keyframes, Doro character art, carousel visuals, thumbnails, and storyboards.
-- Doro LoRA assets are shared across projects. Read `C:\Users\User\Documents\GitHub\DORO_LORA_REGISTRY.md` before generating Doro visuals.
-- ComfyUI is available at `127.0.0.1:8188` when started, but local video generation is not production-ready.
-- Local video model findings:
-  - LTX Video: rejected for Doro work; character identity and anatomy break too often.
-  - Wan2.2 TI2V 5B: rejected; faster, but character quality is not acceptable.
-  - Wan2.2 I2V 14B fp8 + 4-step LoRA: usable only as an experimental 2-3 second atmosphere/motion tool, not a core production pipeline.
-- Remotion is the current reliable long-form video assembly layer: script, captions, motion graphics, camera moves, transitions, and final render.
-- open-carrusel is the strongest proof that Image2 + Doro references + HTML overlays can produce publishable visual content.
-- upload-post is the preferred publishing provider when it covers the target platform.
-- doro-palace is the blog / funnel hub for traffic from carousels, short videos, and long-form YouTube.
-
-## Remotion Direction
-
-Do not build long-form videos around local video models yet. The practical production path is:
-
-1. Codex plans the video: topic, hook, script, segment list, visual beats, title/description.
-2. Image2 generates clean key visuals per scene, with Doro identity and scene-specific props.
-3. Remotion creates motion using deterministic techniques: pan/zoom, parallax, cutaways, UI cards, kinetic text, timeline beats, subtitles, sound effects, and scene transitions.
-4. Optional: Wan 14B I2V can be used for a small number of short transition or atmosphere shots, but only after the keyframe is already strong.
-
-Key rule: Image2 owns visual quality; Remotion owns timing and motion; local video models are optional garnish.
-
-## ai_lesson Opportunities
-
-- Keep the existing Claude Code course intact until there is a clear product decision to reposition it.
-- Consider a future appendix or second product around "AI content factory" workflows:
-  - Codex as producer / engineer
-  - Image2 as art department
-  - Remotion as editor
-  - upload-post as publisher
-  - doro-palace as traffic capture
-- If updating course copy, do not claim ChatGPT Pro automatically provides OpenAI API keys. Treat ChatGPT subscription features, API billing, and local proxy bridges as separate concepts.
-- Good near-term content angle: "AI tools are not one magic model; the workflow wins when each model owns the right job."
-
-## Next Priorities
-
-1. Decide whether ai_lesson stays a Claude Code engineering course or becomes a broader Codex/Cursor/Claude AI workflow course.
-2. If broadening, add new course module(s) instead of rewriting the whole product at once.
-3. If productizing the Remotion workflow, keep it separate from ai_lesson until there is a clearer offer.
+1. Create or rotate Stripe Sandbox credentials and both self-study Price IDs.
+2. Update Vercel Production Stripe values, redeploy, and verify the webhook signature without a real charge.
+3. Run one external CommercePilot entitlement claim with a controlled Sandbox order.
+4. Decide whether learner progress should persist in the shared project before marketing the Dashboard as cross-device progress tracking.

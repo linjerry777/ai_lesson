@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export const metadata = { title: '使用條款 | 網課小韭菜' }
 
 export default function TermsPage() {
@@ -67,7 +69,7 @@ export default function TermsPage() {
         </section>
 
         <div className="border-t pt-6 mt-8">
-          <a href="/" className="text-green-600 text-sm hover:underline">← 返回首頁</a>
+          <Link href="/" className="text-green-600 text-sm hover:underline">← 返回首頁</Link>
         </div>
       </div>
     </div>

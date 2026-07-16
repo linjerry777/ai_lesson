@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { Copy, Check, AlertTriangle, Lightbulb, ExternalLink } from 'lucide-react'
 
 export interface Step {
@@ -25,6 +26,7 @@ function CopyButton({ text }: { text: string }) {
     <button
       onClick={copy}
       className="flex items-center gap-1 text-[10px] text-gray-400 hover:text-white transition-colors flex-shrink-0"
+      aria-label={copied ? '已複製' : '複製內容'}
     >
       {copied ? <Check size={11} className="text-green-400" /> : <Copy size={11} />}
       {copied ? '已複製' : '複製'}
@@ -113,9 +115,11 @@ export default function StepGuide({ steps }: { steps: Step[] }) {
 
               {step.screenshot && (
                 <div className="mt-3 rounded-xl overflow-hidden border border-gray-200 shadow-sm">
-                  <img
+                  <Image
                     src={`/screenshots/${step.screenshot}`}
                     alt={step.title}
+                    width={1280}
+                    height={720}
                     className="w-full h-auto"
                   />
                 </div>

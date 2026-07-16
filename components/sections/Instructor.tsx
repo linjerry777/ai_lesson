@@ -1,10 +1,11 @@
-import { BookOpen, TrendingDown, Zap, DollarSign } from 'lucide-react'
+import Image from 'next/image'
+import { BookOpen, Bot, CreditCard, PanelsTopLeft } from 'lucide-react'
 
 const credentials = [
-  { icon: DollarSign,   text: '累計被騙網課費用 NT$50,000+' },
-  { icon: TrendingDown, text: '學完歸零，作品數量依然是 0' },
-  { icon: Zap,          text: '某個下午被 Claude Code 改變人生' },
-  { icon: BookOpen,     text: '現在靠賣這堂課努力把錢賺回來' },
+  { icon: PanelsTopLeft, text: 'Next.js、Supabase、Vercel 全端實作' },
+  { icon: CreditCard, text: 'Stripe Checkout 與 Webhook 串接' },
+  { icon: Bot, text: 'AI 自動化與內容工作流開發' },
+  { icon: BookOpen, text: '用真實 code path 編寫文字實作課' },
 ]
 
 export default function Instructor() {
@@ -25,9 +26,11 @@ export default function Instructor() {
             <div className="flex flex-col md:flex-row gap-8 items-start">
               {/* Avatar */}
               <div className="flex-shrink-0">
-                <img
+                <Image
                   src="/instructor.png"
-                  alt="小韭菜講師"
+                  alt="Jerry Lin"
+                  width={128}
+                  height={128}
                   className="w-32 h-32 rounded-2xl object-cover shadow-lg"
                 />
               </div>
@@ -35,21 +38,16 @@ export default function Instructor() {
               {/* Content */}
               <div className="flex-1">
                 <h3 className="text-2xl font-black text-gray-900 mb-1">
-                  小韭菜
+                  Jerry Lin / 林帛賢
                 </h3>
                 <p className="text-brand-500 font-semibold text-sm mb-4">
-                  資深網課受害者 / 現已康復
+                  全端工程師 / AI 自動化實作者
                 </p>
 
                 <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                  擁有多年購買網課的豐富經驗——每堂都有「業界實戰」四個字，
-                  每堂都教 Todo List，每堂結束後依然做不出任何東西。
-                  累積課費超過 NT$50,000，換來一整個硬碟的 mp4 和深深的空虛感。
-                  <br /><br />
-                  直到某個下午，用 Claude Code 一個指令就把你現在看到的這個網站建起來了。
-                  當下只有一個念頭：<strong className="text-gray-900">幹，原來是這樣。</strong>
-                  於是把整個過程錄下來，做成這堂課，
-                  試圖從你身上把之前被騙的錢賺回來——但這次是真的教你做出東西。
+                  我把自己實際開發產品時會碰到的登入、資料庫、付款、Webhook、部署與除錯流程，
+                  整理成可以搜尋、複製、逐步驗收的文字課。課程不是把 AI 產生的畫面當成果，
+                  而是要求每個關鍵 code path 都能說清楚、跑得通，最後留下可繼續改造成下一個產品的架構。
                 </p>
 
                 <div className="grid sm:grid-cols-2 gap-3">

@@ -6,12 +6,15 @@ import { Chrome, Mail, Loader2 } from 'lucide-react'
 
 interface Props {
   nextPath: string
+  initialError?: string
 }
 
-export default function LoginForm({ nextPath }: Props) {
+export default function LoginForm({ nextPath, initialError }: Props) {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState<string | null>(null)
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(
+    initialError ? { type: 'error', text: initialError } : null,
+  )
   const supabase = createClient()
 
   const handleGoogleLogin = async () => {

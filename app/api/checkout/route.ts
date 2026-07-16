@@ -1,14 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
+import { PLATFORM_APP_ID } from '@/lib/platform'
 import { getStripe } from '@/lib/stripe'
-import {
-  DEFAULT_PRODUCT,
-  DEFAULT_TIER,
-  getCourse,
-  isValidProduct,
-  isValidTier,
-  resolveStripePriceId,
-} from '@/lib/courses'
+import { resolveStripePriceId } from '@/lib/courses'
+import { resolveCheckoutSelection } from '@/lib/checkout-selection'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,12 +16,16 @@ export async function GET(request: NextRequest) {
     const rawProduct = url.searchParams.get('product')
     const rawTier = url.searchParams.get('tier')
 
-    const productId = isValidProduct(rawProduct) ? rawProduct : DEFAULT_PRODUCT
-    const tier = isValidTier(rawTier) ? rawTier : DEFAULT_TIER
-    const course = getCourse(productId)
+    const { productId, tier, course } = resolveCheckoutSelection(rawProduct, rawTier)
 
-    if (course?.isFree) {
+    if (course.isFree) {
       return NextResponse.redirect(new URL(`/dashboard?course=${productId}`, SITE_URL))
+    }
+
+    if (process.env.AI_LESSON_PAYMENTS_ENABLED !== 'true') {
+      return NextResponse.redirect(
+        new URL(`/?error=payments_unavailable&product=${productId}#pricing`, SITE_URL),
+      )
     }
 
     const priceLookup = resolveStripePriceId(productId, tier)
@@ -50,6 +49,7 @@ export async function GET(request: NextRequest) {
     const { data: purchase } = await createServiceClient()
       .from('purchases')
       .select('id')
+      .eq('app_id', PLATFORM_APP_ID)
       .eq('user_id', user.id)
       .eq('product_id', productId)
       .eq('status', 'completed')

@@ -10,20 +10,20 @@ export default function SuccessPage() {
         </div>
 
         <h1 className="text-2xl font-black text-gray-900 mb-3">
-          購課成功！🎉
+          測試付款已完成
         </h1>
         <p className="text-gray-600 mb-2">
-          感謝你的購買！課程已成功啟用。
+          Stripe 已回傳完成狀態，系統正在確認課程權限。
         </p>
         <p className="text-sm text-gray-500 mb-8">
-          你現在可以開始學習所有課程內容，祝學習愉快！
+          Webhook 通常會在幾秒內完成。若尚未看到課程，稍後重新整理 Dashboard 即可。
         </p>
 
         <Link
           href="/dashboard"
           className="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors"
         >
-          開始學習 →
+          前往 Dashboard
         </Link>
 
         <p className="text-xs text-gray-400 mt-4">
