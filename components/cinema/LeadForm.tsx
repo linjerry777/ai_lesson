@@ -23,6 +23,18 @@ const THEMES = {
     check: 'mt-1.5 h-4 w-4 shrink-0 accent-[#f0a65a]',
     error: 'text-sm text-[#ff8a7a]',
   },
+  frost: {
+    ready: 'rounded-2xl border border-white/50 bg-white/15 p-5 backdrop-blur',
+    readyTitle: 'text-sm font-semibold text-white',
+    readyText: 'mt-2 text-xs leading-6 text-white/75',
+    readyLink: 'mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-[#5d6372] hover:bg-white/90',
+    input: 'min-h-12 w-full min-w-0 flex-1 border-0 border-b border-white/60 bg-transparent px-1 text-base text-white placeholder:text-white/60 focus:border-white focus:outline-none',
+    button: 'group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/85 px-7 text-sm font-semibold tracking-[.12em] text-white transition hover:bg-white hover:text-[#5d6372] disabled:opacity-60',
+    consent: 'flex items-start gap-2.5 text-xs leading-6 text-white/75',
+    consentLink: 'ml-1 text-white underline underline-offset-2',
+    check: 'mt-1.5 h-4 w-4 shrink-0 accent-white',
+    error: 'text-sm text-[#ffe0d8]',
+  },
   paper: {
     ready: 'rounded-2xl border border-[#6f9a86]/40 bg-white/60 p-5',
     readyTitle: 'text-sm font-semibold text-[#2c2a26]',
