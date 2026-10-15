@@ -10,7 +10,44 @@ type State =
   | { kind: 'error'; message: string }
   | { kind: 'ready'; url: string }
 
-export default function LeadForm({ resource, title, compact = false }: { resource: string; title: string; compact?: boolean }) {
+const THEMES = {
+  night: {
+    ready: 'rounded-lg border border-[#f0a65a]/40 bg-[#f0a65a]/10 p-5',
+    readyTitle: 'text-sm font-semibold text-[#f6d2a8]',
+    readyText: 'mt-2 text-xs leading-6 text-[#b9bec4]',
+    readyLink: 'mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-[#f0a65a] px-5 text-sm font-semibold text-[#120c05] hover:bg-[#f6bb7a]',
+    input: 'min-h-12 w-full min-w-0 flex-1 rounded-full border border-white/15 bg-black/40 px-5 text-base text-[#ece7dd] placeholder:text-[#6f7781] focus:border-[#f0a65a] focus:outline-none',
+    button: 'group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#f0a65a] px-6 text-sm font-semibold text-[#120c05] shadow-[0_0_30px_-6px_rgba(240,166,90,.7)] transition hover:bg-[#f6bb7a] disabled:opacity-60',
+    consent: 'flex items-start gap-2.5 text-xs leading-6 text-[#9aa3ad]',
+    consentLink: 'ml-1 text-[#c9ced3] underline underline-offset-2',
+    check: 'mt-1.5 h-4 w-4 shrink-0 accent-[#f0a65a]',
+    error: 'text-sm text-[#ff8a7a]',
+  },
+  paper: {
+    ready: 'rounded-2xl border border-[#6f9a86]/40 bg-white/60 p-5',
+    readyTitle: 'text-sm font-semibold text-[#2c2a26]',
+    readyText: 'mt-2 text-xs leading-6 text-[#6f685d]',
+    readyLink: 'mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-[#5f8f7b] px-5 text-sm font-semibold text-white hover:brightness-105',
+    input: 'min-h-12 w-full min-w-0 flex-1 border-0 border-b border-[#2c2a26]/30 bg-transparent px-1 text-base text-[#2c2a26] placeholder:text-[#9b9285] focus:border-[#5f8f7b] focus:outline-none',
+    button: 'group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#5f8f7b] px-7 text-sm font-semibold tracking-[.14em] text-white shadow-[0_10px_24px_-12px_#5f8f7b] transition hover:brightness-105 disabled:opacity-60',
+    consent: 'flex items-start gap-2.5 text-xs leading-6 text-[#6f685d]',
+    consentLink: 'ml-1 text-[#2c2a26] underline underline-offset-2',
+    check: 'mt-1.5 h-4 w-4 shrink-0 accent-[#5f8f7b]',
+    error: 'text-sm text-[#b23b2a]',
+  },
+}
+
+interface Props {
+  resource: string
+  title: string
+  compact?: boolean
+  variant?: keyof typeof THEMES
+  submitLabel?: string
+  onSuccess?: () => void
+}
+
+export default function LeadForm({ resource, title, compact = false, variant = 'night', submitLabel = '免費取得', onSuccess }: Props) {
+  const theme = THEMES[variant]
   const [email, setEmail] = useState('')
   const [consent, setConsent] = useState(false)
   const [website, setWebsite] = useState('')
@@ -32,6 +69,7 @@ export default function LeadForm({ resource, title, compact = false }: { resourc
         return
       }
       setState({ kind: 'ready', url: data.url })
+      onSuccess?.()
       window.location.assign(data.url)
     } catch {
       setState({ kind: 'error', message: '網路連線失敗，請稍後再試' })
@@ -40,10 +78,10 @@ export default function LeadForm({ resource, title, compact = false }: { resourc
 
   if (state.kind === 'ready') {
     return (
-      <div className="rounded-lg border border-[#f0a65a]/40 bg-[#f0a65a]/10 p-5" role="status">
-        <p className="text-sm font-semibold text-[#f6d2a8]">已開始下載「{title}」</p>
-        <p className="mt-2 text-xs leading-6 text-[#b9bec4]">沒有自動下載的話，點下面的按鈕。連結 10 分鐘內有效；之後用同一個 Email 再填一次即可重新下載新版。</p>
-        <a href={state.url} className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-[#f0a65a] px-5 text-sm font-semibold text-[#120c05] hover:bg-[#f6bb7a]">
+      <div className={theme.ready} role="status">
+        <p className={theme.readyTitle}>已開始下載「{title}」</p>
+        <p className={theme.readyText}>沒有自動下載的話，點下面的按鈕。連結 10 分鐘內有效；之後用同一個 Email 再填一次即可重新下載新版。</p>
+        <a href={state.url} className={theme.readyLink}>
           <Download size={16} aria-hidden="true" />下載檔案
         </a>
       </div>
@@ -64,25 +102,25 @@ export default function LeadForm({ resource, title, compact = false }: { resourc
           placeholder="你的 Email"
           value={email}
           onChange={event => setEmail(event.target.value)}
-          className="min-h-12 w-full min-w-0 flex-1 rounded-full border border-white/15 bg-black/40 px-5 text-base text-[#ece7dd] placeholder:text-[#6f7781] focus:border-[#f0a65a] focus:outline-none"
+          className={theme.input}
         />
         <button
           type="submit"
           disabled={sending}
-          className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#f0a65a] px-6 text-sm font-semibold text-[#120c05] shadow-[0_0_30px_-6px_rgba(240,166,90,.7)] transition hover:bg-[#f6bb7a] disabled:opacity-60"
+          className={theme.button}
         >
           {sending ? <Loader2 size={16} className="animate-spin" aria-hidden="true" /> : null}
-          {sending ? '處理中…' : '免費取得'}
+          {sending ? '處理中…' : submitLabel}
           {!sending && <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />}
         </button>
       </div>
       {/* Honeypot for bots; hidden from people and assistive tech. */}
       <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" value={website} onChange={event => setWebsite(event.target.value)} className="hidden" />
-      <label className="flex items-start gap-2.5 text-xs leading-6 text-[#9aa3ad]">
-        <input type="checkbox" checked={consent} onChange={event => setConsent(event.target.checked)} className="mt-1.5 h-4 w-4 shrink-0 accent-[#f0a65a]" />
-        <span>{CONSENT_TEXT}<a href="/privacy" className="ml-1 text-[#c9ced3] underline underline-offset-2">隱私權政策</a></span>
+      <label className={theme.consent}>
+        <input type="checkbox" checked={consent} onChange={event => setConsent(event.target.checked)} className={theme.check} />
+        <span>{CONSENT_TEXT}<a href="/privacy" className={theme.consentLink}>隱私權政策</a></span>
       </label>
-      {state.kind === 'error' && <p className="text-sm text-[#ff8a7a]" role="alert">{state.message}</p>}
+      {state.kind === 'error' && <p className={theme.error} role="alert">{state.message}</p>}
     </form>
   )
 }
