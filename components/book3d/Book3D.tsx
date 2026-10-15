@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { Canvas } from '@react-three/fiber'
 import LeadForm from '@/components/cinema/LeadForm'
 import styles from '@/components/popup/popup.module.css'
-import { coverCopyOpacity, freeCopyOpacity } from '@/lib/book3d'
-import BookScene, { type SceneLayer, type Timeline } from './BookScene'
+import { channelsCopyOpacity, coverCopyOpacity, freeCopyOpacity } from '@/lib/book3d'
+import BookScene, { type ChannelClip, type SceneLayer, type Timeline } from './BookScene'
 
 const L = (name: string) => `/popup/${name}.webp`
 
@@ -26,6 +26,18 @@ const FREE: SceneLayer[] = [
   { src: L('free_front'), x: 0.68, depth: 0.06, width: 0.42 },
 ]
 
+// Real 6-second clips cut from each channel's recent shorts.
+const C = (name: string) => `/popup/clips/${name}`
+const CHANNELS: ChannelClip[] = [
+  { name: 'Doro夫子', tagline: '科技日更', clip: C('doro-fuzi'), x: 0.2, depth: 0.58 },
+  { name: 'Doro公公', tagline: '娛樂日更', clip: C('doro-gonggong'), x: 0.4, depth: 0.5 },
+  { name: '訊號滿格', tagline: 'AI 新聞', clip: C('xun-signal'), x: 0.6, depth: 0.5 },
+  { name: '麻糬QQ', tagline: '每日一笑', clip: C('mochi-qq'), x: 0.8, depth: 0.58 },
+]
+
+const FREE_AT = 0.47
+const CHANNELS_AT = 0.95
+
 interface Props {
   resource: { slug: string; title: string } | null
 }
@@ -42,6 +54,9 @@ export default function Book3D({ resource }: Props) {
   const timelineRef = useRef<Timeline>({ g: 0, introStart: 0 })
   const coverCopy = useRef<HTMLDivElement>(null)
   const freeCopy = useRef<HTMLDivElement>(null)
+  const channelsCopy = useRef<HTMLDivElement>(null)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const [fontFamily, setFontFamily] = useState('serif')
   const [layout, setLayout] = useState<{ shift: { x: number; y: number }; mobile: boolean }>({ shift: { x: 0.17, y: 0 }, mobile: false })
 
   useEffect(() => {
@@ -54,9 +69,14 @@ export default function Book3D({ resource }: Props) {
       const track = document.getElementById('book3d-track')
       const trackEnd = track ? track.offsetTop + track.offsetHeight - window.innerHeight : max
       timeline.g = Math.min(1, Math.max(0, window.scrollY / Math.max(1, trackEnd)))
-      const c = coverCopyOpacity(timeline.g), f = freeCopyOpacity(timeline.g)
-      if (coverCopy.current) { coverCopy.current.style.opacity = String(c); coverCopy.current.style.pointerEvents = c > 0.5 ? 'auto' : 'none' }
-      if (freeCopy.current) { freeCopy.current.style.opacity = String(f); freeCopy.current.style.pointerEvents = f > 0.5 ? 'auto' : 'none' }
+      const show = (el: HTMLDivElement | null, value: number) => {
+        if (!el) return
+        el.style.opacity = String(value)
+        el.style.pointerEvents = value > 0.5 ? 'auto' : 'none'
+      }
+      show(coverCopy.current, coverCopyOpacity(timeline.g))
+      show(freeCopy.current, freeCopyOpacity(timeline.g))
+      show(channelsCopy.current, channelsCopyOpacity(timeline.g))
     }
     const schedule = () => { if (!raf) raf = requestAnimationFrame(update) }
     function measure() {
@@ -66,6 +86,8 @@ export default function Book3D({ resource }: Props) {
     }
     measure()
     update()
+    const family = rootRef.current && getComputedStyle(rootRef.current).getPropertyValue('--font-serif-tc').trim()
+    if (family) setFontFamily(`${family}, serif`)
     window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', measure)
     return () => {
@@ -76,7 +98,7 @@ export default function Book3D({ resource }: Props) {
   }, [])
 
   return (
-    <div className={styles.root}>
+    <div ref={rootRef} className={styles.root}>
       <div className="fixed inset-0" aria-hidden="true">
         <Canvas
           shadows
@@ -85,7 +107,7 @@ export default function Book3D({ resource }: Props) {
           gl={{ antialias: true, powerPreference: 'high-performance' }}
         >
           <Suspense fallback={null}>
-            <BookScene timeline={timelineRef} cover={COVER} free={FREE} viewShift={layout.shift} effects={!layout.mobile} />
+            <BookScene timeline={timelineRef} cover={COVER} free={FREE} channels={CHANNELS} fontFamily={fontFamily} viewShift={layout.shift} effects={!layout.mobile} />
           </Suspense>
         </Canvas>
       </div>
@@ -93,21 +115,21 @@ export default function Book3D({ resource }: Props) {
       <header className={styles.topbar}>
         <Link href="/book" className={`${styles.serif} ${styles.brand}`}>Jerry 的 AI 頻道</Link>
         <nav className={styles.nav} aria-label="主要導覽">
-          <Link href="/videos">頻道</Link>
-          <button type="button" onClick={() => scrollToProgress(0.74)}>免費教學</button>
+          <button type="button" onClick={() => scrollToProgress(CHANNELS_AT)}>頻道</button>
+          <button type="button" onClick={() => scrollToProgress(FREE_AT)}>免費教學</button>
           <Link href="/book?mode=css#shop">課程</Link>
           <a href="mailto:donutai08@gmail.com?subject=%E5%A7%94%E8%A8%97%E8%A3%BD%E4%BD%9C">接案</a>
         </nav>
       </header>
 
-      <main id="book3d-track" className="relative" style={{ height: '560vh' }}>
+      <main id="book3d-track" className="relative" style={{ height: '820vh' }}>
         <div className={`pointer-events-none fixed inset-0 z-10 flex ${layout.mobile ? 'items-start pt-24' : 'items-center'} px-5 sm:px-[clamp(20px,5vw,72px)]`}>
           <div ref={coverCopy} className={`${styles.copy} absolute left-5 sm:left-[clamp(20px,5vw,72px)] right-5 sm:right-auto`} style={{ position: 'absolute', transition: 'opacity .2s' }}>
             <p className={styles.kicker} style={{ ['--accent' as string]: '#c98a2e' }}>Chapter 01</p>
             <h1 className={`${styles.serif} ${styles.title}`}>Jerry 的<br />AI 頻道</h1>
             <p className={styles.lede}>看影片・學工作流・拿免費資源</p>
             <div className={styles.actions} style={{ ['--accent' as string]: '#c98a2e' }}>
-              <button type="button" onClick={() => scrollToProgress(0.74)} className={styles.button}>翻開 →</button>
+              <button type="button" onClick={() => scrollToProgress(FREE_AT)} className={styles.button}>翻開 →</button>
               <Link href="/videos" className={styles.link}>直接看影片筆記</Link>
             </div>
           </div>
@@ -120,6 +142,15 @@ export default function Book3D({ resource }: Props) {
                 <LeadForm resource={resource.slug} title={resource.title} variant="paper" submitLabel="寄給我" compact />
               </div>
             )}
+          </div>
+          <div ref={channelsCopy} className={`${styles.copy} ${layout.mobile ? 'rounded-2xl bg-[#f7f2e8]/85 p-5 shadow-[0_20px_40px_-24px_rgba(60,45,25,.5)] backdrop-blur-md' : ''} absolute left-5 sm:left-[clamp(20px,5vw,72px)] right-5 sm:right-auto`} style={{ position: 'absolute', opacity: 0, transition: 'opacity .2s' }}>
+            <p className={styles.kicker} style={{ ['--accent' as string]: '#b5552c' }}>Chapter 03 · Channels</p>
+            <h2 className={`${styles.serif} ${styles.title}`}>四個頻道，<br />每天自動開播</h2>
+            <p className={styles.lede}>書頁裡播的都是真的片。每一支，背後都是同一套 AI 工作流。</p>
+            <div className={styles.actions} style={{ ['--accent' as string]: '#b5552c' }}>
+              <Link href="/videos" className={styles.button}>看影片筆記 →</Link>
+            </div>
+            <p className={styles.note}>工作流套件與課程整理中，留過 Email 的人會先收到通知。</p>
           </div>
         </div>
       </main>

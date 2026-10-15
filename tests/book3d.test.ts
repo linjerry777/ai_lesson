@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
-  CAMERA_PATH, cameraAt, coverCopyOpacity, coverLift, flipAngle, freeCopyOpacity, freeLift, layerPlacement, SPREAD,
+  CAMERA_PATH, cameraAt, channelsCopyOpacity, channelsLift, coverCopyOpacity, coverLift, flipAngle, freeCopyOpacity, freeLift,
+  layerPlacement, SPREAD, TIMELINE,
 } from '@/lib/book3d'
 
 describe('3D book timeline', () => {
@@ -23,27 +24,40 @@ describe('3D book timeline', () => {
     expect(coverLift(0, 0, 0)).toBe(0)
     expect(coverLift(0, 1, 0)).toBeCloseTo(1)
     expect(coverLift(0, 1, 1)).toBeCloseTo(1)
-    expect(coverLift(0.4, 1, 0)).toBe(0)
+    expect(coverLift(TIMELINE.flip[0], 1, 0)).toBe(0)
   })
 
-  it('turns the page once, flat to flat', () => {
-    expect(flipAngle(0.2)).toBe(0)
-    expect(flipAngle(0.46)).toBeGreaterThan(0)
-    expect(flipAngle(0.46)).toBeLessThan(Math.PI)
-    expect(flipAngle(0.8)).toBeCloseTo(Math.PI)
+  it('turns each page flat to flat, one after the other', () => {
+    const mid = (r: readonly [number, number]) => (r[0] + r[1]) / 2
+    expect(flipAngle(TIMELINE.flip[0])).toBe(0)
+    expect(flipAngle(mid(TIMELINE.flip))).toBeCloseTo(Math.PI / 2)
+    expect(flipAngle(TIMELINE.flip[1])).toBeCloseTo(Math.PI)
+    expect(flipAngle(TIMELINE.flip[1], 2)).toBe(0)
+    expect(flipAngle(1, 2)).toBeCloseTo(Math.PI)
   })
 
-  it('pops the free-lesson chapter after the turn, back layers first', () => {
-    expect(freeLift(0.5, 0)).toBe(0)
-    expect(freeLift(0.58, 0)).toBeGreaterThan(freeLift(0.58, 1))
-    expect(freeLift(0.9, 1)).toBeCloseTo(1)
+  it('pops the free-lesson chapter after the first turn and folds it before the second', () => {
+    expect(freeLift(TIMELINE.freePop[0], 0)).toBe(0)
+    const early = TIMELINE.freePop[0] + 0.03
+    expect(freeLift(early, 0)).toBeGreaterThan(freeLift(early, 1))
+    expect(freeLift(0.5, 1)).toBeCloseTo(1)
+    expect(freeLift(TIMELINE.flip2[0], 0)).toBe(0)
   })
 
-  it('hands the copy from the cover to the free chapter', () => {
+  it('stands the channel wall up after the second turn and keeps it', () => {
+    expect(channelsLift(TIMELINE.flip2[0], 0)).toBe(0)
+    expect(channelsLift(1, 0)).toBeCloseTo(1)
+    expect(channelsLift(1, 1)).toBeCloseTo(1)
+  })
+
+  it('hands the copy from chapter to chapter', () => {
     expect(coverCopyOpacity(0)).toBe(1)
-    expect(coverCopyOpacity(0.3)).toBe(0)
-    expect(freeCopyOpacity(0.5)).toBe(0)
-    expect(freeCopyOpacity(0.75)).toBe(1)
+    expect(coverCopyOpacity(0.2)).toBe(0)
+    expect(freeCopyOpacity(0.3)).toBe(0)
+    expect(freeCopyOpacity(0.48)).toBe(1)
+    expect(freeCopyOpacity(0.65)).toBe(0)
+    expect(channelsCopyOpacity(0.7)).toBe(0)
+    expect(channelsCopyOpacity(0.95)).toBe(1)
   })
 
   it('maps the shared 0..1 layout onto the spread', () => {

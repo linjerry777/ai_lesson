@@ -9,7 +9,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import { DepthOfField, EffectComposer, Noise, Vignette } from '@react-three/postprocessing'
 import * as THREE from 'three'
-import { cameraAt, coverLift, flipAngle, freeLift, layerPlacement, SPREAD } from '@/lib/book3d'
+import { cameraAt, channelsLift, coverLift, flipAngle, freeLift, layerPlacement, SPREAD } from '@/lib/book3d'
 
 export interface SceneLayer {
   src: string
@@ -19,6 +19,15 @@ export interface SceneLayer {
   standee?: boolean
 }
 
+export interface ChannelClip {
+  name: string
+  tagline: string
+  /** Base path without extension: `${clip}.mp4`, `${clip}.webm` and `${clip}.jpg` must exist. */
+  clip: string
+  x: number
+  depth: number
+}
+
 /** Shared, mutable progress so scroll never triggers React renders. */
 export interface Timeline { g: number; introStart: number }
 
@@ -26,6 +35,9 @@ interface Props {
   timeline: { readonly current: Timeline }
   cover: SceneLayer[]
   free: SceneLayer[]
+  channels: ChannelClip[]
+  /** Resolved CSS font family for text drawn into canvas textures. */
+  fontFamily: string
   /** Fractions of the viewport to shift the render: desktop moves the book right, mobile moves it down. */
   viewShift: { x: number; y: number }
   effects: boolean
@@ -170,14 +182,14 @@ function PaperLayer({ layer, lift, order }: { layer: SceneLayer; lift: (order: n
 }
 
 /* ── The page that turns from the cover spread to the next one ── */
-function TurningPage({ timeline, paper }: { timeline: Timeline; paper: THREE.Texture }) {
+function TurningPage({ timeline, paper, turn }: { timeline: Timeline; paper: THREE.Texture; turn: 1 | 2 }) {
   const segments = 28
   const pageWidth = SPREAD.width / 2 - 0.02
   const mesh = useRef<THREE.Mesh>(null)
   const geometry = useMemo(() => new THREE.PlaneGeometry(pageWidth, SPREAD.depth, segments, 1), [pageWidth])
 
   useFrame(() => {
-    const angle = flipAngle(timeline.g)
+    const angle = flipAngle(timeline.g, turn)
     if (!mesh.current) return
     mesh.current.visible = angle > 0.001 && angle < Math.PI - 0.001
     if (!mesh.current.visible) return
@@ -319,6 +331,133 @@ function LightShaft() {
   )
 }
 
+/* ── A paper picture frame that plays a real clip from one of the channels ── */
+const FRAME_WIDTH = 0.155 * SPREAD.width
+const VIDEO_HEIGHT = FRAME_WIDTH * 16 / 9
+const BORDER = 0.07
+const LABEL = 0.42
+
+function drawLabel(canvas: HTMLCanvasElement, name: string, tagline: string, fontFamily: string) {
+  const ctx = canvas.getContext('2d')!
+  const { width, height } = canvas
+  ctx.fillStyle = PAPER
+  ctx.fillRect(0, 0, width, height)
+  ctx.strokeStyle = 'rgba(120,100,70,.18)'
+  ctx.lineWidth = 3
+  ctx.strokeRect(6, 6, width - 12, height - 12)
+  const labelTop = height * (1 - LABEL / (VIDEO_HEIGHT + BORDER * 2 + LABEL))
+  ctx.textAlign = 'center'
+  ctx.fillStyle = '#2c2a26'
+  ctx.font = `700 ${Math.round(width * 0.13)}px ${fontFamily}`
+  ctx.fillText(name, width / 2, labelTop + (height - labelTop) * 0.5)
+  ctx.fillStyle = '#8a7f6e'
+  ctx.font = `500 ${Math.round(width * 0.075)}px ${fontFamily}`
+  ctx.fillText(tagline, width / 2, labelTop + (height - labelTop) * 0.82)
+}
+
+function ChannelFrame({ channel, order, timeline, fontFamily }: { channel: ChannelClip; order: number; timeline: Timeline; fontFamily: string }) {
+  const pivot = useRef<THREE.Group>(null)
+  const screen = useRef<THREE.MeshStandardMaterial>(null)
+  const video = useRef<HTMLVideoElement | null>(null)
+  const videoTexture = useRef<THREE.VideoTexture | null>(null)
+  const playing = useRef(false)
+  const poster = useTexture(`${channel.clip}.jpg`)
+  const boardWidth = FRAME_WIDTH + BORDER * 2
+  const boardHeight = VIDEO_HEIGHT + BORDER * 2 + LABEL
+  const { x, z } = layerPlacement(channel.x, channel.depth)
+
+  const { board, boardGeometry, screenGeometry } = useMemo(() => {
+    poster.colorSpace = THREE.SRGBColorSpace
+    const canvas = document.createElement('canvas')
+    canvas.width = 512
+    canvas.height = Math.round(512 * boardHeight / boardWidth)
+    const board = new THREE.CanvasTexture(canvas)
+    board.colorSpace = THREE.SRGBColorSpace
+    const boardGeometry = new THREE.BoxGeometry(boardWidth, boardHeight, 0.03)
+    boardGeometry.translate(0, boardHeight / 2, 0)
+    const screenGeometry = new THREE.PlaneGeometry(FRAME_WIDTH, VIDEO_HEIGHT)
+    screenGeometry.translate(0, LABEL + BORDER + VIDEO_HEIGHT / 2, 0.017)
+    return { board, boardGeometry, screenGeometry }
+  }, [poster, boardWidth, boardHeight])
+
+  // Label: draw now, redraw once the web font is ready (canvas text can't wait for CSS).
+  useEffect(() => {
+    let cancelled = false
+    const draw = () => {
+      drawLabel(board.image as HTMLCanvasElement, channel.name, channel.tagline, fontFamily)
+      board.needsUpdate = true
+    }
+    draw()
+    document.fonts?.load(`700 40px ${fontFamily}`).then(() => { if (!cancelled) draw() }).catch(() => {})
+    return () => { cancelled = true }
+  }, [board, channel.name, channel.tagline, fontFamily])
+
+  // Video lives in an effect so StrictMode's mount/unmount/mount gets a fresh element each time.
+  useEffect(() => {
+    const el = document.createElement('video')
+    // H.264 for Safari / Chrome, VP9 WebM where H.264 isn't available.
+    el.src = el.canPlayType('video/mp4; codecs="avc1.4D401E"') ? `${channel.clip}.mp4` : `${channel.clip}.webm`
+    el.muted = true
+    el.loop = true
+    el.playsInline = true
+    el.preload = 'metadata'
+    const texture = new THREE.VideoTexture(el)
+    texture.colorSpace = THREE.SRGBColorSpace
+    const onPlaying = () => { playing.current = true }
+    el.addEventListener('playing', onPlaying)
+    video.current = el
+    videoTexture.current = texture
+    return () => {
+      el.removeEventListener('playing', onPlaying)
+      el.pause()
+      el.removeAttribute('src')
+      el.load()
+      texture.dispose()
+      video.current = null
+      videoTexture.current = null
+      playing.current = false
+    }
+  }, [channel.clip])
+
+  useFrame(state => {
+    const value = channelsLift(timeline.g, order)
+    const visible = flipAngle(timeline.g, 2) > Math.PI * 0.8 && value > 0.001
+    if (pivot.current) {
+      pivot.current.visible = visible
+      pivot.current.rotation.x = -Math.PI / 2 * (1 - value)
+      const hovered = pivot.current.userData.hovered ? 1 : 0
+      pivot.current.userData.tilt = (pivot.current.userData.tilt ?? 0) + (hovered - (pivot.current.userData.tilt ?? 0)) * 0.12
+      pivot.current.rotation.x += pivot.current.userData.tilt * 0.12
+      pivot.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.6 + order * 4) * 0.01
+    }
+    // Only decode video while the channel wall is actually up.
+    const el = video.current
+    if (el && visible && value > 0.6 && el.paused) el.play().catch(() => {})
+    if (el && !visible && !el.paused) el.pause()
+    if (screen.current) {
+      const map = playing.current && videoTexture.current ? videoTexture.current : poster
+      if (screen.current.map !== map) { screen.current.map = map; screen.current.needsUpdate = true }
+    }
+  })
+
+  return (
+    <group ref={pivot} position={[x, SPREAD.pageTop + 0.004, z]} visible={false}>
+      <mesh
+        geometry={boardGeometry}
+        castShadow
+        receiveShadow
+        onPointerOver={() => { if (pivot.current) pivot.current.userData.hovered = true; document.body.style.cursor = 'pointer' }}
+        onPointerOut={() => { if (pivot.current) pivot.current.userData.hovered = false; document.body.style.cursor = '' }}
+      >
+        <meshStandardMaterial map={board} roughness={0.95} />
+      </mesh>
+      <mesh geometry={screenGeometry}>
+        <meshStandardMaterial ref={screen} map={poster} roughness={0.55} metalness={0} emissive="#ffffff" emissiveIntensity={0.12} toneMapped={false} />
+      </mesh>
+    </group>
+  )
+}
+
 function Focus({ timeline }: { timeline: Timeline }) {
   const target = useRef(new THREE.Vector3(...cameraAt(0).focus))
   useFrame((_, delta) => {
@@ -333,13 +472,14 @@ function Focus({ timeline }: { timeline: Timeline }) {
   )
 }
 
-export default function BookScene({ timeline: timelineRef, cover, free, viewShift, effects }: Props) {
+export default function BookScene({ timeline: timelineRef, cover, free, channels, fontFamily, viewShift, effects }: Props) {
   // Same object for the component's lifetime; children read .g every frame.
   const timeline = timelineRef.current
   const paper = usePaperTexture()
   const introDuration = 1600
   const coverLiftFn = (order: number, now: number) => coverLift(timeline.g, Math.min(1, (now - timeline.introStart) / introDuration), order)
   const freeLiftFn = (order: number) => (flipAngle(timeline.g) > Math.PI * 0.8 ? freeLift(timeline.g, order) : 0)
+  const channelOrder = (i: number) => (channels.length > 1 ? i / (channels.length - 1) : 0)
 
   return (
     <>
@@ -374,7 +514,11 @@ export default function BookScene({ timeline: timelineRef, cover, free, viewShif
         {free.map((layer, i) => (
           <PaperLayer key={layer.src} layer={layer} order={free.length > 1 ? i / (free.length - 1) : 0} lift={freeLiftFn} />
         ))}
-        <TurningPage timeline={timeline} paper={paper} />
+        {channels.map((channel, i) => (
+          <ChannelFrame key={channel.clip} channel={channel} order={channelOrder(i)} timeline={timeline} fontFamily={fontFamily} />
+        ))}
+        <TurningPage timeline={timeline} paper={paper} turn={1} />
+        <TurningPage timeline={timeline} paper={paper} turn={2} />
       </group>
 
       <LightShaft />
