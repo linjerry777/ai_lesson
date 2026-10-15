@@ -1,6 +1,17 @@
 # ai_lesson Current Status
 
-Last updated: 2026-09-30 (new course/payment work is local only; earlier production release below)
+Last updated: 2026-10-15 (content hub P1 is local only; not pushed or deployed)
+
+## 2026-10-15 content hub P1 (local)
+
+- Repositioned per Jerry: content + email list + store hub. Old course sections removed from the homepage; old course code kept.
+- New: `/videos`, `/videos/[slug]`, `/free`, `/free/[slug]`, `/v/[code]`, `/api/leads`, `/admin/stats`; proxy now records utm/`?s=` attribution cookie (last touch, 30 days) and still guards `/dashboard`.
+- Content lives in `content/videos/*.json` and `content/free/*.json` (validated at build). Two placeholder videos and one placeholder prompt pack. Contract: `docs/content-contract.md`.
+- Applied `supabase/migrations/20261015090000_ai_lesson_content_hub.sql` to shared `jerry-platform` via `supabase db query --linked` (not `db push`; not recorded in schema_migrations). Additive only: `ai_lesson_leads`, `ai_lesson_clicks`, `ai_lesson_capture_lead`, `ai_lesson_video_stats`, private bucket `ai-lesson-downloads`. anon/authenticated have no table grants or function execute (verified).
+- Uploaded placeholder `autovideo-prompt-pack/autovideo-prompt-pack-v1.md` with `scripts/upload-free-resources.mjs`; public object URL returns 400.
+- Verified: `npm run check` (lint, typecheck, 13 files / 91 tests + 1 skipped, build). Local production server: `/v/1?s=yt` → click row + cookie → video page → consent required → lead row with video=1/source=youtube → signed URL 200 with file content → `/admin/stats` aggregate. 375px no horizontal overflow on home/video/free. Test lead and click rows deleted afterwards.
+- Not verified: `/admin/stats` as a logged-in admin (needs Jerry's Google login; `ADMIN_EMAILS` added to local `.env.local` only — add it on Vercel before deploy). No welcome email is sent yet (Resend is P3). No rate limiting beyond a honeypot.
+- Next: P2 store (email checkout without pre-login, entitlement claim, workflow kit / preorder / waitlist; needs a fresh `sk_test_`), P3 sync (pipeline → content JSON, YouTube RSS, Resend).
 
 ## 2026-09-30 local course delivery and payment preparation
 

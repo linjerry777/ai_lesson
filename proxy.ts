@@ -1,7 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createServerClient, type SetAllCookies } from '@supabase/ssr'
+import { ATTRIBUTION_COOKIE, attributionCookieOptions, attributionFromSearch, encodeAttribution } from '@/lib/attribution'
 
-export async function proxy(request: NextRequest) {
+async function protectDashboard(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -27,7 +28,7 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (request.nextUrl.pathname.startsWith('/dashboard') && !user) {
+  if (!user) {
     const next = `${request.nextUrl.pathname}${request.nextUrl.search}`
     return NextResponse.redirect(
       new URL(`/login?next=${encodeURIComponent(next)}`, request.url),
@@ -37,6 +38,18 @@ export async function proxy(request: NextRequest) {
   return supabaseResponse
 }
 
+export async function proxy(request: NextRequest) {
+  const response = request.nextUrl.pathname.startsWith('/dashboard')
+    ? await protectDashboard(request)
+    : NextResponse.next({ request })
+
+  // Any page opened with utm_* / ?s= tags becomes the visitor's latest source.
+  const attribution = attributionFromSearch(request.nextUrl.searchParams, request.nextUrl.pathname)
+  if (attribution) response.cookies.set(ATTRIBUTION_COOKIE, encodeAttribution(attribution), attributionCookieOptions)
+
+  return response
+}
+
 export const config = {
-  matcher: ['/dashboard/:path*'],
+  matcher: ['/((?!api|v/|_next|favicon.ico|robots.txt|sitemap.xml|opengraph-image|.*\\.[a-z0-9]+$).*)'],
 }

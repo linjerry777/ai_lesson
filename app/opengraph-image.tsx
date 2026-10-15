@@ -1,140 +1,24 @@
 import { ImageResponse } from 'next/og'
+import { SITE } from '@/lib/site'
 
-// Next.js convention: this file becomes /opengraph-image
-// (and is referenced by metadata.openGraph.images automatically).
+// Next.js convention: this file becomes /opengraph-image.
 export const runtime = 'edge'
-export const alt = 'Claude Code 實戰工作流 — AI 時代的工程師超能力'
+export const alt = `${SITE.name} — ${SITE.tagline}`
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 export default async function OG() {
   return new ImageResponse(
     (
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          background:
-            'linear-gradient(135deg, #fff7ed 0%, #ffedd5 35%, #fed7aa 100%)',
-          padding: '64px 72px',
-          fontFamily: 'sans-serif',
-          position: 'relative',
-        }}
-      >
-        {/* Top badge */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 12,
-            color: '#c2410c',
-            fontSize: 22,
-            fontWeight: 700,
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-          }}
-        >
-          <span
-            style={{
-              display: 'inline-flex',
-              padding: '8px 16px',
-              background: '#f97316',
-              color: '#fff',
-              borderRadius: 999,
-              fontSize: 18,
-            }}
-          >
-            網課小韭菜
-          </span>
-          <span style={{ color: '#9a3412' }}>· 純文字實戰手冊 · 永久存取</span>
+      <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', background: '#f6f3eb', color: '#1c343b', padding: '72px 80px', fontFamily: 'sans-serif' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 26, fontWeight: 700, color: '#b65025' }}>
+          <span style={{ width: 14, height: 14, borderRadius: 999, background: '#b65025' }} />
+          {SITE.name}
         </div>
-
-        {/* Headline */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            marginTop: 56,
-            color: '#111827',
-            fontWeight: 900,
-            fontSize: 88,
-            lineHeight: 1.05,
-            letterSpacing: '-0.02em',
-          }}
-        >
-          <span>你現在看到的</span>
-          <span>
-            <span style={{ color: '#f97316' }}>這個網站</span>
-          </span>
-          <span>是 Claude Code 做的</span>
-        </div>
-
-        {/* Sub */}
-        <div
-          style={{
-            display: 'flex',
-            marginTop: 36,
-            color: '#374151',
-            fontSize: 30,
-            lineHeight: 1.4,
-            maxWidth: 980,
-          }}
-        >
-          Google 登入 + Stripe 付款 + Vercel 部署 — 一個下午整套接起來。
-        </div>
-
-        {/* Footer row */}
-        <div
-          style={{
-            display: 'flex',
-            position: 'absolute',
-            bottom: 56,
-            left: 72,
-            right: 72,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            color: '#6b7280',
-            fontSize: 22,
-          }}
-        >
-          <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span
-              style={{
-                display: 'inline-flex',
-                width: 36,
-                height: 36,
-                background: '#f97316',
-                color: '#fff',
-                fontWeight: 900,
-                fontSize: 16,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 8,
-              }}
-            >
-              AI
-            </span>
-            ailesson-two.vercel.app
-          </span>
-          <span
-            style={{
-              display: 'flex',
-              alignItems: 'baseline',
-              gap: 12,
-              color: '#111827',
-              fontWeight: 800,
-            }}
-          >
-            <span style={{ fontSize: 44 }}>NT$990</span>
-            <span style={{ color: '#9ca3af', fontSize: 20 }}>
-              Sandbox demo
-            </span>
-          </span>
-        </div>
+        <div style={{ display: 'flex', fontSize: 76, fontWeight: 800, lineHeight: 1.2, letterSpacing: '-0.02em', maxWidth: 1000 }}>{SITE.tagline}</div>
+        <div style={{ display: 'flex', fontSize: 28, color: '#68706c' }}>影片筆記 · 免費 prompt 包 · 一鍵跑起來的 AI 工作流</div>
       </div>
     ),
-    { ...size },
+    size,
   )
 }

@@ -40,10 +40,10 @@ export default function Navbar() {
   const initials = displayName.slice(0, 1).toUpperCase()
 
   const navLinks = [
-    { href: '#curriculum', label: '課程大綱' },
-    { href: '#ai-help', label: 'AI 求助工具' },
-    { href: '#instructor', label: '關於講師' },
-    { href: '#pricing', label: '課程方案' },
+    { href: '/videos', label: '影片筆記' },
+    { href: '/free', label: '免費資源' },
+    { href: '/#coming', label: '工作流與課程' },
+    { href: '/#about', label: '關於' },
   ]
 
   return (
@@ -57,7 +57,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-rust rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">AI</span>
             </div>
             <span className="font-bold text-gray-900 text-lg">
@@ -88,7 +88,7 @@ export default function Navbar() {
                   className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-brand-500 transition-colors"
                 >
                   <BookOpen size={15} />
-                  我的課程
+                  我的學習
                 </Link>
 
                 {/* Avatar + name */}
@@ -132,12 +132,12 @@ export default function Navbar() {
                 >
                   登入
                 </Link>
-                <a
-                  href="/login?next=%2Fdashboard%3Fcourse%3Dstarter-free"
+                <Link
+                  href="/free"
                   className="bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold px-4 py-3 rounded-lg transition-colors"
                 >
-                  免費入門
-                </a>
+                  免費資源
+                </Link>
               </>
             )}
           </div>
@@ -195,13 +195,13 @@ export default function Navbar() {
               >
                 登入
               </Link>
-              <a
-                href="/login?next=%2Fdashboard%3Fcourse%3Dstarter-free"
+              <Link
+                href="/free"
                 className="block bg-brand-500 text-white text-center text-sm font-semibold px-4 py-3 rounded-lg"
                 onClick={() => setMenuOpen(false)}
               >
-                免費入門
-              </a>
+                免費資源
+              </Link>
             </>
           )}
         </div>

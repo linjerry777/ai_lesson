@@ -1,0 +1,37 @@
+{
+  "slug": "claude-code-first-week",
+  "code": "2",
+  "title": "Claude Code 新手第一週最常卡住的 3 件事",
+  "channel": "tech",
+  "publishedAt": "2026-10-14",
+  "status": "published",
+  "summary": "環境變數、權限提示、改壞了怎麼回復——新手最常卡的三個地方與對應的解法。（示範內容，正式影片上線後替換）",
+  "platforms": {},
+  "sections": [
+    {
+      "heading": "1. 環境變數讀不到",
+      "body": "大多數「API key 無效」其實是檔名或位置錯了。先確認檔案叫 .env.local、放在專案根目錄，改完要重啟開發伺服器。"
+    },
+    {
+      "heading": "2. 每一步都在問權限",
+      "body": "權限提示是保護，不是錯誤。常用且安全的指令可以加入允許清單，危險操作保持詢問。"
+    },
+    {
+      "heading": "3. 改壞了回不去",
+      "body": "開始前先 git commit 一次。AI 改壞時用 git diff 看改了什麼，再決定要退回還是讓它修。"
+    }
+  ],
+  "prompts": [
+    {
+      "title": "卡住時的求助單",
+      "text": "我在做【目標】時卡住了。\n我做了：【步驟】\n看到的錯誤：【完整錯誤訊息】\n請先判斷最可能的 2 個原因，再給我一個最小的驗證步驟。"
+    }
+  ],
+  "tools": [
+    { "name": "Git", "url": "https://git-scm.com/", "note": "每次讓 AI 動手前先存檔" }
+  ],
+  "cta": {
+    "kind": "free",
+    "slug": "autovideo-prompt-pack"
+  }
+}

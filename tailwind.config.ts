@@ -9,6 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        paper: '#f6f3eb',
+        ink: { DEFAULT: '#1c343b', soft: '#314e56', muted: '#68706c' },
+        rust: { DEFAULT: '#b65025', soft: '#f5eee2' },
         brand: {
           50: '#fff7ed',
           100: '#ffedd5',

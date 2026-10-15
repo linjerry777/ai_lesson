@@ -1,0 +1,39 @@
+{
+  "slug": "ai-short-video-factory",
+  "code": "1",
+  "title": "我用 Claude Code 做了一條 AI 短影音自動化工廠",
+  "channel": "tech",
+  "publishedAt": "2026-10-15",
+  "status": "published",
+  "summary": "從選題、腳本、配音到剪輯，一條每天自動產出短影音的流程長什麼樣子。（示範內容，正式影片上線後替換）",
+  "platforms": {},
+  "sections": [
+    {
+      "heading": "這條流程在做什麼",
+      "body": "輸入一個主題，AI 依序產出題目、60 秒腳本、分鏡與字幕，最後用 ffmpeg 合成影片。\n\n重點不是每一步都完美，而是每一步都有固定格式，壞掉時能知道是哪一段。"
+    },
+    {
+      "heading": "為什麼用 Claude Code 串",
+      "body": "Claude Code 能直接讀寫專案檔案與執行指令，所以「寫腳本 → 存檔 → 呼叫剪輯」可以在同一個對話裡完成，不用在多個網頁工具之間複製貼上。"
+    },
+    {
+      "heading": "你可以先從哪裡開始",
+      "body": "不用一次做完整條。先用下面的「腳本 prompt」把一個題目變成 60 秒口播稿，確認格式穩定，再往後接分鏡和剪輯。"
+    }
+  ],
+  "prompts": [
+    {
+      "title": "60 秒口播稿",
+      "text": "用以下題目寫一支 60 秒口播稿：【題目】\n結構：0–3 秒鉤子、3 個步驟、成果示範、結尾 CTA。\n語氣口語、短句，每句不超過 20 字，總字數 250 字以內。"
+    }
+  ],
+  "tools": [
+    { "name": "Claude Code", "url": "https://docs.anthropic.com/en/docs/claude-code/overview", "note": "串接每一步的 AI 開發助手" },
+    { "name": "ffmpeg", "url": "https://ffmpeg.org/", "note": "合成畫面、配音與字幕" }
+  ],
+  "cta": {
+    "kind": "free",
+    "slug": "autovideo-prompt-pack",
+    "pitch": "影片裡用到的 6 組 prompt 整理成一份，留 Email 直接下載。"
+  }
+}

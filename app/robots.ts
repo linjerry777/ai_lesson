@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: '/',
         // 學員專區與 callback 不需要被 index
-        disallow: ['/api/', '/dashboard', '/auth/callback', '/success'],
+        disallow: ['/api/', '/dashboard', '/auth/callback', '/success', '/admin', '/v/'],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

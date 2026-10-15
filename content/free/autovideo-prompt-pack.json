@@ -1,0 +1,17 @@
+{
+  "slug": "autovideo-prompt-pack",
+  "title": "AI 短影音自動化 Prompt 包",
+  "summary": "從選題、腳本、分鏡到字幕檢查，一套可以直接貼給 Claude Code 或 ChatGPT 的短影音 prompt。（示範內容，正式版上線前會替換）",
+  "status": "published",
+  "format": "Markdown · 6 組 prompt",
+  "bullets": [
+    "選題：從一個關鍵字產出 10 個有鉤子的題目",
+    "腳本：60 秒口播稿，含開頭 3 秒鉤子與結尾 CTA",
+    "分鏡：把腳本拆成畫面、字幕與素材清單",
+    "檢查：字幕錯字、節奏與平台規格自檢"
+  ],
+  "file": {
+    "path": "autovideo-prompt-pack/autovideo-prompt-pack-v1.md",
+    "downloadName": "ai-short-video-prompt-pack-v1.md"
+  }
+}
