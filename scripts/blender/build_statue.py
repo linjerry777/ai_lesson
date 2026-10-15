@@ -22,7 +22,7 @@ args = sys.argv[sys.argv.index("--") + 1:]
 work, out = Path(args[0]), Path(args[1])
 PIECES = int(args[2]) if len(args) > 2 else 140
 HEIGHT = float(args[3]) if len(args) > 3 else 3.2
-THICK = float(args[4]) if len(args) > 4 else 0.32
+THICK = float(args[4]) if len(args) > 4 else 0.55
 random.seed(11)
 
 height = np.load(work / "height.npy")
@@ -129,6 +129,13 @@ def materials():
     tex.image = bpy.data.images.load(str(work / "texture.png"))
     skin.node_tree.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
     bsdf.inputs["Roughness"].default_value = 0.35
+    if (work / "normal.png").exists():
+        normal_tex = nodes.new("ShaderNodeTexImage")
+        normal_tex.image = bpy.data.images.load(str(work / "normal.png"))
+        normal_tex.image.colorspace_settings.name = "Non-Color"
+        normal_map = nodes.new("ShaderNodeNormalMap")
+        skin.node_tree.links.new(normal_tex.outputs["Color"], normal_map.inputs["Color"])
+        skin.node_tree.links.new(normal_map.outputs["Normal"], bsdf.inputs["Normal"])
     core = bpy.data.materials.new("core")
     core.use_nodes = True
     core.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.86, 0.9, 0.95, 1)

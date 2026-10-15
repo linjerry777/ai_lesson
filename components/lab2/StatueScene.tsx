@@ -41,7 +41,9 @@ function useFragments(url: string, crackFrom: THREE.Vector3) {
       if (source.name === 'core') { obj.material = ice; return }
       if (!skins.has(source)) {
         skins.set(source, new THREE.MeshPhysicalMaterial({
-          map: source.map, roughness: 0.42, metalness: 0, clearcoat: 0.9, clearcoatRoughness: 0.25,
+          map: source.map, normalMap: source.normalMap, normalScale: new THREE.Vector2(1.1, 1.1),
+          roughness: 0.38, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.18,
+          clearcoatNormalMap: source.normalMap, clearcoatNormalScale: new THREE.Vector2(0.5, 0.5),
         }))
       }
       obj.material = skins.get(source)!
@@ -109,7 +111,8 @@ export default function StatueScene({ progress, offsetX }: Props) {
     if (b.current) b.current.visible = animate(second.fragments, order => assembleAmount(g, order))
     if (stage.current) {
       const k = Math.min(1, delta * 2.5)
-      const targetY = Math.sin(state.clock.elapsedTime * 0.3) * 0.25 + state.pointer.x * 0.5
+      // Swing wide enough that the statue's thickness and side light read clearly.
+      const targetY = Math.sin(state.clock.elapsedTime * 0.35) * 0.42 + state.pointer.x * 0.6
       stage.current.rotation.y += (targetY - stage.current.rotation.y) * k
       stage.current.rotation.x += (-state.pointer.y * 0.12 - stage.current.rotation.x) * k
       const x = g < 0.5 ? -offsetX : offsetX
