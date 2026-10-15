@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { Copy, Check, AlertTriangle, Lightbulb, ExternalLink } from 'lucide-react'
 
@@ -9,27 +9,35 @@ export interface Step {
   body?: string
   link?: { text: string; url: string }   // 直接連到設定頁面
   claude?: string                         // 給 Claude 的 prompt
+  promptLabel?: string
   code?: { lang: string; content: string }
   warning?: string
   tip?: string
   screenshot?: string
 }
 
-function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false)
-  const copy = () => {
-    navigator.clipboard.writeText(text)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+function CopyButton({ text, light = false }: { text: string; light?: boolean }) {
+  const [status, setStatus] = useState<'idle' | 'copied' | 'error'>('idle')
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current) }, [])
+  const copy = async () => {
+    if (timer.current) clearTimeout(timer.current)
+    try {
+      await navigator.clipboard.writeText(text)
+      setStatus('copied')
+    } catch {
+      setStatus('error')
+    }
+    timer.current = setTimeout(() => setStatus('idle'), 3000)
   }
   return (
     <button
       onClick={copy}
-      className="flex items-center gap-1 text-[10px] text-gray-400 hover:text-white transition-colors flex-shrink-0"
-      aria-label={copied ? '已複製' : '複製內容'}
+      className={`flex min-h-11 items-center gap-1 rounded px-2 text-xs transition-colors flex-shrink-0 ${light ? 'text-emerald-800 hover:bg-emerald-100' : 'text-gray-300 hover:bg-gray-800 hover:text-white'}`}
+      aria-label={status === 'copied' ? '已複製' : '複製內容'}
     >
-      {copied ? <Check size={11} className="text-green-400" /> : <Copy size={11} />}
-      {copied ? '已複製' : '複製'}
+      {status === 'copied' ? <Check size={13} /> : <Copy size={13} />}
+      <span role="status">{status === 'copied' ? '已複製' : status === 'error' ? '複製失敗，請手動選取' : '複製'}</span>
     </button>
   )
 }
@@ -48,15 +56,15 @@ function CodeBlock({ lang, content }: { lang: string; content: string }) {
   )
 }
 
-function ClaudePrompt({ content }: { content: string }) {
+function ClaudePrompt({ content, label = '貼給 Claude 的指令' }: { content: string; label?: string }) {
   return (
-    <div className="mt-3 rounded-xl overflow-hidden border border-purple-200">
-      <div className="flex items-center justify-between px-4 py-2 bg-purple-50 border-b border-purple-200">
+    <div className="mt-3 rounded-xl overflow-hidden border border-emerald-200">
+      <div className="flex items-center justify-between px-4 py-2 bg-emerald-50 border-b border-emerald-200">
         <div className="flex items-center gap-2">
           <span className="text-sm">🤖</span>
-          <span className="text-[10px] font-semibold text-purple-600 uppercase tracking-wide">貼給 Claude 的指令</span>
+          <span className="text-[10px] font-semibold text-emerald-800 uppercase tracking-wide">{label}</span>
         </div>
-        <CopyButton text={content} />
+        <CopyButton text={content} light />
       </div>
       <pre className="p-4 bg-white text-sm text-gray-800 overflow-x-auto leading-relaxed whitespace-pre-wrap font-sans">
         {content}
@@ -95,7 +103,7 @@ export default function StepGuide({ steps }: { steps: Step[] }) {
                 </a>
               )}
 
-              {step.claude && <ClaudePrompt content={step.claude} />}
+              {step.claude && <ClaudePrompt content={step.claude} label={step.promptLabel} />}
 
               {step.code && <CodeBlock lang={step.code.lang} content={step.code.content} />}
 

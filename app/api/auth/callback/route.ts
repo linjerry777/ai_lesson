@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
       const {
         data: { user },
       } = await supabase.auth.getUser()
-      if (user?.email) {
+      if (user?.email && user.email_confirmed_at) {
         try {
           await claimExternalEntitlements(user.id, user.email)
         } catch (claimError) {

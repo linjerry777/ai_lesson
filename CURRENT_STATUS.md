@@ -1,6 +1,49 @@
 # ai_lesson Current Status
 
-Last updated: 2026-07-16
+Last updated: 2026-09-30 (new course/payment work is local only; earlier production release below)
+
+## 2026-09-30 local course delivery and payment preparation
+
+This section supersedes older learner/progress/payment implementation notes below; it does not claim a new production deployment.
+
+- Generated three separate Product Design/built-in image_gen concepts in the Lesson chat; Jerry's 1/2/3 choice is pending. No broad UI rebuild. Exact image2.5 version cannot be verified through the available tool.
+- Expanded all 21 text chapters with exercises, artifacts, acceptance checklists and official-source checks. Free/Claude Code/Codex Remotion remain separate: 4/8/9 chapters and 24/84/64 steps. Cohort is not offered.
+- Added a runnable, pinned Remotion text-animation lab and authenticated private ZIP download. Actual output: 6 seconds, 1280x720, 30fps H.264, no audio; full decode and both segment frames verified. No model/TTS calls, role animation long film or publishing is claimed.
+- Hardened Checkout/Stripe raw-body webhook validation, TWD minor-unit amounts, app/user/product/tier identity, Price/mode checks, idempotency and persistence read-back. Added service-only atomic fulfillment/revocation RPC migration so refunds before/concurrent with checkout and duplicates cannot restore revoked access. Success URLs do not grant access.
+- Preserved user-scoped browser progress; prepared optional auth/RLS/atomic cloud progress and recoverable local pending changes. Both new migrations are local preparations only; cloud flags remain off and no shared DB mutation occurred.
+- External claims now require verified email and purchase ownership read-back. There are zero real external orders to exercise that bridge.
+- Cloud read-only: Google enabled; this app purchases/external pending/claimed all zero. Stripe Sandbox key still returns 401/api_key_expired; Codex Price missing, Claude Price/endpoint secret validity unverified. Paid entry remains closed; no Checkout/customer/charge or legal agreement accepted.
+- Validation: lint, typecheck, 11 files / 63 tests and production build pass. Optional actual signed-handler/local-PG round-trip included; 16 additional isolated DB/RLS checks and concurrent fulfillment/refund pass. Nine local next-start HTTP boundaries pass. The synthetic reader source is deleted, route404 and absent from build manifest; private ZIP traced, paid workbook markers absent from public JS.
+- Chrome synthetic learner: complete/reload read-back and actual copy/paste verified. CSS320/390 reading checked with no root horizontal overflow. Real Google learner, two real accounts, actual Stripe Sandbox and cloud cross-device acceptance still pending.
+- Updated sales delivery copy and removed this repo footer's internal Hub-root service-center link in line with the shared upgrade brief; these changes are local, not deployed.
+- Isolated local Docker fixture is stopped and preserved; temporary production :3005 stopped. This chat's dev :3004 remains available. Preserved all existing dirty/untracked work, no commit/push/deploy or sibling edits.
+- Handoff/evidence: `../_repo_reviews/jerry-ai-studio/2026-09-30-five-project-upgrade/lesson/handoff.md`; exact external dependencies and replay steps: `docs/payment-activation.md`.
+
+## 2026-09-30 production release
+
+- Promoted the course-notebook redesign to https://ailesson-two.vercel.app. Deployment: `dpl_3R6gUTVcjTeXM7pTMZm6gBrQUs3J`; prior stable rollback: `dpl_5TmuGXR3BM76TV7ugLW9aj9BCZEL`.
+- Passed npm run check: lint, TypeScript, 28 tests and production build. Production unauthenticated dashboard remains 307; paid checkout remains paused and redirects with payments_unavailable.
+- External Chrome verified public help-brief generation and clipboard success with synthetic UI troubleshooting text. This is local formatting, not an AI model call.
+- Formal homepage checked at 320/768/1024/1440 in real-site iframes without root horizontal overflow.
+- Real learner login/entitlements remain unverified: the login page states that signing in accepts Terms/Privacy, and the action-time approval question is still pending. No Google sign-in or payment session was initiated.
+- Progress remains user-scoped browser storage; cross-device/cloud persistence is not verified. Evidence: `../_repo_reviews/jerry-ai-studio/2026-09-30-release/`.
+
+## 2026-09-28 local course presentation and learning pass
+
+- Replaced the dense hero with an editorial course-notebook layout; simplified the homepage around learning outcomes, tools, curriculum and actual course availability. Removed unsubstantiated loss/time claims from the active footer and repetitive sales sections from the homepage.
+- Added a local AI help-brief composer: required goal/evidence, optional attempted steps, chapter-aware context, reviewable output and clipboard success/failure handling. This formats prompts locally; it does not call a model or transmit text.
+- Refined the learning sidebar, reading spacing, chapter labels and phone layout. Chapter changes return to the top. Existing user-scoped browser progress is preserved.
+- Verified 28 tests, lint, typecheck and production build. Browser verified real composer generation/copy/invalidation; a temporary synthetic learner fixture verified completed count and last chapter after reload. The fixture was removed before production build and its URL now returns 404.
+- Unauthenticated `/dashboard` returns 307 to login. Disabled paid checkout returns 307 with `payments_unavailable`. No login, entitlement writes or Stripe sessions were created.
+- Responsive visual checks at 320/390/768/1024/1440 via local iframe harness; embedded mobile click automation was unreliable, so do not treat those visual checks as full mobile interaction coverage. Real authenticated learner and cross-device progress remain unverified.
+- Evidence: `../_repo_reviews/jerry-ai-studio/2026-09-28-product-quality-pass.md`.
+
+## 2026-09-27 local learning workspace pass
+
+- Completion and last lesson now persist in versioned browser storage scoped to the authenticated user ID; storage failures keep the page usable and show an honest warning. Separate tabs reload saved progress changes.
+- Added a clearer learning-progress panel, responsive reading spacing, truthful final-chapter messaging, and clipboard success/failure handling with legible light/dark prompt buttons.
+- Verified: lint, typecheck, 24 tests and production build. Storage tests cover reload, separate users, corrupt data, blocked storage and tab updates.
+- Persistence is per browser, not cloud sync. Authenticated course UI and cross-device progress were not browser-verified. Payment lock remains intact; no entitlement/purchase writes or production deployment were performed.
 
 AI Lesson is a text-first course platform. It is not a video-hosting product.
 
@@ -85,3 +128,7 @@ AI Lesson is a text-first course platform. It is not a video-hosting product.
 2. Update Vercel Production Stripe values, redeploy, and verify the webhook signature without a real charge.
 3. Run one external CommercePilot entitlement claim with a controlled Sandbox order.
 4. Decide whether learner progress should persist in the shared project before marketing the Dashboard as cross-device progress tracking.
+
+## 2026-09-28 local Jerry LINE Hub entry integration
+
+Added a public return link to `https://jerry-line-hub.vercel.app` in the existing navigation/footer without altering authentication, business data, payment controls or service APIs. This link and prior UI work remain local, not deployed. The Hub has a new local service portal, requirement draft and isolated workforce module; see `../jerry-line-hub/docs/line-hub-integration.md` for production dependencies and exact integration boundaries.

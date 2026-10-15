@@ -1,0 +1,10 @@
+{
+  "id": "practice-001",
+  "fps": 30,
+  "width": 1280,
+  "height": 720,
+  "segments": [
+    { "id": "s01", "from": 0, "durationInFrames": 90, "caption": "先把目標拆成可驗收的步驟", "visualTask": "顯示第一個可交付的任務" },
+    { "id": "s02", "from": 90, "durationInFrames": 90, "caption": "每次只修改一個片段", "visualTask": "切換到單段修改與驗收" }
+  ]
+}

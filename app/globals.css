@@ -21,3 +21,7 @@ body {
     text-wrap: balance;
   }
 }
+
+:where(button, a, input, select, textarea):focus-visible { outline: 3px solid #b65d31; outline-offset: 3px; }
+html { scroll-padding-top: 84px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }

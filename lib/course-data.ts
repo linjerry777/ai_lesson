@@ -1,4 +1,5 @@
 import type { Step } from '@/app/dashboard/StepGuide'
+import { attachWorkbook } from './course-workbooks'
 
 export interface Lesson {
   id: string
@@ -12,7 +13,7 @@ export interface Lesson {
 export const COURSE_TITLE    = 'Claude Code 實戰工作流'
 export const COURSE_SUBTITLE = '從零建立一個真實產品的完整過程'
 
-export const lessons: Lesson[] = [
+const baseLessons: Lesson[] = [
 
   // ── ch00 ─────────────────────────────────────────────────────────────────
   {
@@ -21,7 +22,7 @@ export const lessons: Lesson[] = [
     duration: '約 20 分',
     description:
       '開始之前，你需要五個帳號和幾個工具。這章把每個步驟都整理好了，照著做就能把環境準備好。\n\n' +
-      '所有工具都有免費方案，信用卡不是必須的。唯一要花錢的是 Claude Code Desktop 的訂閱，月費約 $20 USD。',
+      '先確認各服務的帳號資格與目前方案。Claude 使用方案、API、主機與交易處理可能另計費，課程費用不含這些支出。練習先使用本機與 Sandbox，看到付費或合約步驟先停下來確認。',
     keyPoints: [
       '五個必要帳號：Google、GitHub、Claude、Supabase、Vercel',
       '安裝 Claude Code Desktop（GUI 介面，比 CLI 更直觀）',
@@ -38,7 +39,7 @@ export const lessons: Lesson[] = [
    → 這個帳號會用來登入後面所有服務
 
 ② GitHub：https://github.com/signup
-   → 用 Google 帳號登入建立
+   → 建立 GitHub 帳號並完成官方驗證
 
 ③ Claude：https://claude.ai
    → 用 Google 帳號登入建立
@@ -53,9 +54,9 @@ export const lessons: Lesson[] = [
       },
       {
         title: '下載並安裝 Claude Code Desktop',
-        body: '去官方網站下載，選你的作業系統版本安裝。裝完打開，用你的 Claude 帳號登入。',
+        body: '去官方網站下載，選你的作業系統版本安裝。裝完開啟，用你的 Claude 帳號登入。',
         link: { text: '下載 Claude Code Desktop', url: 'https://claude.ai/download' },
-        tip: 'Claude Code Desktop 需要訂閱 Claude Pro（約 $20/月）才能使用。這是這堂課唯一需要付費的工具。',
+        tip: 'Desktop 的登入方式與可用方案以官方頁面和你的帳號為準；訂閱與 API 計費分開。先確認可用 Code 工作階段，再開始課程，不要因教材自行升級方案。',
       },
       {
         title: '切換到 Code 模式，選一個資料夾',
@@ -82,37 +83,34 @@ export const lessons: Lesson[] = [
       },
       {
         title: '安裝 Stripe CLI',
-        body: 'Stripe CLI 要在你的 Windows 本機安裝，不是透過 Claude Code。\n\n打開「終端機」或「PowerShell」，執行下面其中一個指令：',
+        body: 'Stripe CLI 在本機 ch04 的 webhook 測試才會用到。先讀官方安裝頁，選與你的 Windows 環境相符的方式；安裝後在 PowerShell 確認版本。',
+        link: { text: 'Stripe CLI 官方安裝說明', url: 'https://docs.stripe.com/stripe-cli' },
         code: {
-          lang: 'bash',
-          content: `# 方法一（推薦）— 用 winget：
-winget install Stripe.StripeCLI
-
-# 方法二 — 用 Scoop（如果有裝）：
-scoop install stripe`,
+          lang: 'powershell',
+          content: `stripe --version
+# 尚未安裝時，按官方頁面選 Windows 方式；不要猜套件名稱。`,
         },
-        warning: '不要在 Claude Code 的 Chat 分頁貼這個指令——Chat 是 Linux 環境，winget 跑不起來。要在你的 Windows 終端機直接執行。',
+        warning: '先確認目前終端機的 OS 與工作目錄；遠端工作階段不一定是你的 Windows 本機。登入 Stripe CLI 前也要確認使用正確帳號及 Sandbox。',
         tip: 'Stripe CLI 在 ch04 本機測試 Webhook 才會用到（stripe listen --forward-to localhost:3000/api/webhooks/stripe）。安裝完執行 stripe --version 確認成功，到時候直接用。',
       },
       {
-        title: '認識 Claude Code 的技能系統（Skill）',
-        body: '在 Claude Code Desktop 輸入 / 可以看到所有內建技能的清單。這堂課最常用到的幾個：',
+        title: '認識指令、內建技能與第三方外掛的差別',
+        body: '在 Code 工作階段輸入 / 檢視此版本可用專案。指令、內建技能、自訂技能與外掛不是同一件事；第三方專案不保證已安裝。這門課以基本開發流程為主，不需要安裝設計外掛才能完成。',
         code: {
           lang: 'text',
-          content: `/ui-ux-pro-max   → 啟用 UI/UX 設計模式，讓 Claude 生出更精緻的介面
-/simplify        → 檢查並優化你剛寫好的程式碼，去掉不必要的複雜度
-/commit          → 自動幫你寫 git commit message，不用自己想
-/debug           → 系統化 debug 模式，Claude 會一步步找出錯誤原因
-/review-pr       → 檢查你的程式碼有沒有問題，上線前跑一遍`,
+          content: `1. 輸入 /，只使用目前清單中確實存在的專案。
+2. /ui-ux-pro-max 等第三方名稱需要另外安裝，不是通用內建指令。
+3. 沒有某個技能時，直接描述任務、限制與驗收方式也能練習。
+4. 安裝外掛之前，先讀來源、所需許可權與費用。`,
         },
-        tip: '技能會持續更新。直接在 Claude Code 輸入 / 查看最新的完整清單，每個技能都有說明。不用背，需要的時候查就好。',
+        tip: '技能會持續更新。直接在 Claude Code 輸入 / 檢視最新的完整清單，每個技能都有說明。不用背，需要的時候查就好。',
       },
       {
         title: '本章驗收：你準備好開工了嗎？',
         body: '進入下一章前，請先確認下面每一項都完成。少一項都先停下來補，不然後面遇到錯誤時會很難判斷是程式碼問題，還是環境還沒準備好。',
         code: {
           lang: 'text',
-          content: `□ 可以打開 Claude Code Desktop，並切到 Code 分頁
+          content: `□ 可以開啟 Claude Code Desktop，並切到 Code 分頁
 □ Code 分頁已經選好一個專案資料夾
 □ Claude 可以在本機執行 node -v，並看到版本號
 □ Git 已安裝，Code 分頁不再顯示 Git is required
@@ -128,11 +126,11 @@ scoop install stripe`,
   // ── ch01 ─────────────────────────────────────────────────────────────────
   {
     id: 'ch01',
-    title: '一句話，整個網站生出來',
+    title: '從需求單到可驗收的產品首頁',
     duration: '約 45 分',
     description:
       '我跟 Claude Code 說：幫我建一個賣線上課程的網站，要有 Google 登入和 Stripe 付款。然後它就開始動了。\n\n' +
-      'Navbar、Hero section、痛點卡片、課程大綱、學員回饋、比較表、FAQ、頁腳——一個下午全部生完。\n\n' +
+      '先完成主視覺、課程大綱、價格、FAQ 與頁尾。沒有真實來源就不加學員回饋、獲利數字或成果保證。\n\n' +
       'AI 寫出什麼，取決於你說了什麼。這章教你怎麼把一個模糊的想法，拆解成 Claude Code 能直接動手的需求。',
     keyPoints: [
       '怎麼把模糊想法拆解成 AI 能執行的需求描述',
@@ -165,11 +163,11 @@ scoop install stripe`,
       },
       {
         title: '建立 Next.js 專案',
-        body: '打開 Claude Code Desktop，選一個你想放專案的資料夾，然後貼這段給它：',
+        body: '開啟 Claude Code Desktop，選一個你想放專案的資料夾，然後貼這段給它：',
         claude: `幫我建立一個 Next.js 16 的專案，名稱叫 ai-lesson。
 問到設定的時候 TypeScript 選 Yes、Tailwind 選 Yes，其他都選預設值。
 建完之後進入專案資料夾，告訴我成功了。`,
-        tip: '這堂課用 Next.js 16 + Tailwind v4。Tailwind v4 的設定方式和以前不一樣：不需要 tailwind.config.ts，改在 globals.css 裡用 @import "tailwindcss" 和 @theme 定義自訂顏色。如果 Claude 問你要放在哪個位置，告訴它你想放的資料夾路徑就好。',
+        tip: '先看 package.json：本課參考站是 Next.js 16 + Tailwind v3，保留 tailwind.config.ts；新建專案可能使用 v4。v4 的 @import 與 @theme 不能直接貼進 v3 專案。請 AI 先辨識已安裝版本，再提供相符設定。',
       },
       {
         title: '告訴 Claude 你要什麼樣的網站',
@@ -180,7 +178,7 @@ https://ailesson-two.vercel.app/
 把課程名稱、文案換成我的內容，整體版型、配色、風格都照這個網站做。
 建完之後告訴我怎麼在瀏覽器預覽。`,
         warning: '不要一次叫它做太多。先讓它建好整體、能在瀏覽器看到之後，再慢慢調整細節。如果 build 出現「找不到 brand-500 顏色」或網頁沒有橘色，告訴 Claude：「幫我在 globals.css 的 @theme 裡定義 brand-50 到 brand-900 的橘色系顏色，用 oklch 格式」，它會補上去。',
-        tip: '想讓 UI 更精緻的話，輸入 /ui-ux-pro-max 啟用設計模式，再告訴 Claude 你想改哪個區塊。',
+        tip: '先描述版面與閱讀需求，再逐區調整。設計外掛是選用工具，只有在已安裝、已理解許可權時使用。',
       },
       {
         title: '想改哪裡，直接描述給 Claude',
@@ -195,11 +193,11 @@ https://ailesson-two.vercel.app/
       },
       {
         title: '本章驗收：首頁真的跑起來',
-        body: '這章不要求你一次做出完美設計，只要求你有一個能在瀏覽器打開、能被 Claude 繼續修改的 Next.js 專案。',
+        body: '這章不要求你一次做出完美設計，只要求你有一個能在瀏覽器開啟、能被 Claude 繼續修改的 Next.js 專案。',
         code: {
           lang: 'text',
           content: `□ npm run dev 可以正常啟動
-□ 瀏覽器打開 http://localhost:3000 可以看到首頁
+□ 瀏覽器開啟 http://localhost:3000 可以看到首頁
 □ 首頁至少有 Hero、課程大綱、價格、FAQ 幾個區塊
 □ 改一段文案後，瀏覽器會熱更新
 □ 執行 git status 可以看到你改過的檔案
@@ -234,8 +232,8 @@ https://ailesson-two.vercel.app/
     steps: [
       {
         title: '建立 Supabase 專案',
-        body: '登入 Supabase（帳號在 ch00 已建好），點右上角「New project」建一個新專案。建完之後點左側「Project Settings → API」，把這三個值複製起來：\n\n• Project URL（長得像 https://xxx.supabase.co）\n• anon / public key（很長的 JWT）\n• service_role key（另一個，權限更高）',
-        link: { text: '打開 Supabase Dashboard', url: 'https://supabase.com/dashboard' },
+        body: '登入 Supabase（帳號在 ch00 已建好），點右上角「New project」建一個新專案。建完之後點左側「Project Settings → API」，把這三個值複製起來：\n\n• Project URL（長得像 https://xxx.supabase.co）\n• anon / public key（很長的 JWT）\n• service_role key（另一個，許可權更高）',
+        link: { text: '開啟 Supabase Dashboard', url: 'https://supabase.com/dashboard' },
         screenshot: 'supabase-api-keys.png',
         warning: 'service_role key 絕對不能公開！只能在後端用。不能 commit 到 git，不能放到前端程式碼。',
       },
@@ -263,32 +261,32 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000`,
 - 導覽列右上角：還沒登入顯示「登入」按鈕，登入後顯示我的 email 和「登出」按鈕
 
 .env.local 裡已經有 Supabase 的設定了。`,
-        warning: '導覽列需要同時讀取登入狀態（Server）和處理登出點擊（Client）。如果 Claude 生出來的 Navbar 有錯，告訴它：「Navbar 需要拆成 Server Component 讀取用戶資訊，加上 Client Component 處理登出按鈕」。\n\n如果 build 出現 `Parameter \'cookiesToSet\' implicitly has an \'any\' type` 這個 TypeScript 錯誤，告訴 Claude：「幫我修正 supabase/server.ts 和 middleware.ts 裡 setAll 的型別，參數要明確標注為 { name: string; value: string; options?: object }[]」。',
+        warning: '需要互動的登出按鈕放 Client Component；服務端以 getUser 驗證身分。Cookie 的 setAll 型別請沿用已安裝 @supabase/ssr 的 SetAllCookies 型別，例如 Parameters<SetAllCookies>[0]，不要把 Cookie options 隨意改成 object。Next.js 16 使用 proxy.ts；舊版 middleware.ts 請依實際 Next 版本處理。',
       },
       {
         title: '去 Google Cloud Console 開 OAuth 憑證',
-        body: '1. 打開 Google Cloud Console\n2. 左上角選或建立一個專案\n3. 左側選單 → APIs & Services → Credentials\n4. 點「+ CREATE CREDENTIALS」→「OAuth client ID」\n5. Application type 選「Web application」\n6. Authorized redirect URIs 現在先加本機這一個就好：',
-        link: { text: '打開 Google Cloud Console', url: 'https://console.cloud.google.com/apis/credentials' },
+        body: '1. 開啟 Google Cloud Console\n2. 左上角選或建立一個專案\n3. 左側選單 → APIs & Services → Credentials\n4. 點「+ CREATE CREDENTIALS」→「OAuth client ID」\n5. Application type 選「Web application」\n6. Authorized redirect URIs 現在先加本機這一個就好：',
+        link: { text: '開啟 Google Cloud Console', url: 'https://console.cloud.google.com/apis/credentials' },
         code: {
           lang: 'text',
-          content: `http://localhost:3000/auth/callback`,
+          content: `https://你的Supabase專案.supabase.co/auth/v1/callback`,
         },
         screenshot: 'google-cloud-oauth-credentials.png',
-        warning: '⚠️ 現在只加本機的就好。Vercel 線上網址在 ch05 部署後才有，到時候再回來這裡補加：https://你的網址.vercel.app/auth/callback。少加一個，那個環境的登入就壞掉。建完複製 Client ID 和 Client Secret。',
+        warning: '經由 Supabase 的 Google OAuth，Google Console 的 Authorized redirect URI 要填 Supabase provider 顯示的 /auth/v1/callback。網站的 /api/auth/callback 則填在 Supabase Redirect URLs；這是兩個不同的跳轉，不要混用。',
       },
       {
         title: '在 Supabase 啟用 Google 登入',
         body: '1. Supabase Dashboard → Authentication → Providers\n2. 找到 Google，點開啟用\n3. 把 Client ID 和 Client Secret 貼進去\n4. 存檔',
-        link: { text: '打開 Supabase Auth Providers', url: 'https://supabase.com/dashboard/project/_/auth/providers' },
+        link: { text: '開啟 Supabase Auth Providers', url: 'https://supabase.com/dashboard/project/_/auth/providers' },
         screenshot: 'supabase-google-provider.png',
         tip: 'Supabase 這個頁面也會給你一個 Callback URL（格式是 https://xxx.supabase.co/auth/v1/callback），這個也要加回到 Google Cloud Console 的 redirect URIs 裡。',
       },
       {
         title: '設定 Supabase Site URL（最多人忘記的一步）',
-        body: '這個沒設好，登入完成後 OAuth code 會跑到錯的地方。\n\n→ Authentication → URL Configuration\n→ Site URL 現在填 http://localhost:3000（本機開發用）\n→ Redirect URLs 加入 http://localhost:3000/**',
-        link: { text: '打開 Supabase URL Configuration', url: 'https://supabase.com/dashboard/project/_/auth/url-configuration' },
+        body: '這個沒設好，登入完成後 OAuth code 會跑到錯的地方。\n\n→ Authentication → URL Configuration\n→ Site URL 現在填 http://localhost:3000（本機開發用）\n→ Redirect URLs 加入 http://localhost:3000/api/auth/callback',
+        link: { text: '開啟 Supabase URL Configuration', url: 'https://supabase.com/dashboard/project/_/auth/url-configuration' },
         screenshot: 'supabase-site-url.png',
-        warning: '⚠️ 現在先填 localhost。部署到 Vercel 後（ch05），一定要回來把 Site URL 改成你的 Vercel 網址，並在 Redirect URLs 補加 https://你的網址.vercel.app/**，否則線上登入會一直 redirect 回 localhost。',
+        warning: '⚠️ 現在先填 localhost。部署到 Vercel 後（ch05），一定要回來把 Site URL 改成你的 Vercel 網址，並在 Redirect URLs 補加 https://你的網址.vercel.app/api/auth/callback，否則線上登入會一直 redirect 回 localhost。',
       },
       {
         title: '本章驗收：Google 登入跑完一次',
@@ -297,14 +295,14 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000`,
           lang: 'text',
           content: `□ /login 頁面有 Google 登入按鈕
 □ 點 Google 登入後會跳到 Google 授權畫面
-□ 授權後會回到 http://localhost:3000/auth/callback
+□ Supabase 完成 Google 回呼後轉到 http://localhost:3000/api/auth/callback
 □ 最後會進入 /dashboard 或顯示已登入狀態
 □ Navbar 或 dashboard 能顯示你的 email
 □ Supabase Auth > Users 裡看得到這個使用者`,
         },
         claude: `我的 Google 登入流程卡住了。請你用系統化方式幫我檢查：
 1. Supabase URL / anon key / service role key 是否正確
-2. Google Cloud redirect URI 是否包含 http://localhost:3000/auth/callback
+2. Google Cloud redirect URI 是否與 Supabase 的 /auth/v1/callback 完全一致
 3. Supabase Provider 裡的 Client ID / Secret 是否正確
 4. Supabase Site URL 和 Redirect URLs 是否正確
 5. auth callback route 是否正確處理 code exchange
@@ -350,8 +348,8 @@ STRIPE_WEBHOOK_SECRET=whsec_...`,
       },
       {
         title: '⚠️ 之後加到 Vercel 時——一定要用 Dashboard 手動貼，不要用指令',
-        body: '⚠️ 這步是給 ch05 部署時的提醒，現在不需要操作。Vercel 專案在 ch05 才會建立。\n\n記住一個原則：以後把 env var 加到 Vercel 時，一律用 Vercel 網站手動貼，不要用終端機指令。\n\n操作方式（ch05 部署完再做）：\n1. 打開你的 Vercel 專案\n2. 點上方 Settings → Environment Variables\n3. 一個一個手動加，直接複製貼上值',
-        link: { text: '打開 Vercel Dashboard（ch05 部署後再開）', url: 'https://vercel.com/dashboard' },
+        body: '⚠️ 這步是給 ch05 部署時的提醒，現在不需要操作。Vercel 專案在 ch05 才會建立。\n\n記住一個原則：以後把 env var 加到 Vercel 時，一律用 Vercel 網站手動貼，不要用終端機指令。\n\n操作方式（ch05 部署完再做）：\n1. 開啟你的 Vercel 專案\n2. 點上方 Settings → Environment Variables\n3. 一個一個手動加，直接複製貼上值',
+        link: { text: '開啟 Vercel Dashboard（ch05 部署後再開）', url: 'https://vercel.com/dashboard' },
         screenshot: 'vercel-env-vars.png',
         warning: '⚠️ 換行符地獄警告：絕對不要用終端機指令（echo、printf、pipe）把值傳給 Vercel。Windows 的 echo 會在字串尾端自動加上換行符 \\n，Stripe 拿到帶換行符的 key 會直接拒收，錯誤訊息是 Invalid character in header。一律手動在 Vercel Dashboard 貼上，貼完確認值的結尾沒有 ¶ 符號。',
       },
@@ -374,16 +372,16 @@ StripeConnectionError: An error occurred with our connection to Stripe.
       },
       {
         title: '叫 Claude 建立診斷頁面，方便你隨時檢查',
-        body: '遇到問題的時候，打開這個頁面就能馬上知道哪裡出錯。貼給 Claude：',
+        body: '遇到問題的時候，開啟這個頁面就能馬上知道哪裡出錯。貼給 Claude：',
         claude: `幫我建一個 /api/debug 診斷頁面。
 
-打開這個頁面，我要能直接看到：
+開啟這個頁面，我要能直接看到：
 - 現在有沒有登入、是哪個帳號
 - 這個帳號有沒有購買紀錄
 - 所有環境變數有沒有設定好
 
 環境變數只顯示「已設定」或「未設定」就好，不要把實際的值顯示出來。`,
-        tip: '部署完之後，遇到任何問題先打開 /api/debug 看。沒登入或 env 顯示「未設定」，就知道問題在哪了。\n\n⚠️ 現在打開 /api/debug，「購買紀錄」那欄可能會顯示查詢錯誤——這是正常的，因為 purchases 資料表要在 ch04 才會建立。env 和登入狀態正常就沒問題了。',
+        tip: '部署完之後，遇到任何問題先開啟 /api/debug 看。沒登入或 env 顯示「未設定」，就知道問題在哪了。\n\n⚠️ 現在開啟 /api/debug，「購買紀錄」那欄可能會顯示查詢錯誤——這是正常的，因為 purchases 資料表要在 ch04 才會建立。env 和登入狀態正常就沒問題了。',
       },
       {
         title: '本機測試 vs 線上環境的差異',
@@ -397,8 +395,11 @@ STRIPE_WEBHOOK_SECRET=whsec_...（stripe listen 產生的本機版）
 
 Vercel 線上環境：
 NEXT_PUBLIC_SITE_URL=https://你的網址.vercel.app
-STRIPE_SECRET_KEY=sk_live_...（上線後換成正式模式）
-STRIPE_WEBHOOK_SECRET=whsec_...（Stripe Dashboard 線上 webhook 的 secret）`,
+STRIPE_SECRET_KEY=sk_test_...（線上驗收仍用 Sandbox）
+STRIPE_WEBHOOK_SECRET=whsec_...（同一 Sandbox 的線上 endpoint secret）
+AI_LESSON_PAYMENTS_ENABLED=false
+AI_LESSON_STRIPE_MODE=sandbox
+# 線上部署不等於切 live；商家資格與完整驗收後才自行啟用。`,
         },
       },
       {
@@ -408,13 +409,13 @@ STRIPE_WEBHOOK_SECRET=whsec_...（Stripe Dashboard 線上 webhook 的 secret）`
           lang: 'text',
           content: `□ .env.local 存在，而且沒有被 commit
 □ .gitignore 有包含 .env.local
-□ /api/debug 可以打開
+□ /api/debug 可以開啟
 □ /api/debug 不會顯示任何完整 secret，只顯示 SET / MISSING
 □ Supabase 相關 env 都是 SET
 □ Stripe 相關 env 如果還沒到 ch04，可以先是 MISSING
 □ 你知道本機 webhook secret 和線上 webhook secret 是不同的`,
         },
-        warning: '如果 /api/debug 直接把 key 印出來，立刻叫 Claude 改掉。debug 頁只能顯示狀態，不能顯示實際密鑰。',
+        warning: '如果 /api/debug 直接把 key 印出來，立刻叫 Claude 改掉。debug 頁只能顯示狀態，不能顯示實際金鑰。',
       },
     ],
   },
@@ -438,21 +439,21 @@ STRIPE_WEBHOOK_SECRET=whsec_...（Stripe Dashboard 線上 webhook 的 secret）`
       {
         title: '先建立 Stripe 帳號，並確認你在 Test mode',
         body: '如果你還沒有 Stripe 帳號，先到 stripe.com 註冊。這章先用測試模式，不需要真的收款，也不需要馬上完成正式營業資料審核。登入後請確認 Dashboard 左下角或上方切換在 Test mode。',
-        link: { text: '打開 Stripe Dashboard', url: 'https://dashboard.stripe.com/' },
-        warning: '本章所有操作都先用 Test mode。不要拿 live secret key 測試，也不要把正式 key 貼給 AI。正式上線的 webhook secret 會在 ch05 部署後再設定。',
-        tip: '如果 Stripe 要你補公司或個人資料，先完成能進 Dashboard 的基本註冊即可。真的要上線收款前，再依 Stripe 的指示完成正式帳戶啟用。',
+        link: { text: '開啟 Stripe Dashboard', url: 'https://dashboard.stripe.com/' },
+        warning: '本章只做 Sandbox 驗收。不要拿 live secret key 測試，不要把任何 key 貼給 AI。線上 endpoint 可以仍屬 Sandbox，必須核對模式與帳號。',
+        tip: '註冊資格與要求依國家、商家及帳號而異。需要新條款、公司資料或付費時先自行評估；無法啟用 Sandbox 可先做明確標示的本機合成測試，不能假稱 Stripe 端已通過。',
       },
       {
         title: '在 Stripe 建立商品和價格',
-        body: '1. 打開 Stripe Dashboard（確認左下角是 Test mode）\n2. 左側 Product catalog → + Add product\n3. 填入課程名稱\n4. 價格填 990，幣別選 TWD，選「One time」\n5. 建立後點進商品，複製 Price ID（格式是 price_xxx）',
-        link: { text: '打開 Stripe Product Catalog', url: 'https://dashboard.stripe.com/test/products' },
+        body: '1. 開啟 Stripe Dashboard（確認左下角是 Test mode）\n2. 左側 Product catalog → + Add product\n3. 填入課程名稱\n4. 價格填 990，幣別選 TWD，選「One time」\n5. 建立後點進商品，複製 Price ID（格式是 price_xxx）',
+        link: { text: '開啟 Stripe Product Catalog', url: 'https://dashboard.stripe.com/test/products' },
         screenshot: 'stripe-create-product.png',
-        warning: 'TWD（台幣）在 Stripe 是 zero-decimal 幣別，金額直接填 990，不是 99000。跟美元不同，千萬不要除以 100。',
+        warning: 'Dashboard 的售價填 NT$990；Stripe Price.unit_amount 和 session.amount_total 使用最小貨幣單位，TWD 收款 NT$990 = 99000。TWD 的整數規則針對 payouts，不能套用到 charges。資料庫存 99000 整數，顯示時才轉成 NT$990。',
       },
       {
         title: '把 Stripe keys 補入 .env.local',
         body: 'ch03 建好的 .env.local 裡，ch04 區段填入這兩行（去 Stripe Dashboard → Developers → API keys 複製 Secret key）：',
-        link: { text: '打開 Stripe API Keys', url: 'https://dashboard.stripe.com/test/apikeys' },
+        link: { text: '開啟 Stripe API Keys', url: 'https://dashboard.stripe.com/test/apikeys' },
         code: {
           lang: 'bash',
           content: `STRIPE_SECRET_KEY=sk_test_...
@@ -461,28 +462,36 @@ STRIPE_PRICE_ID=price_...（剛才複製的 Price ID）`,
       },
       {
         title: '在 Supabase 建立購買紀錄資料表',
-        body: '在叫 Claude 寫程式碼之前，先把資料表建好。打開 Supabase SQL Editor，把下面這段 SQL 貼上去執行：',
-        link: { text: '打開 Supabase SQL Editor', url: 'https://supabase.com/dashboard/project/_/sql/new' },
+        body: '以下是全新個人 Sandbox 專案的範例。先讀 schema 與許可權；共享或已有 purchases 的資料庫要寫增量 migration，不能直接重建表。購買由驗簽後的服務端寫入，學員只能讀自己的紀錄。',
+        link: { text: '開啟 Supabase SQL Editor', url: 'https://supabase.com/dashboard/project/_/sql/new' },
         code: {
           lang: 'sql',
-          content: `create table purchases (
+          content: `create table public.purchases (
   id                uuid primary key default gen_random_uuid(),
+  app_id            text not null default 'ai-lesson' check (app_id = 'ai-lesson'),
   user_id           uuid references auth.users(id) not null,
-  stripe_session_id text unique,
+  stripe_session_id text not null,
+  stripe_payment_intent text,
+  product_id        text not null,
+  tier              text not null,
   amount            integer,
   currency          text,
-  status            text default 'completed',
+  status            text not null default 'completed',
   created_at        timestamptz default now(),
-  updated_at        timestamptz default now()
+  updated_at        timestamptz default now(),
+  unique (app_id, stripe_session_id)
 );
 
-alter table purchases enable row level security;
+alter table public.purchases enable row level security;
+revoke all on public.purchases from anon, authenticated;
+grant select on public.purchases to authenticated;
+grant all on public.purchases to service_role;
 
 create policy "Users can view own purchases"
-  on purchases for select
-  using (auth.uid() = user_id);`,
+  on public.purchases for select to authenticated
+  using (app_id = 'ai-lesson' and (select auth.uid()) = user_id);`,
         },
-        tip: '先建表再寫程式碼，這樣 /api/debug 的購買紀錄查詢也會正常了。',
+        tip: '共享 Jerry Platform 還有 membership 政策，請以專案已存在的 schema 為準。本例沒有把任何學員設成可寫購買紀錄。',
       },
       {
         title: '叫 Claude 把 Stripe 付款接起來',
@@ -490,26 +499,26 @@ create policy "Users can view own purchases"
 
 我要的功能：
 1. 點「購課」按鈕 → 跳到 Stripe 付款頁
-2. 付款成功 → 跳到 /success 頁面，顯示「購課成功」和「開始學習」按鈕（設計參考 https://ailesson-two.vercel.app/success）
-3. 付款完成後，把購買紀錄存進 Supabase
-4. 已買過的用戶再點購課按鈕，直接進 /dashboard，不用重複付款
+2. 返回 /success 後，服務端查目前帳號及該 Session 的購買紀錄；沒有已驗證紀錄只顯示等待確認
+3. Webhook 驗簽後讀回付清狀態、金額、幣別、Price、app/product/tier/user，原子寫入並回讀 Supabase；退款先到、事件重送也不能重新開通
+4. 已買過的使用者再點購課按鈕，直接進 /dashboard，不用重複付款
 
 .env.local 裡已有 STRIPE_SECRET_KEY 和 STRIPE_PRICE_ID。
-幣別是台幣（TWD），台幣不需要除以 100。
+幣別是臺幣（TWD），資料庫 amount 存 Stripe 原始最小單位整數，990 元 = 99000；顯示價格時才除以 100。
 
 ⚠️ 重要：Webhook handler 裡讀取 request body 要用 request.text()，不是 request.json()，不然 Stripe signature 驗證會失敗。`,
         warning: 'Webhook 如果沒有觸發，先去 Vercel Function Logs 看錯誤訊息。最常見的原因是 STRIPE_WEBHOOK_SECRET 填錯、或 request body 用錯方式讀取。\n\n如果 TypeScript 出現 `apiVersion` 相關的型別錯誤，告訴 Claude：「把 Stripe 初始化的 apiVersion 改成已安裝 SDK 支援的版本，或是直接拿掉 apiVersion 讓 TypeScript 自動推斷」。',
       },
       {
         title: '本機測試 Webhook（用 stripe listen）',
-        body: '在正式部署前，先用 stripe CLI 在本機測試 webhook 流程。打開另一個終端機視窗執行：',
+        body: '在正式部署前，先用 stripe CLI 在本機測試 webhook 流程。開啟另一個終端機視窗執行：',
         code: {
           lang: 'bash',
           content: `stripe listen --forward-to localhost:3000/api/webhooks/stripe
 # 執行後終端機會顯示一組 whsec_... 本機 webhook secret
 # 把這個值填進 .env.local 的 STRIPE_WEBHOOK_SECRET`,
         },
-        warning: '⚠️ stripe listen 產生的 webhook secret 是本機暫時版，只在本機有效。部署到 Vercel 後，要在 Stripe Dashboard 建立正式 webhook endpoint，把那個 secret 更新進 Vercel env。這個步驟在 ch05 部署後做。',
+        warning: '⚠️ stripe listen 產生的 webhook secret 是本機暫時版，只在本機有效。部署到 Vercel 後，要在 Stripe Dashboard 建立線上 Sandbox webhook endpoint，把那個 secret 更新進 Vercel env。這個步驟在 ch05 部署後做。',
         tip: 'stripe listen 跑著的時候，去瀏覽器點購課 → 用測試卡付款，終端機會顯示 webhook 有沒有送到你的 handler。',
       },
       {
@@ -538,7 +547,7 @@ Webhook 收到 → purchases 表新增一筆
 □ 成功後回到 /success
 □ stripe listen 終端機有收到 checkout.session.completed
 □ Supabase purchases 表新增一筆資料
-□ 再點一次購課，已購用戶會直接進 /dashboard
+□ 再點一次購課，已購使用者會直接進 /dashboard
 □ /api/debug 的 myPurchase 不再是 null`,
         },
         claude: `我的 Stripe 付款流程沒有完整解鎖 dashboard。請幫我照這個順序排查：
@@ -557,10 +566,10 @@ Webhook 收到 → purchases 表新增一筆
   // ── ch05 ─────────────────────────────────────────────────────────────────
   {
     id: 'ch05',
-    title: 'Vercel 部署：git push = 三十秒上線',
+    title: 'Vercel 部署：固定網域與版本驗收',
     duration: '約 30 分',
     description:
-      '改完 code，git add，git commit，git push。Vercel 自動偵測到 main branch 有新 commit，三十秒內重新部署，新版上線。\n\n' +
+      '完成檢查後推送到已連線 Vercel 的 Git 分支，可以觸發部署。請讀回實際建置結果與網址，不保證固定部署時間。\n\n' +
       '但每次部署 Vercel 都給一個新的 URL。你要設定固定的 alias，讓同一個網址永遠指向最新版本。\n\n' +
       'git init、GitHub repo 建立、Vercel 連動、固定 alias 設定，這章完整走一遍。以後你任何專案要部署，套這個流程就對了。',
     keyPoints: [
@@ -590,19 +599,19 @@ git push -u origin main`,
         body: 'ch00 已裝好 Vercel CLI。在專案資料夾裡直接跑：',
         code: {
           lang: 'bash',
-          content: `vercel`,
+          content: `vercel link`,
         },
-        tip: '跑 vercel 指令後會問你幾個問題，選 Link to GitHub repo，找到你剛才建的 repo 連起來。這步主要是連結專案，拿到你的 .vercel.app 網址，先複製起來備用。',
-        warning: '⚠️ 先連結拿網址就好，還不要急著確認部署。下一步先把 env var 全部加好，再正式部署，不然上線的網站會因為缺 env 噴錯。',
+        tip: 'vercel link 連線 CLI 目錄與 Vercel 專案；Git 自動部署可由 Dashboard 的 Import Git Repository 設定。直接跑 vercel 可能啟動部署，不能當成單純連結。',
+        warning: '先確認 account、project 與環境變數，建置通過再部署。需要新付費資源或合約時先自行確認。',
       },
       {
         title: '先把所有 env var 加到 Vercel，再正式部署',
-        body: '⚠️ 順序很重要：先加 env，再 deploy。\n\n1. 打開 Vercel Dashboard → 你的專案 → Settings → Environment Variables\n2. 把 .env.local 裡的 Supabase、Stripe 等所有變數一個一個手動貼上（記得換行符地獄警告，不要用 CLI）\n3. 記得把這兩個改成線上版本：',
-        link: { text: '打開 Vercel Environment Variables', url: 'https://vercel.com/dashboard' },
+        body: '⚠️ 順序很重要：先加 env，再 deploy。\n\n1. 開啟 Vercel Dashboard → 你的專案 → Settings → Environment Variables\n2. 把 .env.local 裡的 Supabase、Stripe 等所有變數一個一個手動貼上（記得換行符地獄警告，不要用 CLI）\n3. 記得把這兩個改成線上版本：',
+        link: { text: '開啟 Vercel Environment Variables', url: 'https://vercel.com/dashboard' },
         code: {
           lang: 'text',
           content: `NEXT_PUBLIC_SITE_URL → https://你的網址.vercel.app
-STRIPE_WEBHOOK_SECRET → 等 Stripe 正式 webhook 建好後再填（下一步）
+STRIPE_WEBHOOK_SECRET → 等 Stripe 線上 Sandbox webhook 建好後再填（下一步）
 
 # 加完 env 之後，正式部署：
 vercel --prod`,
@@ -611,10 +620,10 @@ vercel --prod`,
         warning: 'Vercel 的 env var 加完後，一定要執行 vercel --prod 重新部署才會生效。',
       },
       {
-        title: '部署完更新 Supabase Site URL 和 Stripe 正式 Webhook',
-        body: '拿到 Vercel 固定網址後，這兩個地方要同步更新，不然 Google 登入跟付款都會壞。\n\n**Supabase（Google 登入會壞）：**\n→ Authentication → URL Configuration\n→ Site URL 改成 https://你的網址.vercel.app\n→ Redirect URLs 加入 https://你的網址.vercel.app/**\n\n**Stripe 正式 Webhook（付款成功但 DB 不更新）：**\n1. Stripe Dashboard → Developers → Webhooks → + Add endpoint\n2. Endpoint URL 填：https://你的網址.vercel.app/api/webhooks/stripe\n3. Events 只勾「checkout.session.completed」\n4. 建立後複製 Signing secret（whsec_xxx）\n5. 回 Vercel Settings → Environment Variables → 把 STRIPE_WEBHOOK_SECRET 換成這個新的 secret\n6. 重新執行 vercel --prod 讓新 secret 生效',
-        link: { text: '打開 Supabase URL Configuration', url: 'https://supabase.com/dashboard/project/_/auth/url-configuration' },
-        warning: 'STRIPE_WEBHOOK_SECRET 有兩個版本：ch04 本機用 stripe listen 產生的（暫時），和這裡 Stripe Dashboard 線上 webhook 的（正式）。Vercel 上一定要換成正式版本。',
+        title: '部署完更新 Auth 回呼與 Sandbox Webhook',
+        body: '拿到 Vercel 固定網址後，這兩個地方要同步更新，不然 Google 登入跟付款都會壞。\n\n**Supabase（Google 登入會壞）：**\n→ Authentication → URL Configuration\n→ Site URL 改成 https://你的網址.vercel.app\n→ Redirect URLs 加入 https://你的網址.vercel.app/api/auth/callback\n\n**Stripe 正式 Webhook（付款成功但 DB 不更新）：**\n1. Stripe Dashboard → Developers → Webhooks → + Add endpoint\n2. Endpoint URL 填：https://你的網址.vercel.app/api/webhooks/stripe\n3. 在同一 Sandbox 勾選 checkout.session.completed、checkout.session.async_payment_succeeded、charge.refunded、charge.dispute.created\n4. 建立後複製 Signing secret（whsec_xxx）\n5. 回 Vercel Settings → Environment Variables → 把 STRIPE_WEBHOOK_SECRET 換成這個新的 secret\n6. 重新執行 vercel --prod 讓新 secret 生效',
+        link: { text: '開啟 Supabase URL Configuration', url: 'https://supabase.com/dashboard/project/_/auth/url-configuration' },
+        warning: '每個 endpoint 的 signing secret 各自不同。CLI listener 與 Dashboard endpoint 不能混用；Sandbox 與 live 也分開。部署本身不代表已啟用 live 收款。',
       },
       {
         title: '之後的標準流程就這三行',
@@ -624,19 +633,19 @@ vercel --prod`,
           content: `git add .
 git commit -m "fix: 你改了什麼"
 git push
-# 等 30 秒，Vercel 自動部署好了`,
+# 到 Vercel 讀回部署結果與 alias，再跑驗收；部署時間不固定。`,
         },
       },
       {
         title: '本章驗收：線上版可登入、可付款、可解鎖',
-        body: '正式上線前，請用 Vercel 網址完整跑一次，不要只測 localhost。線上能跑才代表產品能賣。',
+        body: '先用固定 Vercel 網址完整跑 Sandbox 流程；再確認 live 商家資格、服務政策與正式模式驗收。畫面或 HTTP200 不能單獨證明可以對外收款。',
         code: {
           lang: 'text',
-          content: `□ Vercel 網址首頁能打開
+          content: `□ Vercel 網址首頁能開啟
 □ 線上 Google 登入能成功回到 Vercel 網址，不會回 localhost
 □ 線上 /api/debug 顯示 siteUrl 是 Vercel 網址
-□ Stripe Dashboard 已建立正式 webhook endpoint
-□ Vercel 的 STRIPE_WEBHOOK_SECRET 已換成正式 webhook secret
+□ Stripe Dashboard 已建立線上 Sandbox webhook endpoint
+□ Vercel 的 STRIPE_WEBHOOK_SECRET 已換成線上 Sandbox webhook secret
 □ 測試付款成功後，Supabase purchases 有資料
 □ 付款後可以進入 /dashboard 看到課程內容`,
         },
@@ -653,18 +662,18 @@ git push
     description:
       '登入成功，點購課，白畫面，500 error。Vercel log 什麼都沒顯示。這種 debug 才是真實開發的日常。\n\n' +
       '我建了一個 /api/debug，直接回傳當前的 user session、env var 狀態、Supabase 連線狀態。三十秒定位問題。\n\n' +
-      '這章整理了這個專案踩過的所有坑：session 為什麼在線上不見了、purchases 查不到怎麼排查、用 /api/debug 三十秒定位問題。',
+      '這章整理了這個專案踩過的所有坑：session 為什麼線上上不見了、purchases 查不到怎麼排查、用 /api/debug 三十秒定位問題。',
     keyPoints: [
       '怎麼讀 Vercel function logs——找到真正的錯誤',
       '/api/debug 的設計：30 秒確認 session 與 env 狀態',
-      'session 為什麼在線上消失——Supabase Site URL 設定',
+      'session 為什麼線上上消失——Supabase Site URL 設定',
       '付款成功但進不了 dashboard——RLS 和 serviceClient',
     ],
     steps: [
       {
         title: '遇到 500 先去 Vercel 看 log',
         body: '前端白畫面或 500，第一步去這裡找原因：\n\n1. Vercel Dashboard → 你的專案 → Deployments\n2. 點最新那筆 → 右側 Functions tab\n3. 找到出錯的 route，看詳細的 error message',
-        link: { text: '打開 Vercel Deployments', url: 'https://vercel.com/dashboard' },
+        link: { text: '開啟 Vercel Deployments', url: 'https://vercel.com/dashboard' },
         screenshot: 'vercel-function-logs.png',
       },
       {
@@ -676,7 +685,7 @@ git push
 → 去 Vercel Dashboard 手動貼上，不要用指令
 
 ❌ invalid input syntax for type integer: "26.4"
-→ TWD 是 zero-decimal，不能除以 100
+→ 資料庫 amount 存原始最小單位整數；TWD 收款使用兩位小數
 → amount: session.amount_total（不要 / 100）
 
 ❌ JWSError JWSInvalidSignature
@@ -685,11 +694,12 @@ git push
 
 ❌ 付款成功但進不了 dashboard
 → purchases 表的查詢被 RLS 擋住
-→ 查詢 purchases 改用 serviceClient 而不是 user client`,
+→ 先核對 app_id、user_id、product_id、status 與 RLS，不要直接繞過授權
+→ 使用者不能自行寫入或更改 purchases`,
         },
       },
       {
-        title: 'Session 在線上消失怎麼辦',
+        title: 'Session 線上上消失怎麼辦',
         body: '本機登入正常，線上登入後立刻變回未登入狀態——確認這三個地方：',
         code: {
           lang: 'text',
@@ -697,17 +707,17 @@ git push
    Site URL 是否已改成線上網址（不是 localhost）
 
 ② Supabase → Authentication → URL Configuration
-   Redirect URLs 有沒有包含 https://你的網址.vercel.app/**
+   Redirect URLs 有沒有包含 https://你的網址.vercel.app/api/auth/callback
 
 ③ Vercel env var
    NEXT_PUBLIC_SITE_URL 是否是線上網址`,
         },
-        link: { text: '打開 Supabase URL Configuration', url: 'https://supabase.com/dashboard/project/_/auth/url-configuration' },
+        link: { text: '開啟 Supabase URL Configuration', url: 'https://supabase.com/dashboard/project/_/auth/url-configuration' },
         warning: '這三個是連動的，任一個設錯都會造成 session 問題。改完一個要把另外兩個一起確認。',
       },
       {
         title: '用 /api/debug 三十秒定位問題',
-        body: '遇到任何奇怪的問題，打開瀏覽器去你的網站 /api/debug，看輸出：',
+        body: '遇到任何奇怪的問題，開啟瀏覽器去你的網站 /api/debug，看輸出：',
         code: {
           lang: 'json',
           content: `// 正常狀態長這樣：
@@ -758,8 +768,8 @@ __
 1. 先判斷問題屬於 env、auth、database、Stripe webhook、還是 deployment
 2. 列出最可能的 3 個原因
 3. 每次只改一個地方
-4. 改完告訴我要跑哪個指令或打開哪個頁面驗證
-5. 如果需要我去後台設定，請用一步一步 checklist 說明`,
+4. 改完告訴我要跑哪個指令或開啟哪個頁面驗證
+5. 如果需要我去後臺設定，請用一步一步 checklist 說明`,
       },
       {
         title: '本章驗收：你能自己定位 80% 的錯誤',
@@ -802,7 +812,7 @@ __
    → 換文案、換設計，架構不動
 
 ② 登入系統
-   app/login/ + app/auth/callback/ + lib/supabase/
+   app/login/ + app/api/auth/callback/ + lib/supabase/
    → 幾乎不需要動，Google OAuth 通用
 
 ③ 付款系統
@@ -825,7 +835,7 @@ __
 4. 把 lib/course-data.ts 的課程資料換成 [你的內容結構]
 
 品牌色保持橘色，版面結構不變，只換內容。`,
-        tip: '把 [括號內的東西] 換成你自己的產品描述，然後貼給 Claude。它會幫你把所有文案一次換完。也可以先用 /ui-ux-pro-max 讓 Claude 自動優化整體視覺。',
+        tip: '把 [括號內的東西] 換成你自己的產品描述，然後貼給 Claude。它會幫你把所有文案一次換完。也可以先用 /ui-ux-pro-max 讓 Claude 自動最佳化整體視覺。',
       },
       {
         title: '把你的內容先整理成資料，不要先改畫面',
@@ -852,17 +862,16 @@ __
       },
       {
         title: '從這個模板開始新專案',
-        body: '最快的方式：直接 clone 這個專案，重新初始化 git：',
+        body: '先確認模板授權及秘密是否排除，再 clone 到新的資料夾並開新分支。保留原本歷史；新 remote 與部署設定另行確認。',
         code: {
           lang: 'bash',
           content: `git clone https://github.com/你的帳號/ai-lesson.git 你的新專案
 cd 你的新專案
 
-# 重新初始化（不帶走之前的 commit 記錄）
-rm -rf .git
-git init
-git add .
-git commit -m "init: start from template"`,
+git switch -c product-draft
+git status --short
+git remote -v
+# 保留原始 .git；先檢查授權與 remote，再自行設定新 repo。`,
         },
       },
       {
@@ -896,3 +905,4 @@ git commit -m "init: start from template"`,
     ],
   },
 ]
+export const lessons = attachWorkbook('claude-code', baseLessons)

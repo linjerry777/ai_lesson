@@ -1,12 +1,16 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { BookOpen, CheckCircle, ChevronRight, Circle, Clock, LogOut, PlayCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import type { Lesson } from '@/lib/course-data'
 import StepGuide from './StepGuide'
+import AiHelpComposer from '@/components/AiHelpComposer'
+import styles from './learning.module.css'
+import { createProgressStore, EMPTY_SNAPSHOT } from '@/lib/course-progress'
+import { useCloudProgress } from '@/lib/use-cloud-progress'
 
 export interface CourseOption {
   slug: string
@@ -16,12 +20,14 @@ export interface CourseOption {
 }
 
 interface Props {
+  userId: string
   userEmail: string
   courses: CourseOption[]
   initialCourseSlug?: string
+  cloudProgressEnabled?: boolean
 }
 
-export default function CoursePage({ userEmail, courses, initialCourseSlug }: Props) {
+export default function CoursePage({ userId, userEmail, courses, initialCourseSlug, cloudProgressEnabled = false }: Props) {
   const initialCourse = courses.some((course) => course.slug === initialCourseSlug)
     ? initialCourseSlug!
     : courses[0]?.slug ?? ''
@@ -31,10 +37,19 @@ export default function CoursePage({ userEmail, courses, initialCourseSlug }: Pr
     [activeCourseSlug, courses],
   )
 
-  const [activeLessonByCourse, setActiveLessonByCourse] = useState<Record<string, string>>({})
-  const [completed, setCompleted] = useState<Set<string>>(new Set())
+  const progressStore = useMemo(() => createProgressStore(userId, () => window.localStorage), [userId])
+  const cloud = useCloudProgress(cloudProgressEnabled, progressStore, courses.map(course => course.slug))
+  const saved = useSyncExternalStore(progressStore.subscribe, progressStore.getSnapshot, () => EMPTY_SNAPSHOT)
+  const activeLessonByCourse = saved.progress.activeLessons
+  const completed = useMemo(() => new Set(saved.progress.completed), [saved.progress.completed])
+  useEffect(() => {
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === progressStore.key || event.key === null) progressStore.reload()
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [progressStore])
   const router = useRouter()
-  const supabase = createClient()
 
   const lessons = activeCourse.lessons
   const activeId = activeLessonByCourse[activeCourse.slug] ?? lessons[0].id
@@ -44,32 +59,36 @@ export default function CoursePage({ userEmail, courses, initialCourseSlug }: Pr
   const progress = Math.round((completedCount / lessons.length) * 100)
 
   const setActiveLesson = (lessonId: string) => {
-    setActiveLessonByCourse((prev) => ({ ...prev, [activeCourse.slug]: lessonId }))
+    progressStore.update((current) => ({ ...current, activeLessons: { ...current.activeLessons, [activeCourse.slug]: lessonId } }))
+    cloud.save({ courseSlug: activeCourse.slug, lessonId, opened: true })
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }
 
   const toggleComplete = (id: string) => {
     const key = `${activeCourse.slug}:${id}`
-    setCompleted((prev) => {
-      const next = new Set(prev)
+    const nextCompleted = !completed.has(key)
+    progressStore.update((current) => {
+      const next = new Set(current.completed)
       next.has(key) ? next.delete(key) : next.add(key)
-      return next
+      return { ...current, completed: [...next] }
     })
+    cloud.save({ courseSlug: activeCourse.slug, lessonId: id, completed: nextCompleted })
   }
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
+    await createClient().auth.signOut()
     router.push('/')
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50">
+    <div className={`${styles.workspace} flex min-h-screen flex-col`}>
       <header className="sticky top-0 z-10 border-b border-gray-200 bg-white">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-          <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-80">
+          <Link href="/" className="flex min-w-0 items-center gap-2 transition-opacity hover:opacity-80">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-500 text-xs font-black text-white">
               AI
             </div>
-            <span className="max-w-[52vw] truncate text-sm font-bold text-gray-900">
+            <span className="max-w-[42vw] truncate text-sm font-bold text-gray-900">
               {activeCourse.title}
             </span>
             {activeCourse.tier === 'cohort' && (
@@ -84,7 +103,7 @@ export default function CoursePage({ userEmail, courses, initialCourseSlug }: Pr
             )}
           </Link>
 
-          <div className="flex items-center gap-4">
+          <div className="flex shrink-0 items-center gap-4">
             <div className="hidden items-center gap-2 text-xs text-gray-500 sm:flex">
               <div className="h-1.5 w-24 overflow-hidden rounded-full bg-gray-200">
                 <div className="h-full rounded-full bg-brand-500 transition-all" style={{ width: `${progress}%` }} />
@@ -94,7 +113,8 @@ export default function CoursePage({ userEmail, courses, initialCourseSlug }: Pr
             <span className="hidden text-xs text-gray-400 sm:block">{userEmail}</span>
             <button
               onClick={handleSignOut}
-              className="flex items-center gap-1.5 text-xs text-gray-500 transition-colors hover:text-gray-700"
+              aria-label="登出課程"
+              className="flex min-h-11 items-center gap-1.5 text-xs text-gray-500 transition-colors hover:text-gray-700"
             >
               <LogOut size={14} />
               登出
@@ -104,7 +124,7 @@ export default function CoursePage({ userEmail, courses, initialCourseSlug }: Pr
       </header>
 
       <div className="mx-auto flex w-full max-w-7xl flex-1">
-        <aside className="hidden w-72 shrink-0 overflow-y-auto border-r border-gray-200 bg-white md:block">
+        <aside className={`${styles.sidebar} hidden w-72 shrink-0 overflow-y-auto border-r border-gray-200 md:block`}>
           {courses.length > 1 && (
             <div className="border-b border-gray-100 p-4">
               <p className="mb-2 text-xs font-semibold text-gray-500">我的課程</p>
@@ -138,7 +158,7 @@ export default function CoursePage({ userEmail, courses, initialCourseSlug }: Pr
             </div>
           </div>
 
-          <nav className="py-2">
+          <nav className="py-2" aria-label="課程章節">
             {lessons.map((lesson, idx) => {
               const isActive = lesson.id === active.id
               const isDone = completed.has(`${activeCourse.slug}:${lesson.id}`)
@@ -147,6 +167,7 @@ export default function CoursePage({ userEmail, courses, initialCourseSlug }: Pr
                 <button
                   key={lesson.id}
                   onClick={() => setActiveLesson(lesson.id)}
+                  aria-current={lesson.id === active.id ? "step" : undefined}
                   className={`group flex w-full items-start gap-3 border-r-2 px-4 py-3 text-left transition-colors ${
                     isActive ? 'border-brand-500 bg-brand-50' : 'border-transparent hover:bg-gray-50'
                   }`}
@@ -179,11 +200,12 @@ export default function CoursePage({ userEmail, courses, initialCourseSlug }: Pr
           </nav>
         </aside>
 
-        <main className="flex-1 overflow-y-auto">
+        <main className="min-w-0 flex-1">
           {courses.length > 1 && (
             <div className="border-b border-gray-200 bg-white px-4 py-2 md:hidden">
               <select
                 value={activeCourse.slug}
+                aria-label="切換課程"
                 onChange={(event) => setActiveCourseSlug(event.target.value)}
                 className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-700"
               >
@@ -202,20 +224,31 @@ export default function CoursePage({ userEmail, courses, initialCourseSlug }: Pr
                 <button
                   key={lesson.id}
                   onClick={() => setActiveLesson(lesson.id)}
-                  className={`shrink-0 rounded-full border px-3 py-1.5 text-xs transition-colors ${
+                  aria-current={lesson.id === active.id ? "step" : undefined}
+                  className={`min-h-11 max-w-60 shrink-0 truncate rounded-full border px-3 py-1.5 text-xs transition-colors ${
                     lesson.id === active.id
                       ? 'border-brand-500 bg-brand-500 text-white'
                       : 'border-gray-200 text-gray-600 hover:border-brand-300'
                   }`}
                 >
-                  {String(idx + 1).padStart(2, '0')}
+                  {String(idx + 1).padStart(2, '0')} · {lesson.title}
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="max-w-4xl p-6">
+          <div className={`${styles.reading} mx-auto max-w-4xl p-4 sm:p-8 lg:p-10`}>
+            <div className="mb-7 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-brand-100 bg-white px-5 py-4 shadow-sm">
+              <div>
+                <p className="text-xs font-semibold tracking-wider text-brand-600">你的學習工作台</p>
+                <p className="mt-1 text-sm font-semibold text-gray-800">已完成 {completedCount} / {lessons.length} 章，照自己的節奏前進。</p>
+              </div>
+              <p role="status" className={`max-w-xs text-xs leading-relaxed ${saved.persistent ? 'text-gray-500' : 'text-amber-700'}`}>
+                {cloudProgressEnabled ? (cloud.status === 'synced' ? '進度已同步到帳號；重新開啟課程可回讀。' : cloud.status === 'error' ? '帳號同步失敗；本頁保留瀏覽器進度，請稍後重試。' : '正在同步帳號進度…') : saved.persistent ? '進度儲存在此瀏覽器；同一帳號重新整理後可接續。' : '瀏覽器無法保存進度，目前只暫存在本頁。請開啟儲存權限後再標記。'}
+              </p>
+            </div>
             <LessonView
+              key={`${activeCourse.slug}:${active.id}`}
               lesson={active}
               lessonNumber={activeIdx + 1}
               isDone={completed.has(`${activeCourse.slug}:${active.id}`)}
@@ -253,7 +286,7 @@ function LessonView({
         Chapter {String(lessonNumber).padStart(2, '0')}
       </p>
 
-      <h1 className="mb-1 text-2xl font-black text-gray-900">{lesson.title}</h1>
+      <h1 className="mb-3 text-2xl font-semibold leading-snug tracking-tight text-gray-900 sm:text-3xl">{lesson.title}</h1>
       <p className="mb-6 flex items-center gap-1 text-sm text-gray-400">
         <Clock size={13} /> {lesson.duration}
       </p>
@@ -279,10 +312,14 @@ function LessonView({
 
       {lesson.steps?.length > 0 && <StepGuide steps={lesson.steps} />}
 
-      <div className="mt-4 flex items-center gap-3">
+      <details className="mt-6 rounded-xl border border-stone-200 bg-white p-4">
+        <summary className="min-h-11 cursor-pointer py-3 text-sm font-semibold text-gray-800">卡住了？整理這一章的 AI 求助單</summary>
+        <div className="mt-3"><AiHelpComposer lessonTitle={lesson.title} /></div>
+      </details>
+      <div className="mt-6 flex flex-wrap items-center gap-3">
         <button
           onClick={onToggleDone}
-          className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors ${
+          className={`flex min-h-11 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors ${
             isDone
               ? 'border border-brand-200 bg-brand-50 text-brand-600 hover:bg-brand-100'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -295,13 +332,13 @@ function LessonView({
         {!isLast ? (
           <button
             onClick={onNext}
-            className="ml-auto flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600"
+            className="ml-auto flex min-h-11 items-center gap-2 rounded-xl bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600"
           >
             下一章
             <ChevronRight size={15} />
           </button>
         ) : (
-          <p className="ml-auto text-sm text-gray-400">這堂課完成了。</p>
+          <p className="ml-auto text-sm text-gray-500">{isDone ? '本章已完成，回顧其他章節也很好。' : '學完後，記得標記完成。'}</p>
         )}
       </div>
     </div>

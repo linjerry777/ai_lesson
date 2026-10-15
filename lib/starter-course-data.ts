@@ -1,11 +1,12 @@
 import type { Lesson } from './course-data'
+import { attachWorkbook } from './course-workbooks'
 
 export const COURSE_TITLE = 'AI 實作入門預備課'
 
 export const COURSE_SUBTITLE =
   '先補齊終端機、Git、env、AI 協作與除錯觀念，再進入付費實戰課。'
 
-export const lessons: Lesson[] = [
+const baseLessons: Lesson[] = [
   {
     id: 'start00',
     title: '你不是要先學會全部程式，而是先學會怎麼跟 AI 合作',
@@ -98,7 +99,7 @@ pwd`,
         title: '請 AI 先解釋，不要先重寫',
         body: '當你接手一個專案，第一個動作不是改 code，而是叫 AI 讀目錄並解釋責任分工。',
         claude:
-          '請先讀這個 Next.js 專案的目錄結構，列出 app、components、lib、public、middleware.ts 分別負責什麼。先不要修改任何檔案。',
+          '請先讀這個 Next.js 專案的目錄結構與版本，列出 app、components、lib、public、proxy.ts（舊版可能是 middleware.ts）分別負責什麼。先不要修改任何檔案。',
         tip: '如果你能說出「這個 bug 可能在哪個資料夾」，你就已經比盲目貼錯誤訊息穩很多。',
       },
       {
@@ -162,3 +163,4 @@ STRIPE_SECRET_KEY=sk_test_...`,
     ],
   },
 ]
+export const lessons = attachWorkbook('starter-free', baseLessons)

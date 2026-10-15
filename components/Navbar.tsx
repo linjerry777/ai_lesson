@@ -17,7 +17,8 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handleScroll)
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -40,9 +41,9 @@ export default function Navbar() {
 
   const navLinks = [
     { href: '#curriculum', label: '課程大綱' },
-    { href: '/market', label: '市場分析' },
+    { href: '#ai-help', label: 'AI 求助工具' },
     { href: '#instructor', label: '關於講師' },
-    { href: '#pricing', label: '立即購課' },
+    { href: '#pricing', label: '課程方案' },
   ]
 
   return (
@@ -133,7 +134,7 @@ export default function Navbar() {
                 </Link>
                 <a
                   href="/login?next=%2Fdashboard%3Fcourse%3Dstarter-free"
-                  className="bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                  className="bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold px-4 py-3 rounded-lg transition-colors"
                 >
                   免費入門
                 </a>
@@ -143,7 +144,7 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden p-2 text-gray-600"
+            className="md:hidden min-h-11 min-w-11 p-2 text-gray-600"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label={menuOpen ? '關閉選單' : '開啟選單'}
             aria-expanded={menuOpen}
@@ -160,7 +161,7 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="block text-sm text-gray-700 py-2"
+              className="flex min-h-11 items-center text-sm text-gray-700 py-2"
               onClick={() => setMenuOpen(false)}
             >
               {link.label}

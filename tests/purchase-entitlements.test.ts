@@ -7,7 +7,7 @@ import {
 
 const baseSession = {
   id: 'cs_test_example',
-  amount_total: 990,
+  amount_total: 99000,
   currency: 'twd',
 }
 
@@ -16,6 +16,7 @@ describe('Stripe purchase entitlement', () => {
     const record = buildStripePurchaseRecord({
       ...baseSession,
       metadata: {
+        app_id: 'ai-lesson',
         user_id: 'user-1',
         product_id: 'claude-code',
         tier: 'self',
@@ -32,14 +33,11 @@ describe('Stripe purchase entitlement', () => {
     })
   })
 
-  it('keeps legacy sessions compatible when product and tier metadata are absent', () => {
-    const record = buildStripePurchaseRecord({
+  it('rejects sessions without explicit app/product/tier identity', () => {
+    expect(() => buildStripePurchaseRecord({
       ...baseSession,
       metadata: { user_id: 'user-1' },
-    })
-
-    expect(record.product_id).toBe('claude-code')
-    expect(record.tier).toBe('self')
+    })).toThrow()
   })
 
   it.each<{ metadata: Record<string, string> | null; label: string }>([
@@ -54,12 +52,12 @@ describe('Stripe purchase entitlement', () => {
   it('upserts on the shared app/session uniqueness boundary', () => {
     const record = buildStripePurchaseRecord({
       ...baseSession,
-      metadata: { user_id: 'user-1' },
+      metadata: { app_id: 'ai-lesson', user_id: 'user-1', product_id: 'claude-code', tier: 'self' },
     })
 
     expect(purchaseUpsert(record)).toEqual({
       values: record,
-      options: { onConflict: PURCHASE_UPSERT_CONFLICT },
+      options: { onConflict: PURCHASE_UPSERT_CONFLICT, ignoreDuplicates: true },
     })
     expect(PURCHASE_UPSERT_CONFLICT).toBe('app_id,stripe_session_id')
   })

@@ -44,7 +44,7 @@ const products = [
     slug: 'codex-remotion',
     eyebrow: '創作進階',
     title: 'Codex + Image2 + Remotion 角色動畫工作流',
-    description: '把 Codex、Image2、CliRelay、Remotion 串成可重複生產的長片系統。',
+    description: '先完成可重建的兩段本機動畫，再以自有素材延伸圖像、旁白與長片工作流。',
     price: 'NT$1,490',
     icon: Video,
     href: '/api/checkout?product=codex-remotion&tier=self',
@@ -52,19 +52,19 @@ const products = [
     badge: '進階路線',
     tone: 'quiet',
     includes: [
-      '從題材、腳本、角色圖到分段 render 的完整流程',
-      'Image2 圖生圖、reference 控制與安全區設計',
-      'CliRelay OpenAI-compatible bridge 設定觀念',
-      'Remotion 字幕、鏡頭、資訊卡、segment render 與 concat',
-      '適合想做 YouTube 長片、角色動畫或 AI 內容工廠的人',
+      '9 章文字教材、逐章練習與交付清單',
+      '可下載的 Remotion JSX、JSON、lockfile 與驗證器',
+      '本機 6 秒動畫、單段 render 與完整影片 QC',
+      '圖像 reference、安全區與第三方代理的選用觀念',
+      '不包含模型、TTS 額度、角色授權或代發布',
     ],
   },
 ]
 
 const badges = [
-  { icon: Shield, text: 'Stripe Sandbox', sub: '測試流程，不會扣款' },
+  { icon: Shield, text: '付款狀態', sub: '' },
   { icon: FileSearch, text: '文字實作手冊', sub: '可搜尋、複製與更新' },
-  { icon: Infinity, text: '永久存取', sub: '課程更新可回看' },
+  { icon: Infinity, text: '登入後閱讀', sub: '依已取得的課程權限' },
 ]
 
 export default function Pricing() {
@@ -187,8 +187,8 @@ export default function Pricing() {
               <div className="mx-auto mb-1.5 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
                 <badge.icon size={18} className="text-gray-500" />
               </div>
-              <p className="text-xs font-semibold text-gray-700">{badge.text}</p>
-              <p className="text-xs text-gray-400">{badge.sub}</p>
+              <p className="text-xs font-semibold text-gray-700">{badge.text === '付款狀態' ? (!paymentsEnabled ? '付款暫停' : isStripeSandbox ? 'Stripe Sandbox' : 'Stripe 付款') : badge.text}</p>
+              <p className="text-xs text-gray-400">{badge.text === '付款狀態' ? (!paymentsEnabled ? '可先登入免費預備課' : isStripeSandbox ? '測試流程，不會扣款' : '依結帳頁金額確認') : badge.sub}</p>
             </div>
           ))}
         </div>

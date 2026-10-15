@@ -37,9 +37,9 @@ const stages = [
   },
   {
     num: '05',
-    title: 'Vercel 部署與正式環境設定',
-    desc: '推上 GitHub，連接 Vercel，補線上 env，更新 Supabase Site URL 與 Stripe 正式 webhook。',
-    items: ['GitHub repo', 'Vercel 部署', '線上 env', '正式版驗收'],
+    title: 'Vercel 部署與固定網域驗收',
+    desc: '核對 Git 與環境變數，部署到固定網址，驗收登入回呼與 Sandbox webhook；通過前保持付款關閉。',
+    items: ['GitHub repo', '固定網域', '線上 env', 'Sandbox 驗收'],
   },
   {
     num: '06',

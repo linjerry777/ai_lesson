@@ -1,0 +1,16 @@
+{
+  "name": "ai-lesson-local-remotion-lab",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node validate-episode.mjs",
+    "studio": "remotion studio src/index.jsx",
+    "render": "remotion render src/index.jsx LessonEpisode out/practice.mp4 --props=episode.json"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.530",
+    "remotion": "4.0.530",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  }
+}

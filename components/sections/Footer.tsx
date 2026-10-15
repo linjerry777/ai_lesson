@@ -12,7 +12,7 @@ export default function Footer() {
               <span className="font-bold text-white text-base">網課小韭菜</span>
             </div>
             <p className="text-xs text-gray-500 leading-relaxed">
-              被網課騙過 NT$50,000 的人，教你用一個下午真正做出東西。
+              把 AI 協作、網站開發與除錯經驗，整理成可以跟做、複製與驗收的文字實作課。
             </p>
           </div>
 
@@ -24,7 +24,7 @@ export default function Footer() {
                 <li><a href="#curriculum" className="hover:text-white transition-colors text-xs">課程大綱</a></li>
                 <li><a href="/market" className="hover:text-white transition-colors text-xs">市場分析</a></li>
                 <li><a href="#instructor" className="hover:text-white transition-colors text-xs">關於講師</a></li>
-                <li><a href="#pricing" className="hover:text-white transition-colors text-xs">立即購課</a></li>
+                <li><a href="#pricing" className="hover:text-white transition-colors text-xs">課程方案</a></li>
                 <li><a href="#faq" className="hover:text-white transition-colors text-xs">常見問題</a></li>
               </ul>
             </div>
@@ -57,7 +57,7 @@ export default function Footer() {
               <span>@_doro1998ai</span>
             </a>
             <p className="text-xs text-gray-600">
-              Secure payments by{' '}
+              付款流程教學 ·{' '}
               <span className="text-gray-400">Stripe</span>
             </p>
           </div>

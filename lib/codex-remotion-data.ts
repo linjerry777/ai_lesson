@@ -1,11 +1,12 @@
 import type { Lesson } from './course-data'
+import { attachWorkbook } from './course-workbooks'
 
 export const COURSE_TITLE = 'Codex + Image2 + Remotion 角色動畫工作流'
 
 export const COURSE_SUBTITLE =
-  '用 Codex 規劃腳本與系統，Image2 做角色美術，CliRelay 橋接模型，Remotion 組成可重複生產的長片流程'
+  '先用 Codex 規劃腳本與 Remotion 完成兩段本機練習，再以自有素材延伸圖像、旁白與長片；第三方代理為選用'
 
-export const lessons: Lesson[] = [
+const baseLessons: Lesson[] = [
   {
     id: 'cr00',
     title: '工作流總覽：不要叫 AI 一次做完整支片',
@@ -13,7 +14,7 @@ export const lessons: Lesson[] = [
     description:
       '先建立正確心法：Codex 負責結構，Image2 負責視覺品質，Remotion 負責時間軸與動畫。這套流程不是賭影片模型一次成功，而是把影片拆成可檢查、可重做、可批次化的段落。',
     keyPoints: [
-      '為什麼本地影片模型目前不適合當主流程',
+      '本課採用靜態美術與程式時間軸；影片模型是可另外評估的選項',
       'Image2 做 key visual，Remotion 做鏡頭與字幕',
       '每段影片都要能單獨修改、單獨重 render',
       '最後再 concat 成完整長片',
@@ -30,7 +31,7 @@ export const lessons: Lesson[] = [
       },
       {
         title: '建立最小可行流程',
-        body: '第一版只需要做到：腳本 JSON、角色圖、場景圖、旁白、字幕、段落 render、concat。等這些穩了，再加靈感池、上傳排程、封面、A/B 標題。',
+        body: '第一版先完成兩段共 6 秒的 JSON、原創文字、單段 render 與完整輸出。cr05 提供可執行練習包。角色美術、旁白、GUI 與長片是後續延伸，需要自有素材及各項服務資格；本課不包含模型額度或代發布。',
       },
     ],
   },
@@ -44,15 +45,15 @@ export const lessons: Lesson[] = [
       'Codex / OpenAI Pro 與 API 使用差異',
       'CliRelay 當 OpenAI-compatible bridge',
       'Remotion、Node/Bun、ffmpeg、Edge TTS',
-      'Image edit 最多 5 張 reference 的限制',
+      '模型與代理的 reference 限制要分開確認',
     ],
     steps: [
       {
         title: '確認本機工具',
-        body: '先確認 Node、Bun、ffmpeg、Git 都可用。Remotion 是 React 專案，render 會依賴瀏覽器與 ffmpeg；這些缺一個，後面都會很痛。',
+        body: '最小練習使用 Node、npm、Git，影片 QC 另用 ffmpeg/ffprobe。Remotion CLI 會準備瀏覽器 renderer；Bun、TTS 和代理不是這個練習包的必要條件。',
         code: {
           lang: 'powershell',
-          content: 'node -v\nbun -v\nffmpeg -version\ngit --version',
+          content: 'node -v\nnpm -v\nffmpeg -version\nffprobe -version\ngit --version',
         },
       },
       {
@@ -64,7 +65,7 @@ export const lessons: Lesson[] = [
             'IMAGE_PROVIDER=clirelay\nOPENAI_BASE_URL=http://127.0.0.1:xxxx/v1\nOPENAI_API_KEY=你的本機或 relay key\nIMAGE_MODEL=gpt-image-2',
         },
         warning:
-          'Image2 圖生圖一次最多 5 張 reference。UI 要限制上傳數量，不然會出現 image edit supports at most 5 images。',
+          '「最多 5 張」是特定代理路徑曾出現的限制，不能當成所有 OpenAI 圖像介面的規格。先核對官方模型文件，再查代理自己的限制；使用圖像生成前另行確認帳號、來源圖授權與成本。',
       },
       {
         title: 'Remotion 專案基本命令',
@@ -72,7 +73,7 @@ export const lessons: Lesson[] = [
         code: {
           lang: 'bash',
           content:
-            'bun install\nbun run dev\nbunx remotion preview\nbun run scripts/render-episode-segments.ts "001"',
+            'npm install\nnpx remotion studio src/index.jsx\nnpx remotion compositions src/index.jsx\n# cr05 的範例建立好之後才 render\nnpx remotion render src/index.jsx LessonSegment out/segment-001.mp4 --props=segment.json',
         },
       },
     ],
@@ -96,7 +97,7 @@ export const lessons: Lesson[] = [
       },
       {
         title: '用 Codex 產出企劃草稿',
-        body: '把題材、目標觀眾、片長、語氣、頻道定位交給 Codex，讓它先產出大綱，不急著產最終台詞。',
+        body: '把題材、目標觀眾、片長、語氣、頻道定位交給 Codex，讓它先產出大綱，不急著產最終臺詞。',
         claude:
           '請把這個題材改成一支 5 分鐘 YouTube 長片企劃。輸出：hook、核心承諾、目標觀眾、5 個章節、每章重點、需要的角色與畫面素材。不要使用內部專案術語，講給一般 AI 創作者聽。',
       },
@@ -111,7 +112,7 @@ export const lessons: Lesson[] = [
     title: 'Image2 美術：角色、道具、背景與 key visual',
     duration: '35 分鐘',
     description:
-      'Image2 的強項不是只修圖，而是把角色、場景與敘事情緒一次提升。這堂會建立 Doro 角色一致性、reference 選擇、模式選擇，以及如何避免人物被文字擋住。',
+      '先用原創或已授權角色定義外觀、reference 與字幕安全區，再評估圖像生成。參考圖可提供方向，仍要逐張確認一致性；課程不提供第三方角色授權或保證模型輸出。',
     keyPoints: [
       'reference 圖少而精，不要一次塞爆',
       '角色、服裝、道具、姿勢要和段落內容對齊',
@@ -140,12 +141,12 @@ export const lessons: Lesson[] = [
     title: '把素材變成 episode JSON',
     duration: '30 分鐘',
     description:
-      '建立可重複渲染的資料格式：每段都包含旁白、字幕、畫面設定、角色圖、背景圖、動畫類型與狀態。這是 GUI、批次處理和重新生成的核心。',
+      '建立可重複渲染的資料格式：每段都包含旁白、字幕、畫面設定、角色圖、背景圖、動畫型別與狀態。這是 GUI、批次處理和重新生成的核心。',
     keyPoints: [
       'episode 是影片專案，不是單一片段',
       'segment 是可單獨重生與重 render 的最小單位',
       'dirty flag 告訴你哪些段落需要重燒',
-      'asset manifest 保存每張圖的來源與版本',
+      'asset manifest 儲存每張圖的來源與版本',
     ],
     steps: [
       {
@@ -158,8 +159,8 @@ export const lessons: Lesson[] = [
         },
       },
       {
-        title: '保存素材版本',
-        body: '同一個角色或場景可能會重生很多次。不要覆蓋到找不回來，保存 candidates，再讓 active 指向目前採用的版本。',
+        title: '儲存素材版本',
+        body: '同一個角色或場景可能會重生很多次。不要覆蓋到找不回來，儲存 candidates，再讓 active 指向目前採用的版本。',
       },
       {
         title: '讓 GUI 可以改腳本',
@@ -194,22 +195,22 @@ export const lessons: Lesson[] = [
         code: {
           lang: 'bash',
           content:
-            'bun run scripts/render-episode-segments.ts "001" --only segment-012\nbun run scripts/concat-episode.ts "001"',
+            'npx remotion render src/index.jsx LessonSegment out/segment-001.mp4 --props=segment.json\n# 先確認每段 fps、尺寸、編碼一致，再用 ffmpeg concat（見本章練習）',
         },
       },
     ],
   },
   {
     id: 'cr06',
-    title: 'GUI 工作台：My Videos、Assets、Segments、Upload',
+    title: 'GUI 工作臺：My Videos、Assets、Segments、Upload',
     duration: '35 分鐘',
     description:
-      '把整套流程變成可以每天使用的工作台。目標不是炫，而是讓你知道哪支影片做到哪、哪些段落髒了、哪些素材要重生、哪支能上傳。',
+      '把整套流程變成可以每天使用的工作臺。目標不是炫，而是讓你知道哪支影片做到哪、哪些段落髒了、哪些素材要重生、哪支能上傳。',
     keyPoints: [
       'My Videos 放完整影片專案，不放單一片段',
       'Assets 讓使用者重生角色與背景',
       'Segments 讓使用者改腳本與單段 render',
-      'Upload 保存標題、描述、tags 與平台',
+      'Upload 儲存標題、描述、tags 與平臺',
     ],
     steps: [
       {
@@ -222,7 +223,7 @@ export const lessons: Lesson[] = [
       },
       {
         title: '上傳前讓 AI 分析 metadata',
-        body: '標題、描述、tags 可以由 AI 根據腳本和影片內容產生，但平台預設先只留 YouTube，避免長片誤發到短影音平台。',
+        body: '標題、描述、tags 可以由 AI 根據腳本和影片內容產生，但平臺預設先只留 YouTube，避免長片誤發到短影音平臺。',
       },
     ],
   },
@@ -233,7 +234,7 @@ export const lessons: Lesson[] = [
     description:
       '用 YouTube 熱門、AutoVideo 高觀看短片、carousel 題材作為靈感來源。重點是學 hook、節奏與觀眾痛點，不抄對方影片。',
     keyPoints: [
-      '分析要保存，不要每次重跑',
+      '分析要儲存，不要每次重跑',
       '支援單一分析與整池分析',
       '從熱門短片延伸長片主題',
       '每個候選題材都要判斷是否適合 Doro / Codex / Image2 / Remotion',
@@ -241,7 +242,7 @@ export const lessons: Lesson[] = [
     steps: [
       {
         title: '建立候選題材卡',
-        body: '每張卡保存來源標題、頻道、觀看數、hook pattern、可改寫角度、風險與建議影片方向。',
+        body: '每張卡儲存來源標題、頻道、觀看數、hook pattern、可改寫角度、風險與建議影片方向。',
       },
       {
         title: '用 AI 排序，不用 AI 直接決定',
@@ -255,14 +256,14 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'cr08',
-    title: '完整案例：做出一支 Doro 角色動畫長片',
+    title: '完整交付：6 秒練習與角色長片延伸規格',
     duration: '55 分鐘',
     description:
-      '把前面所有步驟串起來，從「Vibe Coding 真的會取代工程師嗎？」這類題材出發，加入搜尋觀點、腳本改寫、Image2 key visual、Remotion 分段動畫，最後輸出可上傳的 YouTube 長片。',
+      '先交付可以重建、完整解碼的 6 秒原創文字動畫，再把相同流程用於角色美術與長片規格。長片、旁白及付費生成需自行提供素材和服務；沒有完成的部分列在交接，不以小範例冒充長片成果。',
     keyPoints: [
       '先補觀點，再寫腳本',
       '角色與場景要服務觀眾理解',
-      '用 1.25x 版本提升節奏',
+      '速度版本需另驗字幕、音訊與觀眾理解',
       '輸出後產生標題、描述、tags 與固定片尾',
     ],
     steps: [
@@ -281,3 +282,4 @@ export const lessons: Lesson[] = [
     ],
   },
 ]
+export const lessons = attachWorkbook('codex-remotion', baseLessons)

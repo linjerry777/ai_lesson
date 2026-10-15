@@ -1,119 +1,31 @@
-import { CheckCircle, Zap } from 'lucide-react'
-
-const bullets = [
-  '免費預備課先確認你能不能跟 AI 做實作，不急著付款',
-  '主課帶你做出 Landing Page、Google 登入、Stripe 付款、Dashboard、Vercel 部署',
-  '每章都有驗收清單：做到這裡應該看到什麼、卡住要貼什麼給 AI',
-  '不是工具介紹課，而是一條可以重複套用到下一個產品的交付流程',
-  '進階路線再延伸到 Codex + Image2 + Remotion 的 AI 內容工廠',
-]
+import { ArrowDown, ArrowUpRight, BookOpen, Check, Code2, Terminal } from 'lucide-react'
+import styles from './hero.module.css'
 
 export default function Hero() {
   return (
-    <section className="pt-24 pb-16 bg-white overflow-hidden">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 bg-brand-50 border border-brand-200 text-brand-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
-              <Zap size={12} className="fill-brand-500 text-brand-500" />
-              先免費入門，再做出可收款網站，最後擴成 AI 內容工廠
-            </div>
-
-            <h1 className="text-4xl sm:text-5xl font-black text-gray-900 leading-tight mb-4">
-              從 AI 新手
-              <br />
-              <span className="text-brand-500">到可交付作品</span>
-              <br />
-              別再只看工具教學
-            </h1>
-
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              這是一套文字版 AI 實作路線。你可以先用免費預備課確認自己跟得上；準備好之後，用 Claude Code 建出一個
-              <strong className="text-gray-900"> 有登入、金流、購買紀錄、Dashboard、部署流程 </strong>
-              的真實產品網站。想做內容生產，再進階到 Codex、Image2、Remotion 的影片工作流。
-            </p>
-
-            <ul className="space-y-3 mb-8">
-              {bullets.map((bullet) => (
-                <li key={bullet} className="flex items-start gap-3">
-                  <CheckCircle
-                    size={18}
-                    className="text-brand-500 mt-0.5 flex-shrink-0"
-                  />
-                  <span className="text-gray-700 text-sm">{bullet}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6">
-              <div>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black text-gray-900">免費開始</span>
-                  <span className="text-gray-400 text-lg">主課 NT$990</span>
-                </div>
-                <p className="text-xs text-gray-500 mt-0.5">先完成入門 checklist，再決定是否購買主課</p>
-              </div>
-              <a
-                href="/login?next=%2Fdashboard%3Fcourse%3Dstarter-free"
-                className="bg-brand-500 hover:bg-brand-600 text-white font-bold px-8 py-4 rounded-xl text-base transition-colors shadow-lg shadow-brand-500/25 hover:shadow-brand-600/25"
-              >
-                先上免費預備課
-              </a>
-              <a
-                href="#pricing"
-                className="border border-gray-200 bg-white px-8 py-4 text-base font-bold text-gray-700 transition-colors hover:border-brand-200 hover:text-brand-600 rounded-xl"
-              >
-                看課程方案
-              </a>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-              <span>免費預備課</span>
-              <span className="text-gray-300">|</span>
-              <span>8 階段完整流程</span>
-              <span className="text-gray-300">|</span>
-              <span>50+ 操作步驟</span>
-              <span className="text-gray-300">|</span>
-              <span>每章驗收清單</span>
-            </div>
+    <section className={styles.hero}>
+      <div className={styles.layout}>
+        <div className={styles.copy}>
+          <p className={styles.eyebrow}><span /> BUILD WITH AI / 文字實作課</p>
+          <h1>把你的想法，<br />做成<span>真的能用</span><br />的產品。</h1>
+          <p className={styles.description}>跟著 Claude Code，逐步完成網站、登入、付款與部署。每一章都有操作指令、除錯方法，以及看得見的驗收結果。</p>
+          <div className={styles.actions}>
+            <a href="/login?next=%2Fdashboard%3Fcourse%3Dstarter-free" className={styles.primary}>先上免費預備課<ArrowUpRight size={18} aria-hidden="true" /></a>
+            <a href="#curriculum" className={styles.secondary}>瀏覽實作路線<ArrowDown size={15} aria-hidden="true" /></a>
           </div>
-
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-brand-50 to-orange-100 rounded-3xl blur-3xl opacity-60" />
-            <div className="relative bg-gray-950 rounded-2xl shadow-2xl overflow-hidden border border-gray-800">
-              <div className="flex items-center gap-2 px-4 py-3 bg-gray-900 border-b border-gray-800">
-                <div className="w-3 h-3 rounded-full bg-red-500" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                <div className="w-3 h-3 rounded-full bg-green-500" />
-                <span className="ml-2 text-gray-500 text-xs font-mono">claude - project workspace</span>
-              </div>
-              <div className="p-6 font-mono text-sm space-y-2">
-                <div className="flex gap-2">
-                  <span className="text-green-400">$</span>
-                  <span className="text-gray-300">
-                    claude <span className="text-brand-400">&quot;幫我建立一個賣線上課程的網站，要有 Google 登入和 Stripe 付款&quot;</span>
-                  </span>
-                </div>
-                <div className="text-gray-500 text-xs pl-4">分析需求，規劃 Next.js + Supabase + Stripe...</div>
-                <div className="text-gray-500 text-xs pl-4">建立 Landing Page 與價格區塊...</div>
-                <div className="text-gray-500 text-xs pl-4">串接 Google OAuth callback...</div>
-                <div className="text-gray-500 text-xs pl-4">建立 Stripe Checkout API...</div>
-                <div className="text-gray-500 text-xs pl-4">寫入 purchases 表，解鎖 dashboard...</div>
-                <div className="text-gray-500 text-xs pl-4">部署到 Vercel，補線上 env 與 webhook...</div>
-                <div className="mt-3 text-green-400 text-xs">
-                  done: first paid product workflow is live
-                </div>
-                <div className="mt-1 text-gray-500 text-xs">
-                  next: run the chapter checklist before shipping
-                </div>
-              </div>
-            </div>
-
-            <div className="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg border border-gray-100 px-4 py-3">
-              <p className="text-xs text-gray-500">學習路線</p>
-              <p className="text-2xl font-black text-brand-500">免費 → 主課 → 進階</p>
-            </div>
+          <p className={styles.note}>從 4 章免費基礎開始 · 主課適合具備基本工程概念的人</p>
+          <div className={styles.traits}><span><BookOpen size={14} aria-hidden="true" />照自己的節奏閱讀</span><span><Terminal size={14} aria-hidden="true" />複製指令，動手驗證</span></div>
+        </div>
+        <div className={styles.notebook} aria-label="課程學習方式示意">
+          <div className={styles.notebookHeader}><span><Code2 size={17} aria-hidden="true" /> THE BUILD NOTES</span><span>學習方式示意</span></div>
+          <div className={styles.page}>
+            <p className={styles.chapter}>CHAPTER 01 / LANDING PAGE</p>
+            <h2>你的第一個<br />產品首頁。</h2>
+            <p className={styles.lessonDescription}>從一句模糊的想法，到可以開啟、瀏覽與修改的頁面。</p>
+            <div className={styles.prompt}><span>01 · 給 AI 一個明確任務</span><p>「先建立課程首頁，包含主視覺、課程大綱與方案。完成後，告訴我怎麼在本機驗證。」</p></div>
+            <div className={styles.checklist}><p>02 · 自己確認結果</p><span><Check size={15} aria-hidden="true" />首頁能在瀏覽器開啟</span><span><Check size={15} aria-hidden="true" />手機版文字與按鈕沒有溢出</span><span><Check size={15} aria-hidden="true" />每個按鈕都有明確去向</span></div>
           </div>
+          <div className={styles.notebookFooter}><span>學習 → 實作 → 驗收</span><span>一章，完成一件事。</span></div>
         </div>
       </div>
     </section>

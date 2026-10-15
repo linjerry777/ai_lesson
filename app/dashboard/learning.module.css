@@ -1,0 +1,14 @@
+.workspace { background: #f6f5ef; color: #21343a; }
+.sidebar { background: #fbfbf7; }
+.sidebar nav { padding: 12px; }
+.sidebar nav button { border-radius: 8px; margin-bottom: 8px; min-height: 72px; border: none; }
+.sidebar nav button[aria-current="step"] { background: #e5ece7; box-shadow: inset 3px 0 #385d4d; }
+.sidebar nav button[aria-current="step"] p { color: #294739; }
+.sidebar nav button[aria-current="step"] svg { color: #3d6853; }
+.reading { min-width: 0; }
+.reading h1 { max-width: 25ch; }
+.reading pre { max-width: 100%; }
+.reading p { line-height: 1.9; }
+.reading > div:first-child { background: #eaf0e7; border-color: #d9e2d4; box-shadow: none; }
+.reading :is(input, textarea) { max-width: 100%; }
+@media (max-width: 640px) { .reading :global(.p-6) { padding: 18px; } }

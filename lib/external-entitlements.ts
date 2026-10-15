@@ -91,6 +91,11 @@ function createSupabaseEntitlementStore(): ExternalEntitlementStore {
       const upsert = purchaseUpsert(record)
       const { error } = await supabase.from('purchases').upsert(upsert.values, upsert.options)
       if (error) throw error
+      const { data, error: readError } = await supabase.from('purchases')
+        .select('user_id,product_id,tier,status').eq('app_id', PLATFORM_APP_ID)
+        .eq('stripe_session_id', record.stripe_session_id).maybeSingle()
+      if (readError || !data || data.user_id !== record.user_id || data.product_id !== record.product_id ||
+        data.tier !== record.tier || data.status !== 'completed') throw new Error('External purchase ownership read-back failed')
     },
     async claimPending(id, userId, claimedAt) {
       const { data, error } = await supabase
@@ -102,6 +107,7 @@ function createSupabaseEntitlementStore(): ExternalEntitlementStore {
           updated_at: claimedAt,
         })
         .eq('id', id)
+        .eq('app_id', PLATFORM_APP_ID)
         .eq('status', 'pending')
         .select('id')
         .maybeSingle()

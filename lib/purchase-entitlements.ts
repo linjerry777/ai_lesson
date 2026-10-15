@@ -1,7 +1,5 @@
 import type Stripe from 'stripe'
 import {
-  DEFAULT_PRODUCT,
-  DEFAULT_TIER,
   getCourse,
   isValidProduct,
   isValidTier,
@@ -16,6 +14,7 @@ export interface PurchaseRecord {
   app_id: typeof PLATFORM_APP_ID
   user_id: string
   stripe_session_id: string
+  stripe_payment_intent?: string | null
   amount: number | null
   currency: string | null
   status: 'completed'
@@ -25,13 +24,14 @@ export interface PurchaseRecord {
 }
 
 export function buildStripePurchaseRecord(
-  session: Pick<Stripe.Checkout.Session, 'id' | 'amount_total' | 'currency' | 'metadata'>,
+  session: Pick<Stripe.Checkout.Session, 'id' | 'amount_total' | 'currency' | 'metadata'> & Partial<Pick<Stripe.Checkout.Session, 'payment_intent'>>,
 ): PurchaseRecord {
   const userId = session.metadata?.user_id
-  const productId = session.metadata?.product_id ?? DEFAULT_PRODUCT
-  const tier = session.metadata?.tier ?? DEFAULT_TIER
+  const productId = session.metadata?.product_id
+  const tier = session.metadata?.tier
 
   if (!userId) throw new Error('Missing user_id')
+  if (session.metadata?.app_id !== PLATFORM_APP_ID) throw new Error('Invalid app_id')
   if (!isValidProduct(productId) || getCourse(productId)?.isFree) {
     throw new Error('Invalid paid product_id')
   }
@@ -41,6 +41,7 @@ export function buildStripePurchaseRecord(
     app_id: PLATFORM_APP_ID,
     user_id: userId,
     stripe_session_id: session.id,
+    stripe_payment_intent: typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id ?? null,
     amount: session.amount_total,
     currency: session.currency,
     status: 'completed',
@@ -52,6 +53,6 @@ export function buildStripePurchaseRecord(
 export function purchaseUpsert(record: PurchaseRecord) {
   return {
     values: record,
-    options: { onConflict: PURCHASE_UPSERT_CONFLICT },
+    options: { onConflict: PURCHASE_UPSERT_CONFLICT, ignoreDuplicates: true },
   } as const
 }
