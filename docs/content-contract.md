@@ -9,7 +9,7 @@
   "slug": "ai-short-video-factory",          // kebab-case，頁面網址 /videos/<slug>
   "code": "1",                               // 口播短碼，/v/<code>；1–16 個 a-z0-9，不可重複
   "title": "影片標題",
-  "channel": "tech",                          // lib/site.ts 的 CHANNELS key
+  "channel": "nailao",                         // lib/site.ts 的 CHANNELS key
   "publishedAt": "2026-10-15",                // YYYY-MM-DD，列表依此排序
   "status": "published",                      // draft 不會出現在網站
   "summary": "一兩句摘要（≤400 字）",

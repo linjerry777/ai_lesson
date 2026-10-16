@@ -9,7 +9,7 @@ import { normalizeEmail, parseLeadRequest } from '@/lib/leads'
 import { isAdminEmail } from '@/lib/admin'
 
 const video = {
-  slug: 'demo-video', code: '7', title: 'Demo', channel: 'tech', publishedAt: '2026-10-01', status: 'published',
+  slug: 'demo-video', code: '7', title: 'Demo', channel: 'nailao', publishedAt: '2026-10-01', status: 'published',
   summary: 'summary', platforms: { youtube: 'dQw4w9WgXcQ', bilibili: 'BV1xx411c7mD' },
   sections: [{ heading: 'h', body: 'b' }], prompts: [{ title: 't', text: 'p' }],
   tools: [{ name: 'Git', url: 'https://git-scm.com/' }], cta: { kind: 'free', slug: 'pack' },

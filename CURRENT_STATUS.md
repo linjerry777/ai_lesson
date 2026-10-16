@@ -1,6 +1,18 @@
 # ai_lesson Current Status
 
-Last updated: 2026-10-15 (content hub P1 is local only; not pushed or deployed)
+Last updated: 2026-10-16 (JERRY.AI "24H ON AIR" redesign is local only; not pushed or deployed)
+
+## 2026-10-16 JERRY.AI "24H ON AIR" redesign (local)
+
+- Jerry chose direction "A+C" from Image2 mockups: magazine / broadcast-schedule look (paper, ink, one signal colour per channel) for hero + channels + workflow + free, and a quiet monochrome serif look for shop + studio.
+- Six channels (lib/site.ts `CHANNELS`): 奶烙 (cat-hosted talk channel, Jerry voices it; Jerry's face is never shown), 訊號滿格, Doro夫子, Doro公公, 麻糬QQ, 鳴潮二創 (fan work: channel showcase only, never used in selling sections). Slot hours on the 24h ruler are display only, not a real publishing schedule.
+- Video notes now use channel key `nailao` (was `tech`).
+- Homepage: draggable sticker pile (mouse/pen only), live Taipei ON AIR clock, 24h ruler; channel slots with real clips (`public/clips`), a docked ruler that follows the slot in view; workflow (5 steps); free notes + lead form; shop (AutoVideo kit, NT$790 early-bird "預購即將開放", CTA collects email via the free prompt pack); studio (mailto + portfolio).
+- Stickers are built by `scripts/build-stickers.py` (sources live in ../AutoVideo; rembg / white-sheet flood fill) → `public/stickers/*.webp`. The 奶烙 photo sticker is cropped from a contact sheet (original photos not found locally). OG card is a static `app/opengraph-image.png` from `scripts/build-og.py` (the old edge OG could not render Chinese).
+- Removed all 3D/WebGL experiments (R3F/three/drei/postprocessing deps, statues, Blender scripts, /book, /lab, /lab2).
+- Verified: `npm run check` (lint, typecheck, 13 files / 91 tests + 1 skipped, build). Playwright screenshots at 1440 and 390 for /, /videos, /videos/[slug], /free, /free/[slug]; no horizontal overflow; no console errors.
+- Not verified: lead submission end-to-end after the restyle (API unchanged); real devices; reduced-motion pass by eye.
+
 
 ## 2026-10-15 content hub P1 (local)
 

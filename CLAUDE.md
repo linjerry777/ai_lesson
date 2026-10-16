@@ -6,6 +6,13 @@ Before working in this repo:
 2. Read `CURRENT_STATUS.md`.
 3. Run `git status --short` and `git log --oneline -5`.
 
+## 2026-10-16 design + channel line-up (Jerry approved)
+
+- Public site brand is JERRY.AI: "一個人，六個頻道，每天自動開播。" Six channels live in `lib/site.ts` `CHANNELS` (奶烙 / 訊號滿格 / Doro夫子 / Doro公公 / 麻糬QQ / 鳴潮二創).
+- 奶烙 is the talk (口播) channel: the cat hosts, Jerry only voices it. Never show Jerry's face (his wife asked).
+- 鳴潮二創 characters (Phoebe, Phrolova) may appear in the channel showcase and hero pile, never in shop/course/selling sections.
+- Visual system: "A" = paper #f3f0e8 + ink + per-channel signal colour, heavy Noto Sans TC 900 + Anton + JetBrains Mono, die-cut stickers; "C" = #fafaf8 monochrome with Instrument Serif / Noto Serif TC for shop + studio. No WebGL.
+
 ## 2026-10-15 positioning change (Jerry approved)
 
 The public site is now a **content + email list + store hub** for Jerry's AI workflow talking-head channel(s), not a single-course sales page:

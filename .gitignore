@@ -40,3 +40,4 @@ next-env.d.ts
 .claude/
 examples/codex-remotion-lab/node_modules/
 examples/codex-remotion-lab/out/
+

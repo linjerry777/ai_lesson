@@ -11,5 +11,6 @@ export default defineConfig([
     'next-env.d.ts',
     '.playwright-mcp/**',
     'supabase/.temp/**',
+    'examples/**/node_modules/**',
   ]),
 ])
