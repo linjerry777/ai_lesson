@@ -2,6 +2,14 @@
 
 Last updated: 2026-10-16 (JERRY.AI "24H ON AIR" redesign is local only; not pushed or deployed)
 
+## 2026-10-17 five channels, real slots, studio hand-off (local)
+
+- Jerry approved the split: this site = channels + free + shop for learners; client work = Jerry AI Studio (studio section is now a short hand-off with link + mailto).
+- 鳴潮二創 removed from the site (non-commercial Bilibili licence): stickers, clip and slot deleted; footer links to Bilibili 毛里球OVO only.
+- 口播 = 奶烙 hosting with Jerry's voice (overrides the monitor-head avatar from the 口播 session). 奶烙 shows "SOON / 口播籌備中" until it has a slot.
+- Ruler/slots use real publish times (Asia/Taipei): 訊號滿格 11:30, Doro夫子 18:00, 麻糬QQ 19:30, Doro公公 20:00.
+- Channel/video inventory written to `docs/channel-status-2026-10-17.md`.
+
 ## 2026-10-16 JERRY.AI "24H ON AIR" redesign (local)
 
 - Jerry chose direction "A+C" from Image2 mockups: magazine / broadcast-schedule look (paper, ink, one signal colour per channel) for hero + channels + workflow + free, and a quiet monochrome serif look for shop + studio.

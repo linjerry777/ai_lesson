@@ -19,7 +19,7 @@ export default function Workflow() {
       <div className="mx-auto max-w-[1440px]">
         <Kicker color="#2747ff" className="text-[#c9c4b8]">02 — BEHIND THE SCENES / 幕後</Kicker>
         <h2 id="workflow-title" className="mt-5 max-w-4xl text-[clamp(34px,8.6vw,104px)] font-black leading-[1] tracking-[-.04em]">
-          一個點子，<br />自動長成<span className="text-[#f5a524]">六支</span>影片。
+          一個點子，<br />自動長成<span className="text-[#f5a524]">五支</span>影片。
         </h2>
         <ol className="mt-16 grid border-t border-white/25 md:grid-cols-5">
           {STEPS.map((step, i) => (

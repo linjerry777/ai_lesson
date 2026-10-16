@@ -27,8 +27,6 @@ STICKERS = {
     'mochi-love': (SPR / 'mochi-love.png', None, False),
     'mochi-popcorn': (SPR / 'mochi-popcorn.png', None, False),
     'doro': (AV / 'assets/brand/mascot.png', None, True),
-    'phoebe': (AV / 'output/phoebe-phrolova/chars/phoebe_sheet.png', (20, 60, 440, 560), 'flood'),
-    'phrolova': (AV / 'output/phoebe-phrolova/chars/phrolova_sheet.png', (20, 90, 440, 570), 'flood'),
     'nailao': (AV / '.codex_tmp/cat-character-study/cat-source-contact-sheet.jpg', (606, 625, 1026, 1185), True),
 }
 

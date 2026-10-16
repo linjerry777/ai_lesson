@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { CHANNELS, pad2 } from '@/lib/site'
+import { CHANNELS, pad2, slotLabel } from '@/lib/site'
 import Ruler from './Ruler'
 
 /**
@@ -43,7 +43,7 @@ export default function Schedule({ children }: { children: React.ReactNode }) {
               <p className="font-mono text-[10px] font-bold tracking-[.16em] text-[var(--ink-2)]">NOW ON AIR · {pad2(active + 1)}/{pad2(CHANNELS.length)}</p>
               <p className="flex items-center gap-2 text-sm font-black">
                 <span className="h-2.5 w-2.5 rounded-full" style={{ background: channel.color }} />
-                {pad2(channel.hour)}:00 {channel.name}
+                {slotLabel(channel)} {channel.name}
               </p>
             </div>
             <div className="min-w-0 flex-1"><Ruler hour={channel.hour} compact /></div>

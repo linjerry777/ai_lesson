@@ -8,9 +8,10 @@ Before working in this repo:
 
 ## 2026-10-16 design + channel line-up (Jerry approved)
 
-- Public site brand is JERRY.AI: "一個人，六個頻道，每天自動開播。" Six channels live in `lib/site.ts` `CHANNELS` (奶烙 / 訊號滿格 / Doro夫子 / Doro公公 / 麻糬QQ / 鳴潮二創).
-- 奶烙 is the talk (口播) channel: the cat hosts, Jerry only voices it. Never show Jerry's face (his wife asked).
-- 鳴潮二創 characters (Phoebe, Phrolova) may appear in the channel showcase and hero pile, never in shop/course/selling sections.
+- Public site brand is JERRY.AI: "一個人，五個頻道，每天自動開播。" Five channels live in `lib/site.ts` `CHANNELS` with their real daily publish times (訊號滿格 11:30, Doro夫子 18:00, 麻糬QQ 19:30, Doro公公 20:00, 奶烙 no fixed slot). Status of every channel: `docs/channel-status-2026-10-17.md`.
+- 奶烙 is the talk (口播) channel (2026-10-17, Jerry): the cat hosts, Jerry only voices it. This replaces the "monitor-head" avatar picked earlier in the 口播 session. Never show Jerry's face (his wife asked).
+- 鳴潮二創 is licensed for non-commercial Bilibili use only: no characters, clips or stickers on this site; only the footer link to Bilibili (`FAN_WORK`).
+- Client work lives on Jerry AI Studio (https://jerry-ai-studio-two.vercel.app); this site's studio section is only a hand-off link, do not duplicate case studies here.
 - Visual system: "A" = paper #f3f0e8 + ink + per-channel signal colour, heavy Noto Sans TC 900 + Anton + JetBrains Mono, die-cut stickers; "C" = #fafaf8 monochrome with Instrument Serif / Noto Serif TC for shop + studio. No WebGL.
 
 ## 2026-10-15 positioning change (Jerry approved)

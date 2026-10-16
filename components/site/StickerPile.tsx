@@ -12,15 +12,15 @@ interface PileSticker {
   r: number
   tag?: { label: string; name: string; color: string; ink: string; x: number; y: number; r: number }
   bubble?: string
+  mirror?: boolean
 }
 
 const PILE: PileSticker[] = [
-  { src: 'phoebe', alt: '菲比（鳴潮二創）', x: 6, y: 0, w: 31, r: -9, tag: { label: 'PHOEBE', name: '鳴潮二創', color: '#3b2fd9', ink: '#fff', x: -6, y: 58, r: -6 } },
-  { src: 'phrolova', alt: '弗洛洛（鳴潮二創）', x: 67, y: 1, w: 28, r: 8 },
-  { src: 'mochi', alt: '麻糬', x: 38, y: 3, w: 29, r: 5, tag: { label: 'MOCHI', name: '麻糬QQ', color: '#ff5d8f', ink: '#fff', x: 62, y: 30, r: 7 } },
-  { src: 'xun', alt: '小訊', x: 0, y: 33, w: 35, r: -5, tag: { label: 'XUN', name: '訊號滿格', color: '#2747ff', ink: '#fff', x: 4, y: 82, r: -4 } },
-  { src: 'doro', alt: 'Doro', x: 64, y: 40, w: 36, r: 7, tag: { label: 'DORO', name: 'Doro夫子／公公', color: '#ff4a1c', ink: '#fff', x: 30, y: 84, r: 5 } },
-  { src: 'nailao', alt: '奶烙（橘白貓）', x: 37, y: 37, w: 26, r: -3, tag: { label: 'NAILAO', name: '奶烙', color: '#f5a524', ink: '#1a1208', x: 50, y: 86, r: -5 }, bubble: '喵，今天聊 AI' },
+  { src: 'mochi', alt: '麻糬', x: 37, y: 0, w: 31, r: 5, tag: { label: 'MOCHI', name: '麻糬QQ', color: '#ff5d8f', ink: '#fff', x: 60, y: 26, r: 7 } },
+  { src: 'doro', alt: 'Doro夫子', x: 67, y: 4, w: 31, r: 8, tag: { label: 'DORO', name: 'Doro夫子', color: '#0e9f6e', ink: '#fff', x: 22, y: 82, r: -4 } },
+  { src: 'xun', alt: '小訊', x: 1, y: 10, w: 35, r: -6, tag: { label: 'XUN', name: '訊號滿格', color: '#2747ff', ink: '#fff', x: 4, y: 84, r: -4 } },
+  { src: 'doro', alt: 'Doro公公', x: 64, y: 50, w: 33, r: -7, mirror: true, tag: { label: 'DORO', name: 'Doro公公', color: '#ff4a1c', ink: '#fff', x: 30, y: 80, r: 5 } },
+  { src: 'nailao', alt: '奶烙（橘白貓）', x: 36, y: 38, w: 27, r: -3, tag: { label: 'NAILAO', name: '奶烙', color: '#f5a524', ink: '#1a1208', x: 50, y: 86, r: -5 }, bubble: '喵，今天聊 AI' },
 ]
 
 /**
@@ -53,7 +53,7 @@ export default function StickerPile() {
         const o = offsets[i] ?? { x: 0, y: 0 }
         return (
           <div
-            key={s.src}
+            key={s.alt}
             className="sticker-drop absolute cursor-grab active:cursor-grabbing"
             style={{
               left: `${s.x}%`, top: `${s.y}%`, width: `${s.w}%`,
@@ -71,7 +71,7 @@ export default function StickerPile() {
               src={`/stickers/${s.src}.webp`}
               alt={s.alt}
               draggable={false}
-              className="sticker-img block h-auto w-full"
+              className={`sticker-img block h-auto w-full ${s.mirror ? '-scale-x-100' : ''}`}
             />
             {s.tag && (
               <span

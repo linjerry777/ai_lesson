@@ -1,12 +1,11 @@
 import { ArrowUpRight } from 'lucide-react'
-import { CHANNELS, PLATFORM_LABELS, pad2, type Channel, type PlatformKey } from '@/lib/site'
+import { CHANNELS, PLATFORM_LABELS, pad2, slotLabel, type Channel, type PlatformKey } from '@/lib/site'
 import ClipVideo from '@/components/site/ClipVideo'
 import Schedule from '@/components/site/Schedule'
 import { Kicker } from '@/components/site/ui'
 
 function Slot({ c, i }: { c: Channel; i: number }) {
   const links = Object.entries(c.links) as [PlatformKey, string][]
-  const portrait = c.clipShape === 'portrait'
   return (
     <article id={`ch-${c.key}`} data-slot={i} className="grid scroll-mt-16 border-t-2 border-[var(--ink)] lg:min-h-[88svh] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
       <div className="reveal flex flex-col justify-center px-4 py-12 sm:px-8 lg:py-16 lg:pl-[max(2rem,calc((100vw-1440px)/2+2rem))]">
@@ -16,7 +15,14 @@ function Slot({ c, i }: { c: Channel; i: number }) {
           <span className="h-3 w-px bg-[var(--ink)]" aria-hidden="true" />
           <span className="text-[var(--ink-2)]">{c.code}</span>
         </p>
-        <p className="font-display text-outline mt-4 text-[clamp(92px,12.5vw,210px)] leading-[.86]" aria-label={`${pad2(c.hour)} 點檔`}>{pad2(c.hour)}:00</p>
+        {c.hour !== undefined ? (
+          <p className="font-display text-outline mt-4 text-[clamp(92px,12.5vw,210px)] leading-[.86]" aria-label={`每天 ${slotLabel(c)} 發片`}>{slotLabel(c)}</p>
+        ) : (
+          <p className="mt-4 flex items-end gap-4">
+            <span className="font-display text-outline text-[clamp(92px,12.5vw,210px)] leading-[.86]" aria-hidden="true">SOON</span>
+            <span className="mb-3 bg-[var(--ink)] px-2 py-1 text-sm font-bold text-[var(--paper)]">{c.note}</span>
+          </p>
+        )}
         <h3 className="mt-3 text-[clamp(52px,6.6vw,112px)] font-black leading-[1] tracking-[-.04em]">{c.name}</h3>
         <p className="mt-4 text-xl font-bold leading-snug sm:text-2xl">{c.tagline}</p>
         <p className="mt-3 max-w-md text-[15px] leading-7 text-[var(--ink-2)]">{c.description}</p>
@@ -30,7 +36,6 @@ function Slot({ c, i }: { c: Channel; i: number }) {
             <span className="inline-flex min-h-11 items-center border-2 border-dashed border-[var(--ink)] px-4 font-mono text-[12px] font-bold tracking-[.1em] text-[var(--ink-2)]">頻道整理中 · COMING SOON</span>
           )}
         </div>
-        {c.fanWork && <p className="mt-4 font-mono text-[10px] tracking-[.12em] text-[var(--ink-2)]">FAN WORK / 非官方二創，角色版權屬原作</p>}
       </div>
 
       <div className="relative flex min-h-[560px] items-center justify-center overflow-hidden px-6 py-14 lg:min-h-0" style={{ background: c.color, color: c.ink }}>
@@ -38,8 +43,8 @@ function Slot({ c, i }: { c: Channel; i: number }) {
         <span className="absolute right-4 top-1/2 hidden -translate-y-1/2 font-mono text-[11px] font-bold tracking-[.3em] [writing-mode:vertical-rl] sm:block" aria-hidden="true">
           SLOT {pad2(i + 1)} / {pad2(CHANNELS.length)}
         </span>
-        <div className={`reveal relative ${portrait ? 'w-[min(68vw,300px)]' : 'w-[min(86%,720px)]'}`}>
-          <div className={`relative overflow-hidden border-[3px] border-[var(--ink)] bg-black shadow-[10px_10px_0_var(--ink)] ${portrait ? 'aspect-[9/16]' : 'aspect-video'}`}>
+        <div className={`reveal relative w-[min(68vw,300px)]`}>
+          <div className={`relative overflow-hidden border-[3px] border-[var(--ink)] bg-black shadow-[10px_10px_0_var(--ink)] aspect-[9/16]`}>
             <ClipVideo name={c.clip} label={`${c.name} 片段`} className="h-full w-full object-cover" />
             <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 bg-black/55 px-2 py-1 font-mono text-[10px] font-bold tracking-[.14em] text-white">
               <span className="h-1.5 w-1.5 rounded-full bg-[var(--red)]" aria-hidden="true" />REC · {c.code}
@@ -50,13 +55,9 @@ function Slot({ c, i }: { c: Channel; i: number }) {
             src={`/stickers/${c.sticker}.webp`}
             alt=""
             loading="lazy"
-            className={`sticker-img pointer-events-none absolute ${portrait ? '-right-[30%] bottom-[-8%] w-[56%] sm:-right-[58%] sm:bottom-[-6%] sm:w-[78%]' : '-right-[6%] -bottom-[22%] w-[32%]'}`}
+            className={`sticker-img pointer-events-none absolute -right-[30%] bottom-[-8%] w-[56%] sm:-right-[58%] sm:bottom-[-6%] sm:w-[78%]`}
             style={{ transform: `rotate(${i % 2 ? -7 : 6}deg)${c.mirror ? ' scaleX(-1)' : ''}` }}
           />
-          {c.sticker2 && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={`/stickers/${c.sticker2}.webp`} alt="" loading="lazy" className="sticker-img pointer-events-none absolute -bottom-[20%] -left-[5%] w-[27%] -rotate-6" />
-          )}
         </div>
       </div>
     </article>
@@ -69,9 +70,9 @@ export default function Channels() {
       <div className="mx-auto grid max-w-[1440px] gap-6 px-4 pb-14 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
           <Kicker>01 — PROGRAMME / 今日節目表</Kicker>
-          <h2 id="channels-title" className="mt-5 text-[clamp(34px,8.6vw,104px)] font-black leading-[1] tracking-[-.04em]">六個頻道，<br />從早播到晚。</h2>
+          <h2 id="channels-title" className="mt-5 text-[clamp(34px,8.6vw,104px)] font-black leading-[1] tracking-[-.04em]">五個頻道，<br />從早播到晚。</h2>
         </div>
-        <p className="max-w-sm text-[15px] leading-7 text-[var(--ink-2)]">往下滑，時間會往前走。每個時段一個頻道，影片片段都是頻道裡實際播出的內容。</p>
+        <p className="max-w-sm text-[15px] leading-7 text-[var(--ink-2)]">往下滑，時間會往前走。時段是每天實際發片的時間（台北），影片片段都是頻道裡播出的內容。</p>
       </div>
       <Schedule>
         {CHANNELS.map((c, i) => <Slot key={c.key} c={c} i={i} />)}

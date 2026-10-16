@@ -29,7 +29,7 @@ export default function Masthead() {
           JERRY<span className="text-[var(--red)]">.</span>AI
         </Link>
         <span className="hidden font-mono text-[10px] leading-[1.35] tracking-[.14em] text-[var(--ink-2)] xl:block">
-          AI CREATOR STUDIO<br />6 CHANNELS · 24H ON AIR
+          AI CREATOR STUDIO<br />5 CHANNELS · 24H ON AIR
         </span>
         <nav aria-label="主要選單" className="ml-auto hidden items-center gap-7 md:flex">
           {NAV.map(item => (

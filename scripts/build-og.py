@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ST = ROOT / 'public/stickers'
 W, H = 1200, 630
 PAPER, INK, RED = (243, 240, 232), (18, 18, 18), (255, 59, 48)
-COLORS = ['#f5a524', '#2747ff', '#0e9f6e', '#ff4a1c', '#ff5d8f', '#3b2fd9']
+COLORS = ['#2747ff', '#0e9f6e', '#ff5d8f', '#ff4a1c', '#f5a524']
 
 heavy = ImageFont.truetype('C:/Windows/Fonts/NotoSansTC-VF.ttf', 92)
 heavy.set_variation_by_name('Black')
@@ -28,7 +28,7 @@ d.ellipse((266, 69, 276, 79), fill='white')
 d.text((286, 61), 'ON AIR', font=mono, fill='white')
 
 y = 170
-for line, accent in [('一個人，', None), ('六個頻道，', (0, 2, '#ff5d8f')), ('每天自動開播。', (2, 4, '#ff4a1c'))]:
+for line, accent in [('一個人，', None), ('五個頻道，', (0, 2, '#ff5d8f')), ('每天自動開播。', (2, 4, '#ff4a1c'))]:
     cx = 64
     for i, ch in enumerate(line):
         color = accent[2] if accent and accent[0] <= i < accent[1] else INK
@@ -38,12 +38,14 @@ for line, accent in [('一個人，', None), ('六個頻道，', (0, 2, '#ff5d8f
 
 for i, c in enumerate(COLORS):
     d.rectangle((64 + i * 34, 540, 64 + i * 34 + 26, 556), fill=c)
-d.text((290, 534), 'SIX CHANNELS · 24H ON AIR', font=mono, fill=(74, 71, 64))
+d.text((256, 534), 'FIVE CHANNELS · 24H ON AIR', font=mono, fill=(74, 71, 64))
 
-pile = [('phoebe', 690, 70, 190, -9), ('phrolova', 1000, 80, 170, 8), ('mochi', 850, 60, 180, 5),
-        ('xun', 660, 260, 210, -5), ('doro', 960, 300, 220, 7), ('nailao', 845, 270, 160, -3)]
-for name, px, py, w, r in pile:
+pile = [('mochi', 850, 40, 190, 5, False), ('doro', 1000, 70, 180, 8, False), ('xun', 660, 90, 220, -6, False),
+        ('doro', 980, 320, 190, -7, True), ('nailao', 830, 260, 170, -3, False)]
+for name, px, py, w, r, mirror in pile:
     s = Image.open(ST / f'{name}.webp').convert('RGBA')
+    if mirror:
+        s = s.transpose(Image.FLIP_LEFT_RIGHT)
     s = s.resize((w, round(s.height * w / s.width)), Image.LANCZOS).rotate(r, expand=True, resample=Image.BICUBIC)
     shadow = Image.new('RGBA', s.size, (40, 30, 12, 0))
     shadow.putalpha(s.getchannel('A').point(lambda a: a * 0.22))

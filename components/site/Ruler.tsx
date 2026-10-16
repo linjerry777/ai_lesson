@@ -25,13 +25,13 @@ export default function Ruler({ hour, compact = false }: { hour?: number; compac
           )}
         </div>
       ))}
-      {CHANNELS.map(c => (
+      {CHANNELS.filter(c => c.hour !== undefined).map(c => (
         <a
           key={c.key}
           href={`#ch-${c.key}`}
           tabIndex={-1}
           className="pointer-events-auto absolute top-[12px] h-3 w-3 -translate-x-1/2 rounded-full border-2 border-[var(--paper)]"
-          style={{ left: pct(c.hour), background: c.color }}
+          style={{ left: pct(c.hour!), background: c.color }}
           title={c.name}
         />
       ))}

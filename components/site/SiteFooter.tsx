@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { CHANNELS, NAV, SITE, pad2 } from '@/lib/site'
+import { CHANNELS, FAN_WORK, NAV, SITE, slotLabel } from '@/lib/site'
 
 export default function SiteFooter() {
   return (
@@ -17,6 +17,7 @@ export default function SiteFooter() {
             <ul className="mt-4 space-y-2.5 text-sm">
               {NAV.map(item => <li key={item.href}><Link href={item.href} className="hover:underline">{item.label}</Link></li>)}
               <li><Link href="/videos" className="hover:underline">影片筆記</Link></li>
+              <li><a href={SITE.studioUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">Jerry AI Studio ↗</a></li>
             </ul>
           </div>
           <div>
@@ -24,12 +25,15 @@ export default function SiteFooter() {
             <ul className="mt-4 space-y-2.5 text-sm">
               {CHANNELS.map(c => (
                 <li key={c.key} className="flex items-center gap-3">
-                  <span className="font-mono text-[11px] tabular-nums text-[#a8a397]">{pad2(c.hour)}:00</span>
+                  <span className="w-16 font-mono text-[11px] tabular-nums text-[#a8a397]">{c.hour !== undefined ? slotLabel(c) : '—'}</span>
                   <span className="h-2 w-2 rounded-full" style={{ background: c.color }} aria-hidden="true" />
                   <Link href={`/#ch-${c.key}`} className="hover:underline">{c.name}</Link>
                 </li>
               ))}
             </ul>
+            <a href={FAN_WORK.url} target="_blank" rel="noopener noreferrer" className="mt-6 inline-block font-mono text-[11px] tracking-[.06em] text-[#a8a397] hover:text-white hover:underline">
+              另有 {FAN_WORK.label} → {FAN_WORK.site} ↗
+            </a>
           </div>
         </div>
         <p className="font-display mt-16 select-none text-[clamp(64px,27.5vw,520px)] leading-[.82] tracking-[.01em]" aria-hidden="true">

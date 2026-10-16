@@ -19,7 +19,7 @@ export default function Shop({ waitlistHref }: { waitlistHref: string }) {
             <span className="font-serif block text-[clamp(64px,9vw,148px)] tracking-[-.02em]">AutoVideo</span>
             <span className="font-serif-tc mt-2 block text-[clamp(44px,6vw,96px)] font-light tracking-[.02em]">工作流套件</span>
           </h2>
-          <p className="mt-8 text-lg leading-8 text-[var(--ink-2)]">照著貼，就能跑。你看到的六個頻道，就是用這套流程每天產出的。</p>
+          <p className="mt-8 text-lg leading-8 text-[var(--ink-2)]">照著貼，就能跑。你看到的五個頻道，就是用這套流程每天產出的。</p>
 
           <ul className="mt-10 max-w-xl border-t border-[#121212]/25">
             {KITS.map((kit, i) => (
