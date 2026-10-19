@@ -1,0 +1,4 @@
+# Sellable kit sources and local artefacts never ship to Vercel
+products/
+.statue-work/
+docs/superpowers/
