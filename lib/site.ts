@@ -103,7 +103,7 @@ export function slotLabel(c: Channel) {
 export const NAV = [
   { href: '/#channels', label: '頻道', code: 'CHANNELS' },
   { href: '/free', label: '免費教學', code: 'FREE' },
-  { href: '/#shop', label: '工作流', code: 'SHOP' },
+  { href: '/shop', label: '工作流與課程', code: 'SHOP' },
   { href: '/#studio', label: '接案', code: 'STUDIO' },
 ]
 

@@ -1,17 +1,18 @@
 {
   "slug": "autovideo-prompt-pack",
   "title": "AI 短影音自動化 Prompt 包",
-  "summary": "從選題、腳本、分鏡到字幕檢查，一套可以直接貼給 Claude Code 或 ChatGPT 的短影音 prompt。（示範內容，正式版上線前會替換）",
+  "summary": "JERRY.AI 頻道每天做片用的同一套規則：選題、逐句腳本與鏡頭、發布前檢查、標題、數據回饋，6 組可以直接貼給 Claude Code 或 ChatGPT 的 prompt。",
   "status": "published",
   "format": "Markdown · 6 組 prompt",
   "bullets": [
-    "選題：從一個關鍵字產出 10 個有鉤子的題目",
-    "腳本：60 秒口播稿，含開頭 3 秒鉤子與結尾 CTA",
-    "分鏡：把腳本拆成畫面、字幕與素材清單",
-    "檢查：字幕錯字、節奏與平台規格自檢"
+    "選題：只用官方來源的新聞三則，第一則選觀眾切身的",
+    "圖鑑選題：四種人＋每型一個畫得出來的笑點",
+    "腳本＋鏡頭：逐句先選鏡頭再寫字幕，第 1 秒給結果",
+    "發布前檢查：前 5 秒、字幕、事實、片長",
+    "數據回饋：一次只改一個變因"
   ],
   "file": {
-    "path": "autovideo-prompt-pack/autovideo-prompt-pack-v1.md",
-    "downloadName": "ai-short-video-prompt-pack-v1.md"
+    "path": "autovideo-prompt-pack/autovideo-prompt-pack-v2.md",
+    "downloadName": "ai-short-video-prompt-pack-v2.md"
   }
 }

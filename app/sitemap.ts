@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { getPublishedResources, getPublishedVideos } from '@/lib/content'
+import { PRODUCTS } from '@/lib/products'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ailesson-two.vercel.app'
 
@@ -14,6 +15,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: `${SITE_URL}/videos`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${SITE_URL}/free`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${SITE_URL}/shop`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    ...PRODUCTS.map(product => ({ url: `${SITE_URL}/shop/${product.slug}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.8 })),
     ...videos,
     ...resources,
     {

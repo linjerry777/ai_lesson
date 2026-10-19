@@ -2,6 +2,13 @@
 
 Last updated: 2026-10-16 (JERRY.AI "24H ON AIR" redesign is local only; not pushed or deployed)
 
+## 2026-10-19 shop + first sellable kit (local)
+
+- New `/shop` and `/shop/[slug]` (C monochrome style) driven by `lib/products.ts`: Shorts Studio Kit NT$790 (preorder), Claude Code course NT$990 (preorder), Mystery Doc Kit and Chibi MV Kit (soon). Payments are still paused (expired Stripe key), so every CTA is the email form (free prompt pack + launch notice). Nav "工作流與課程" → /shop; homepage shop section links to the kit.
+- `products/shorts-studio-kit/`: Claude Code plugin (`.claude-plugin/plugin.json` + `marketplace.json`, `claude plugin validate` passes) with 5 skills (news-short, meme-short, short-qc, channel-learning, new-host) and a Remotion `starter/` extracted from AutoVideo's Claude Studio (TechNews + EntShort, edge-tts default / Fish optional, loudnorm, QC sheet). Original sample host 「小方」 generated with Codex (no Jerry characters shipped). Clean `npm install` + both sample builds verified (news 44.8s, meme 30.8s, 1080×1920, ~-19 dB mean).
+- Zip for delivery: `products/dist/shorts-studio-kit-v1.0.zip` (git-ignored, ~15MB). Not uploaded anywhere yet; buyer delivery needs payments first.
+- Free prompt pack replaced with real content (v2, `course-resources/free/autovideo-prompt-pack/autovideo-prompt-pack-v2.md`) and uploaded to the private `ai-lesson-downloads` bucket; content JSON points to v2 (production still serves v1 until deploy).
+
 ## 2026-10-17 five channels, real slots, studio hand-off (local)
 
 - Jerry approved the split: this site = channels + free + shop for learners; client work = Jerry AI Studio (studio section is now a short hand-off with link + mailto).

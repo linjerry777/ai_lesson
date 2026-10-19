@@ -41,3 +41,8 @@ next-env.d.ts
 examples/codex-remotion-lab/node_modules/
 examples/codex-remotion-lab/out/
 
+
+# Kit build output
+/products/dist/
+/products/*/starter/node_modules/
+/products/*/starter/out/

@@ -12,5 +12,6 @@ export default defineConfig([
     '.playwright-mcp/**',
     'supabase/.temp/**',
     'examples/**/node_modules/**',
+    'products/**', // sellable kits ship their own toolchain (Remotion)
   ]),
 ])

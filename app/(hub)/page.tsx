@@ -16,7 +16,7 @@ export default function Home() {
       <Channels />
       <Workflow />
       <FreeSection notes={notes} resource={resource} />
-      <Shop waitlistHref={resource ? `/free/${resource.slug}` : '/free'} />
+      <Shop />
       <Studio />
     </main>
   )
