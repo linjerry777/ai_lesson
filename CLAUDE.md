@@ -12,7 +12,7 @@ Before working in this repo:
 - 奶烙 is the talk (口播) channel (2026-10-17, Jerry): the cat hosts, Jerry only voices it. This replaces the "monitor-head" avatar picked earlier in the 口播 session. Never show Jerry's face (his wife asked).
 - 鳴潮二創 is licensed for non-commercial Bilibili use only: no characters, clips or stickers on this site; only the footer link to Bilibili (`FAN_WORK`).
 - Client work lives on Jerry AI Studio (https://jerry-ai-studio-two.vercel.app); this site's studio section is only a hand-off link, do not duplicate case studies here.
-- Store: `lib/products.ts` is the catalogue for `/shop`. Sellable kits live in `products/<slug>/` (own toolchain, excluded from app tsconfig/eslint); zips go to `products/dist/` (git-ignored). Never ship Jerry's channel characters inside a kit.
+- Store: `lib/products.ts` is the catalogue for `/shop`. Sellable kit sources live in the **private** repo `linjerry777/jerry-ai-kits` (local `../jerry-ai-kits`, zips via `scripts/pack.py`); this repo is public, so never commit kit sources here. Never ship Jerry's channel characters inside a kit.
 - Visual system: "A" = paper #f3f0e8 + ink + per-channel signal colour, heavy Noto Sans TC 900 + Anton + JetBrains Mono, die-cut stickers; "C" = #fafaf8 monochrome with Instrument Serif / Noto Serif TC for shop + studio. No WebGL.
 
 ## 2026-10-15 positioning change (Jerry approved)

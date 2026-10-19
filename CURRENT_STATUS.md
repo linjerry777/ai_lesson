@@ -5,7 +5,7 @@ Last updated: 2026-10-16 (JERRY.AI "24H ON AIR" redesign is local only; not push
 ## 2026-10-19 production deploy (Jerry approved)
 
 - Deployed local main (f3c43a3 + .vercelignore) with `vercel --prod` → `dpl_F5DBRXTdHYBysND25J8qQtxpkKyF` (ailesson-kfizhayx3), aliased to https://ailesson-two.vercel.app. Rollback target: previous production `ailesson-o5h1zhp9o` (19 days old).
-- **Not pushed to GitHub**: the repo is public and `products/` holds the paid kit source. Move the kit to a private repo (or out of this repo) before pushing main; a push would also trigger a Vercel git deploy.
+- Kit sources moved to the private repo https://github.com/linjerry777/jerry-ai-kits and stripped from this repo's unpushed history (backup branch `backup/pre-kit-split-20261019` still contains them locally — do not push that branch). main was then pushed to GitHub.
 - Added `ADMIN_EMAILS` to Vercel production. `.vercelignore` keeps `products/` out of deployments.
 - Live checks: /, /shop, /shop/*, /free, /free/autovideo-prompt-pack, /videos, /videos/*, OG image, clips, kit previews 200; /admin/stats and /dashboard 307; /book, /lab 404; `/v/1` → video note. Live lead POST returned a signed URL that served prompt pack v2; the test lead row was deleted (count 0).
 - Payments remain off (expired Stripe key). Old course checkout code still exists but the paid entry stays closed.
