@@ -2,6 +2,12 @@
 
 Last updated: 2026-10-16 (JERRY.AI "24H ON AIR" redesign is local only; not pushed or deployed)
 
+## 2026-10-19 auto-publish course (local, not deployed)
+
+- New shop product `auto-publish-course`「YouTube＋IG 自動發布：從授權到每日排程」NT$490 (preorder). Source lives in the private repo `jerry-ai-kits/auto-publish-kit` (COURSE.md 8 chapters, yt_auth/yt_upload/ig_auth/ig_publish/publish scripts, 2 skills, plugin validated, 10 offline tests pass; cloudflared temporary URL tested live with a dummy file: reachable, other paths 404, tunnel closes).
+- Not verified: a real upload to YouTube/IG with these new scripts (needs a test channel/account); course screenshots not captured yet.
+- Shorts Studio Kit page now points to this course for auto-upload.
+
 ## 2026-10-19 production deploy (Jerry approved)
 
 - Deployed local main (f3c43a3 + .vercelignore) with `vercel --prod` → `dpl_F5DBRXTdHYBysND25J8qQtxpkKyF` (ailesson-kfizhayx3), aliased to https://ailesson-two.vercel.app. Rollback target: previous production `ailesson-o5h1zhp9o` (19 days old).

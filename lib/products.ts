@@ -52,7 +52,7 @@ export const PRODUCTS: Product[] = [
       '用 new-host 換成你自己的主持人',
     ],
     requirements: ['Node.js 20+、Python 3.10+、ffmpeg', 'Claude Code（訂閱或 API）', '會打開終端機、複製貼上指令'],
-    excluded: ['自動上傳到 YouTube / IG（提供標題、說明與上傳檢查清單，上傳由你自己按）', 'Fish Audio、Claude 等第三方費用', '觀看數或收益保證'],
+    excluded: ['自動上傳到 YouTube / IG（另售「YouTube＋IG 自動發布」課程）', 'Fish Audio、Claude 等第三方費用', '觀看數或收益保證'],
     previews: [
       { src: '/kits/shorts-news-sample.mp4', poster: '/kits/shorts-news-sample.jpg', label: '範例：今日科技三則（45 秒）' },
       { src: '/kits/shorts-meme-sample.mp4', poster: '/kits/shorts-meme-sample.jpg', label: '範例：吃到飽人圖鑑（30 秒）' },
@@ -61,6 +61,43 @@ export const PRODUCTS: Product[] = [
       { q: '我不會寫程式可以用嗎？', a: '要會打開終端機和複製貼上。剩下的步驟由 Claude Code 照 skills 做，卡住時檢查點會告訴你先看哪裡。' },
       { q: '一定要付費配音嗎？', a: '不用。預設用免費的 edge-tts；想用自己的克隆聲音再接 Fish Audio。' },
       { q: '可以用在有營利的頻道嗎？', a: '可以，影片是你的。套件本身不能轉售或公開分享，範例角色「小方」請換成你自己的。' },
+    ],
+  },
+  {
+    slug: 'auto-publish-course',
+    kind: 'course',
+    name: 'YouTube＋IG 自動發布：從授權到每日排程',
+    latin: 'Auto Publish Course',
+    tagline: '做好的短片，一行指令（或每天排程）發到 Shorts 和 Reels。',
+    description:
+      '8 章設定課程加一套發布腳本：Google Cloud 授權、YouTube API 審核、IG 專業帳號與 Meta App、第一次發布、每天自動排程。斷點續傳、不會重複發、授權快過期會提醒。可以單獨用，也可以接在短影音套件後面。',
+    price: 490,
+    status: 'preorder',
+    sticker: 'mochi-love',
+    includes: [
+      { title: '8 章設定課程', text: '每章都有「成功長這樣」和「卡住時先看」，包含最多人卡關的 OAuth 同意畫面、YouTube API 審核與 IG token。' },
+      { title: 'YouTube 上傳腳本', text: '一次授權長期使用、斷點續傳、AI 合成內容標示、排程公開，授權頻道不符就停止。' },
+      { title: 'Instagram Reels 發布腳本', text: '自動產生只活幾分鐘的暫時影片網址（免註冊），建立 Reels 並發布，token 每週自動續期。' },
+      { title: '一次發兩邊＋防重複', text: '同一支片重跑指令也不會發兩次；失敗只重做沒完成的那邊。' },
+      { title: 'Claude Code plugin（2 個 skills）', text: 'publish-setup 一章一章帶你設定；publish-shorts 每天發布前先檢查授權與 QC。' },
+    ],
+    steps: [
+      '安裝 Python 套件與 cloudflared',
+      '建立 Google Cloud 專案並授權你的頻道',
+      '把 IG 轉成專業帳號、在 Meta 後台產生 token',
+      '私人模式測一次，再測防重複',
+      '設定每天固定時間自動發布',
+    ],
+    requirements: ['Python 3.10+', '有 YouTube 頻道的 Google 帳號', 'Instagram 帳號＋Facebook 帳號（登入 Meta 開發者後台）'],
+    excluded: [
+      'YouTube 新專案在通過 API 審核前，上傳的影片會先是「私人」（課程教你申請審核與過渡做法）',
+      '代為申請審核或代管帳號',
+      'TikTok、Threads 等其他平台',
+    ],
+    faq: [
+      { q: '會不會被平台當成機器人？', a: '用的是 YouTube 與 Instagram 官方 API，發到你自己的帳號，和官方 App 發布一樣。' },
+      { q: '為什麼影片上傳後是私人？', a: '這是 YouTube 對還沒審核的新 API 專案的規定。審核通過前到 YouTube Studio 按一下公開即可，第 3 章教你申請審核。' },
+      { q: '一定要買短影音套件嗎？', a: '不用。只要有做好的 mp4 就能用；有套件的話可以接在出片後面一路自動。' },
     ],
   },
   {
