@@ -23,9 +23,16 @@ export interface Product {
   excluded: string[]
   previews?: { src: string; poster: string; label: string }[]
   faq?: { q: string; a: string }[]
+  /** Stripe Payment Link (public URL) and its id. Present = the product can be bought now. */
+  paymentLink?: string
+  paymentLinkId?: string
+  /** Built but not public yet (e.g. waiting for a real-account test). */
+  hidden?: boolean
+  /** Delivered file in the private `ai-lesson-downloads` bucket. */
+  file?: { path: string; downloadName: string }
 }
 
-export const PRODUCTS: Product[] = [
+const CATALOGUE: Product[] = [
   {
     slug: 'shorts-studio-kit',
     kind: 'kit',
@@ -37,6 +44,9 @@ export const PRODUCTS: Product[] = [
     price: 790,
     status: 'preorder',
     sticker: 'xun-explain',
+    file: { path: 'kits/shorts-studio-kit-v1.0.zip', downloadName: 'shorts-studio-kit-v1.0.zip' },
+    paymentLink: 'https://buy.stripe.com/7sYdR262V4ikfCReHu9MY00',
+    paymentLinkId: 'plink_1USfRk5t4WzXNwwb3bDQvCyD',
     includes: [
       { title: 'Claude Code plugin（5 個 skills）', text: 'news-short、meme-short、short-qc、channel-learning、new-host。Claude 照流程幫你做片，不用自己記步驟。' },
       { title: 'Remotion 專案 starter', text: '9:16 1080×1920。新聞模板 10 種鏡頭、圖鑑模板 70+ 種笑點鏡頭，字幕時間＝配音實際長度。' },
@@ -52,7 +62,7 @@ export const PRODUCTS: Product[] = [
       '用 new-host 換成你自己的主持人',
     ],
     requirements: ['Node.js 20+、Python 3.10+、ffmpeg', 'Claude Code（訂閱或 API）', '會打開終端機、複製貼上指令'],
-    excluded: ['自動上傳到 YouTube / IG（另售「YouTube＋IG 自動發布」課程）', 'Fish Audio、Claude 等第三方費用', '觀看數或收益保證'],
+    excluded: ['自動上傳到 YouTube / IG（「YouTube＋IG 自動發布」課程即將推出）', 'Fish Audio、Claude 等第三方費用', '觀看數或收益保證'],
     previews: [
       { src: '/kits/shorts-news-sample.mp4', poster: '/kits/shorts-news-sample.jpg', label: '範例：今日科技三則（45 秒）' },
       { src: '/kits/shorts-meme-sample.mp4', poster: '/kits/shorts-meme-sample.jpg', label: '範例：吃到飽人圖鑑（30 秒）' },
@@ -65,6 +75,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     slug: 'auto-publish-course',
+    hidden: true, // Jerry: real YouTube/IG test before it goes public
     kind: 'course',
     name: 'YouTube＋IG 自動發布：從授權到每日排程',
     latin: 'Auto Publish Course',
@@ -74,6 +85,7 @@ export const PRODUCTS: Product[] = [
     price: 490,
     status: 'preorder',
     sticker: 'mochi-love',
+    file: { path: 'kits/auto-publish-kit-v1.0.zip', downloadName: 'auto-publish-kit-v1.0.zip' },
     includes: [
       { title: '8 章設定課程', text: '每章都有「成功長這樣」和「卡住時先看」，包含最多人卡關的 OAuth 同意畫面、YouTube API 審核與 IG token。' },
       { title: 'YouTube 上傳腳本', text: '一次授權長期使用、斷點續傳、AI 合成內容標示、排程公開，授權頻道不符就停止。' },
@@ -152,8 +164,13 @@ export const PRODUCTS: Product[] = [
   },
 ]
 
+/** Everything the site lists. Hidden products stay out of pages, sitemap and links. */
+export const PRODUCTS: Product[] = CATALOGUE.filter(product => !product.hidden)
+
 export function getProduct(slug: string) {
   return PRODUCTS.find(product => product.slug === slug) ?? null
 }
+
+export const canBuy = (product: Product) => Boolean(product.paymentLink && product.file)
 
 export const priceLabel = (product: Product) => (product.price === null ? '即將推出' : `NT$${product.price.toLocaleString('en-US')}`)

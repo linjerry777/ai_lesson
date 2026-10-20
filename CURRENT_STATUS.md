@@ -2,6 +2,15 @@
 
 Last updated: 2026-10-16 (JERRY.AI "24H ON AIR" redesign is local only; not pushed or deployed)
 
+## 2026-10-21 paid delivery for kits (Stripe Payment Links)
+
+- Shorts Studio Kit is buyable: live Payment Link https://buy.stripe.com/7sYdR262V4ikfCReHu9MY00 (plink_1USfRk5t4WzXNwwb3bDQvCyD, NT$790 TWD, tax-inclusive, tax-ID collection off) on the Stripe account AILESSON (acct_1TJwRu5t4WzXNwwb, UK, payments + payouts active). After payment Stripe redirects to `/thanks?session_id={CHECKOUT_SESSION_ID}`.
+- `/thanks` + `/api/kit-download` (lib/kit-orders.ts) re-read the Checkout Session with a separate restricted key `STRIPE_KIT_KEY` (Checkout Sessions read + Payment Links read), require complete+paid and full price, map the session to a product by payment link id, record the order in `public.ai_lesson_kit_orders` (new table, RLS on, no anon/auth grants; migration 20261020090000 applied to jerry-platform), then 303 to a 10-minute signed URL. The old course checkout (lib/stripe.ts) is untouched.
+- Zips live in the private bucket `ai-lesson-downloads/kits/` (uploaded with scripts/upload-kits.mjs from ../jerry-ai-kits/dist).
+- New `/link` page for IG/YouTube bios (free pack → products → notes → channels → studio).
+- `auto-publish-course` is `hidden` until Jerry's real-account test.
+- **Needs Jerry**: create the restricted key and add it to Vercel production as `STRIPE_KIT_KEY` (Claude must not handle API keys). Until then `/thanks` shows the "email me your receipt" fallback. Then do one real purchase + refund to verify end to end.
+
 ## 2026-10-19 auto-publish course (local, not deployed)
 
 - New shop product `auto-publish-course`「YouTube＋IG 自動發布：從授權到每日排程」NT$490 (preorder). Source lives in the private repo `jerry-ai-kits/auto-publish-kit` (COURSE.md 8 chapters, yt_auth/yt_upload/ig_auth/ig_publish/publish scripts, 2 skills, plugin validated, 10 offline tests pass; cloudflared temporary URL tested live with a dummy file: reachable, other paths 404, tunnel closes).

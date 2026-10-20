@@ -1,9 +1,11 @@
+import Link from 'next/link'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { ArrowRight } from 'lucide-react'
 import LeadForm from '@/components/site/LeadForm'
 import { BackLink } from '@/components/site/ui'
 import { getPublishedResources } from '@/lib/content'
-import { PRODUCTS, getProduct, priceLabel } from '@/lib/products'
+import { PRODUCTS, canBuy, getProduct, priceLabel } from '@/lib/products'
 import { SITE } from '@/lib/site'
 
 export function generateStaticParams() {
@@ -30,6 +32,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   if (!product) notFound()
   const resource = getPublishedResources()[0]
   const soon = product.status === 'soon'
+  const buyable = canBuy(product)
 
   return (
     <main className="bg-[#fafaf8] px-4 pb-28 pt-12 sm:px-8 sm:pt-20">
@@ -47,13 +50,31 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <aside className="relative border border-[var(--ink)] bg-white p-7 lg:sticky lg:top-24">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={`/stickers/${product.sticker}.webp`} alt="" className="sticker-img pointer-events-none absolute -top-24 right-4 hidden w-24 rotate-6 lg:block" />
-            <p className="font-mono text-[10px] tracking-[.2em] text-[var(--ink-2)]">{soon ? 'IN PRODUCTION · 製作中' : 'EARLY BIRD · 預購即將開放'}</p>
-            <p className="font-serif mt-2 text-6xl leading-none">{priceLabel(product)}</p>
-            <p className="mt-5 text-sm leading-7 text-[var(--ink-2)]">
-              {soon ? '這個工作流還在整理成可以照著跑的版本。' : '付款功能開通中。'}
-              留下 Email，先收到免費的 AI 短影音 Prompt 包，{soon ? '推出' : '開賣'}時第一個通知你。
-            </p>
-            {resource && <div className="mt-6"><LeadForm resource={resource.slug} title={resource.title} submitLabel={soon ? '推出時通知我' : '開賣通知我'} /></div>}
+            {buyable ? (
+              <>
+                <p className="font-mono text-[10px] tracking-[.2em] text-[var(--ink-2)]">ONE-TIME · 一次買斷</p>
+                <p className="font-serif mt-2 text-6xl leading-none">{priceLabel(product)}</p>
+                <a href={product.paymentLink} className="group mt-7 flex min-h-14 items-center justify-center gap-3 bg-[var(--ink)] px-8 text-[15px] tracking-[.08em] text-[#fafaf8] transition hover:bg-[#333]">
+                  立即購買 <ArrowRight size={17} className="transition group-hover:translate-x-1" aria-hidden="true" />
+                </a>
+                <ul className="mt-5 space-y-1.5 text-xs leading-6 text-[var(--ink-2)]">
+                  <li>・Stripe 安全付款，支援信用卡、Apple Pay、Google Pay</li>
+                  <li>・付款完成立刻下載，不用等寄信</li>
+                  <li>・之後的更新版本免費下載</li>
+                  <li>・7 天內不滿意可退費，見<Link href="/refund" className="underline">退費政策</Link></li>
+                </ul>
+              </>
+            ) : (
+              <>
+                <p className="font-mono text-[10px] tracking-[.2em] text-[var(--ink-2)]">{soon ? 'IN PRODUCTION · 製作中' : 'EARLY BIRD · 預購即將開放'}</p>
+                <p className="font-serif mt-2 text-6xl leading-none">{priceLabel(product)}</p>
+                <p className="mt-5 text-sm leading-7 text-[var(--ink-2)]">
+                  {soon ? '這個工作流還在整理成可以照著跑的版本。' : '即將開賣。'}
+                  留下 Email，先收到免費的 AI 短影音 Prompt 包，{soon ? '推出' : '開賣'}時第一個通知你。
+                </p>
+                {resource && <div className="mt-6"><LeadForm resource={resource.slug} title={resource.title} submitLabel={soon ? '推出時通知我' : '開賣通知我'} /></div>}
+              </>
+            )}
           </aside>
         </section>
 
