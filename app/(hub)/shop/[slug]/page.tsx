@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react'
 import LeadForm from '@/components/site/LeadForm'
 import { BackLink } from '@/components/site/ui'
 import { getPublishedResources } from '@/lib/content'
-import { PRODUCTS, canBuy, getProduct, priceLabel } from '@/lib/products'
+import { PRODUCTS, canBuy, compareLabel, getProduct, priceLabel } from '@/lib/products'
 import { SITE } from '@/lib/site'
 
 export function generateStaticParams() {
@@ -53,7 +53,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             {buyable ? (
               <>
                 <p className="font-mono text-[10px] tracking-[.2em] text-[var(--ink-2)]">ONE-TIME · 一次買斷</p>
-                <p className="font-serif mt-2 text-6xl leading-none">{priceLabel(product)}</p>
+                <p className="font-serif mt-2 flex items-end gap-3 text-6xl leading-none">{priceLabel(product)}{compareLabel(product) && <s className="mb-1 text-xl text-[var(--ink-2)]">{compareLabel(product)}</s>}</p>
                 <a href={product.paymentLink} className="group mt-7 flex min-h-14 items-center justify-center gap-3 bg-[var(--ink)] px-8 text-[15px] tracking-[.08em] text-[#fafaf8] transition hover:bg-[#333]">
                   立即購買 <ArrowRight size={17} className="transition group-hover:translate-x-1" aria-hidden="true" />
                 </a>
@@ -61,6 +61,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   <li>・Stripe 安全付款，支援信用卡、Apple Pay、Google Pay</li>
                   <li>・付款完成立刻下載，不用等寄信</li>
                   <li>・之後的更新版本免費下載</li>
+                  <li>・買家專屬 LINE 社群，卡住就問</li>
                   <li>・7 天內不滿意可退費，見<Link href="/refund" className="underline">退費政策</Link></li>
                 </ul>
               </>

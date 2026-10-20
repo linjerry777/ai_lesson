@@ -3,6 +3,7 @@ import { createClient, createServiceClient } from '@/lib/supabase/server'
 import CoursePage from './CoursePage'
 import { PLATFORM_APP_ID } from '@/lib/platform'
 import { claimExternalEntitlements } from '@/lib/external-entitlements'
+import { claimKitCourses } from '@/lib/kit-orders'
 import { getLearnerCourses } from '@/lib/learner-access'
 import { stripeIsLive } from '@/lib/stripe'
 
@@ -24,6 +25,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   if (user.email && user.email_confirmed_at) {
     try {
       await claimExternalEntitlements(user.id, user.email)
+      await claimKitCourses(user.id, user.email)
     } catch (error) {
       // Existing purchases and the free primer should remain available even
       // when the external order bridge is temporarily unavailable.

@@ -30,6 +30,12 @@ export interface Product {
   hidden?: boolean
   /** Delivered file in the private `ai-lesson-downloads` bucket. */
   file?: { path: string; downloadName: string }
+  /** Course unlocked in /dashboard (Google login with the purchase email). */
+  grantsCourse?: 'claude-code'
+  /** A bundle: slugs of the products it delivers (current and future versions). */
+  bundle?: string[]
+  /** Crossed-out reference price shown next to the price. */
+  compareAt?: number
 }
 
 const CATALOGUE: Product[] = [
@@ -41,12 +47,13 @@ const CATALOGUE: Product[] = [
     tagline: '照著貼，就能跑。一行指令出一支 9:16 短片。',
     description:
       '訊號滿格、麻糬QQ 每天在用的同一條流水線：選題查證、逐句腳本與鏡頭、配音、Remotion 渲染、抽格 QC、數據回饋。打包成 Claude Code plugin 和一個可以直接渲染的專案。',
-    price: 790,
+    price: 399,
+    compareAt: 790,
     status: 'preorder',
     sticker: 'xun-explain',
     file: { path: 'kits/shorts-studio-kit-v1.0.zip', downloadName: 'shorts-studio-kit-v1.0.zip' },
-    paymentLink: 'https://buy.stripe.com/7sYdR262V4ikfCReHu9MY00',
-    paymentLinkId: 'plink_1USfRk5t4WzXNwwb3bDQvCyD',
+    paymentLink: 'https://buy.stripe.com/fZu00c62VaGI0HX42Q9MY01',
+    paymentLinkId: 'plink_1USgc15t4WzXNwwbbZUSypV5',
     includes: [
       { title: 'Claude Code plugin（5 個 skills）', text: 'news-short、meme-short、short-qc、channel-learning、new-host。Claude 照流程幫你做片，不用自己記步驟。' },
       { title: 'Remotion 專案 starter', text: '9:16 1080×1920。新聞模板 10 種鏡頭、圖鑑模板 70+ 種笑點鏡頭，字幕時間＝配音實際長度。' },
@@ -82,7 +89,8 @@ const CATALOGUE: Product[] = [
     tagline: '做好的短片，一行指令（或每天排程）發到 Shorts 和 Reels。',
     description:
       '8 章設定課程加一套發布腳本：Google Cloud 授權、YouTube API 審核、IG 專業帳號與 Meta App、第一次發布、每天自動排程。斷點續傳、不會重複發、授權快過期會提醒。可以單獨用，也可以接在短影音套件後面。',
-    price: 490,
+    price: 199,
+    compareAt: 490,
     status: 'preorder',
     sticker: 'mochi-love',
     file: { path: 'kits/auto-publish-kit-v1.0.zip', downloadName: 'auto-publish-kit-v1.0.zip' },
@@ -120,9 +128,13 @@ const CATALOGUE: Product[] = [
     tagline: 'Landing Page、Google 登入、Stripe 付款、部署上線，8 章一次做完。',
     description:
       '文字實作課。跟著 8 個階段，用 Claude Code 做出一個有登入、付款、購買紀錄與課程解鎖的真網站，最後部署到 Vercel。適合有基本工程概念的人。',
-    price: 990,
+    price: 490,
+    compareAt: 990,
     status: 'preorder',
     sticker: 'xun-thumbsup',
+    grantsCourse: 'claude-code',
+    paymentLink: 'https://buy.stripe.com/dRm6oA2QJbKM76lare9MY02',
+    paymentLinkId: 'plink_1USgdt5t4WzXNwwbmc8Rpd6G',
     includes: [
       { title: '8 章文字實作', text: '環境、Landing、登入、環境變數與除錯、Stripe、部署、除錯救援、重用模板。' },
       { title: '每章驗收清單', text: '每一章都有「做完應該看到什麼」，不是讀完就算。' },
@@ -131,6 +143,31 @@ const CATALOGUE: Product[] = [
     steps: ['準備帳號與環境', '做 Landing Page', '接 Google 登入', '接 Stripe 付款（Sandbox）', '部署上線並驗收'],
     requirements: ['能操作終端機與 Git', '能讀基本 TypeScript 與錯誤訊息'],
     excluded: ['影片授課', '一對一指導', 'Claude、主機等第三方費用', '收益或完成時間保證'],
+  },
+  {
+    slug: 'all-in-one',
+    kind: 'kit',
+    name: '全套：工作流套件＋Claude Code 實戰課',
+    latin: 'All-in-one Pass',
+    tagline: '一次買齊，之後新上架的工作流也自動加進來。',
+    description:
+      'AI 每日短影音工作流套件加上 Claude Code 實戰課。之後上架的工作流（自動發布、懸案紀錄片、Q 版 MV）會直接加進全套，回到付款完成頁就能下載。',
+    price: 799,
+    compareAt: 889,
+    status: 'preorder',
+    sticker: 'mochi-popcorn',
+    bundle: ['shorts-studio-kit', 'claude-code-course'],
+    paymentLink: 'https://buy.stripe.com/eVq5kw8b3bKM4Yd9na9MY03',
+    paymentLinkId: 'plink_1USgfk5t4WzXNwwb4TEd29ND',
+    includes: [
+      { title: 'AI 每日短影音工作流套件', text: 'Claude Code plugin（5 個 skills）＋可直接渲染的 Remotion 專案。' },
+      { title: 'Claude Code 實戰課', text: '8 章文字實作：登入、Stripe 付款、部署上線，做出會收錢的網站。' },
+      { title: '之後上架的工作流', text: '自動發布、懸案紀錄片、Q 版 MV 推出後直接加進全套，不用再付錢。' },
+      { title: 'LINE 社群答疑', text: '卡住就在社群問，我會回；常見問題整理回教材。' },
+    ],
+    steps: ['付款完成後在頁面下載套件', '用付款 Email 登入 Google 開通課程', '加入 LINE 社群', '照設定 prompt 開始做第一支片'],
+    requirements: ['Node.js 20+、Python 3.10+', 'Claude Code（訂閱或 API）', '能操作終端機與 Git'],
+    excluded: ['一對一指導或代做', 'Claude、主機等第三方費用', '收益或完成時間保證'],
   },
   {
     slug: 'mystery-doc-kit',
@@ -171,6 +208,16 @@ export function getProduct(slug: string) {
   return PRODUCTS.find(product => product.slug === slug) ?? null
 }
 
-export const canBuy = (product: Product) => Boolean(product.paymentLink && product.file)
+/** What a purchase of `product` delivers: files to download and/or a course to unlock. */
+export function deliverables(product: Product): Product[] {
+  if (!product.bundle) return [product]
+  return product.bundle.map(slug => CATALOGUE.find(item => item.slug === slug)).filter((item): item is Product => Boolean(item))
+}
+
+export const isDeliverable = (product: Product) => deliverables(product).some(item => item.file || item.grantsCourse)
+
+export const canBuy = (product: Product) => Boolean(product.paymentLink && isDeliverable(product))
+
+export const compareLabel = (product: Product) => (product.compareAt ? `NT$${product.compareAt.toLocaleString('en-US')}` : null)
 
 export const priceLabel = (product: Product) => (product.price === null ? '即將推出' : `NT$${product.price.toLocaleString('en-US')}`)

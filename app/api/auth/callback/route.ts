@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { normalizeRedirectPath } from '@/lib/safe-redirect'
 import { PLATFORM_APP_ID } from '@/lib/platform'
 import { claimExternalEntitlements } from '@/lib/external-entitlements'
+import { claimKitCourses } from '@/lib/kit-orders'
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
@@ -25,6 +26,7 @@ export async function GET(request: NextRequest) {
       if (user?.email && user.email_confirmed_at) {
         try {
           await claimExternalEntitlements(user.id, user.email)
+          await claimKitCourses(user.id, user.email)
         } catch (claimError) {
           // External order sync can recover on the next dashboard visit and
           // must not turn a valid OAuth login into a failed callback.

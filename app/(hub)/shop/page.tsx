@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
-import { PRODUCTS, priceLabel } from '@/lib/products'
+import { PRODUCTS, canBuy, compareLabel, priceLabel } from '@/lib/products'
 import { SITE } from '@/lib/site'
 
 export const metadata: Metadata = {
@@ -36,9 +36,9 @@ export default function ShopPage() {
                     <span className="mt-2 block text-[15px] leading-7 text-[var(--ink-2)]">{product.tagline}</span>
                   </span>
                   <span className="flex items-center gap-4 sm:flex-col sm:items-end">
-                    <span className="font-serif text-4xl">{priceLabel(product)}</span>
+                    <span className="font-serif text-4xl">{compareLabel(product) && <s className="mr-2 text-lg text-[var(--ink-2)]">{compareLabel(product)}</s>}{priceLabel(product)}</span>
                     <span className="inline-flex items-center gap-1 font-mono text-[11px] tracking-[.14em]">
-                      {soon ? 'IN PRODUCTION' : '預購・開賣通知'} <ArrowUpRight size={14} aria-hidden="true" />
+                      {soon ? 'IN PRODUCTION' : canBuy(product) ? '現在可買' : '預購・開賣通知'} <ArrowUpRight size={14} aria-hidden="true" />
                     </span>
                   </span>
                 </Link>
@@ -46,7 +46,7 @@ export default function ShopPage() {
             )
           })}
         </ul>
-        <p className="mt-8 font-mono text-[11px] leading-6 tracking-[.06em] text-[var(--ink-2)]">付款功能開通中。現在留 Email 會先收到免費 Prompt 包，開賣時第一個通知你。</p>
+        <p className="mt-8 font-mono text-[11px] leading-6 tracking-[.06em] text-[var(--ink-2)]">付款走 Stripe，完成後立刻下載。每個產品都附買家專屬 LINE 社群答疑。</p>
       </div>
     </main>
   )

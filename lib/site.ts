@@ -11,6 +11,8 @@ export const SITE = {
     '一個人讓 Claude 和 Codex 各自經營頻道，看誰撐得久。這裡有每支影片的重點筆記、可直接複製的 prompt、免費教學，以及照著貼就能跑的 AI 工作流套件。',
   contactEmail: 'donutai08@gmail.com',
   studioUrl: 'https://jerry-ai-studio-two.vercel.app/',
+  /** LINE OpenChat for buyers' Q&A; empty until Jerry creates it. */
+  lineCommunityUrl: process.env.NEXT_PUBLIC_LINE_COMMUNITY_URL ?? '',
 }
 
 export type PlatformKey = 'youtube' | 'bilibili' | 'instagram' | 'threads' | 'facebook' | 'tiktok'

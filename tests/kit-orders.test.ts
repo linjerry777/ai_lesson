@@ -10,7 +10,7 @@ function session(overrides: Partial<Stripe.Checkout.Session> = {}): Stripe.Check
     id: 'cs_live_a1B2c3D4e5F6g7H8',
     status: 'complete',
     payment_status: 'paid',
-    amount_total: 79000,
+    amount_total: 39900,
     currency: 'twd',
     livemode: true,
     customer_details: { email: 'buyer@example.com' },
@@ -32,7 +32,7 @@ describe('kit order verification', () => {
   it('reads the product from the Payment Link metadata', () => {
     expect(productSlugOf(session())).toBe('shorts-studio-kit')
     expect(productSlugOf(session({ payment_link: 'plink_1', metadata: { product_slug: 'auto-publish-course' } }))).toBe('auto-publish-course')
-    expect(productSlugOf(session({ payment_link: 'plink_1USfRk5t4WzXNwwb3bDQvCyD', metadata: {} }))).toBe('shorts-studio-kit')
+    expect(productSlugOf(session({ payment_link: 'plink_1USgc15t4WzXNwwbbZUSypV5', metadata: {} }))).toBe('shorts-studio-kit')
     expect(productSlugOf(session({ payment_link: 'plink_unknown', metadata: {} }))).toBeNull()
   })
 
@@ -45,6 +45,14 @@ describe('kit order verification', () => {
     }
   })
 
+  it('delivers 100% promotion-code orders and bundles', () => {
+    expect(checkSession(session({ payment_status: 'no_payment_required', amount_total: 0, total_details: { amount_discount: 39900, amount_shipping: 0, amount_tax: 0 } } as Partial<Stripe.Checkout.Session>)).ok).toBe(true)
+    const bundle = checkSession(session({ amount_total: 79900, payment_link: 'plink_1USgfk5t4WzXNwwb4TEd29ND', metadata: {} }))
+    expect(bundle.ok && bundle.order.product.slug).toBe('all-in-one')
+    const course = checkSession(session({ amount_total: 49000, payment_link: 'plink_1USgdt5t4WzXNwwbmc8Rpd6G', metadata: {} }))
+    expect(course.ok && course.order.product.slug).toBe('claude-code-course')
+  })
+
   it('refuses unpaid or incomplete sessions', () => {
     expect(checkSession(session({ payment_status: 'unpaid' }))).toEqual({ ok: false, reason: 'unpaid' })
     expect(checkSession(session({ status: 'open' }))).toEqual({ ok: false, reason: 'unpaid' })
@@ -52,7 +60,6 @@ describe('kit order verification', () => {
 
   it('refuses unknown products, products without a file, and underpaid links', () => {
     expect(checkSession(session({ payment_link: { id: 'p', metadata: { product_slug: 'nope' } } as unknown as Stripe.PaymentLink })).ok).toBe(false)
-    expect(checkSession(session({ payment_link: { id: 'p', metadata: { product_slug: 'claude-code-course' } } as unknown as Stripe.PaymentLink })).ok).toBe(false)
     expect(checkSession(session({ amount_total: 100 })).ok).toBe(false)
   })
 })

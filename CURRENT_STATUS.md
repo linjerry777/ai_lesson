@@ -2,6 +2,14 @@
 
 Last updated: 2026-10-16 (JERRY.AI "24H ON AIR" redesign is local only; not pushed or deployed)
 
+## 2026-10-21 price war + bundle (Jerry approved)
+
+- Prices: Shorts Studio Kit NT$399 (was 790), auto-publish NT$199 (still hidden), Claude Code course NT$490 (was 990, now buyable via Payment Link; unlock = Google login with the purchase email → `claimKitCourses` writes a `purchases` row), new bundle `all-in-one` NT$799 (kit + course + future kits).
+- Live Payment Links (all redirect to /thanks, promotion codes allowed, tax-ID collection off): kit plink_1USgc15t4WzXNwwbbZUSypV5, course plink_1USgdt5t4WzXNwwbmc8Rpd6G, bundle plink_1USgfk5t4WzXNwwb4TEd29ND. Old NT$790 link plink_1USfRk… deactivated.
+- 100% promotion-code orders (`no_payment_required`) also deliver — use one for the end-to-end test instead of a real charge.
+- LINE community: `NEXT_PUBLIC_LINE_COMMUNITY_URL` (not set yet) shows the join card on /thanks.
+- Stripe CLI on this machine is logged into a different, test-mode account (acct_1TJwS44…, key expired 2026-07); the live account is acct_1TJwRu5t4WzXNwwb.
+
 ## 2026-10-21 Claude vs Codex theme
 
 - Jerry: Codex's quota is exhausted, so Doro夫子/Doro公公 are removed from the site (channels, stickers, clips). Hero is now "兩個 AI 幫我開播，只有一個還醒著。"; new `Versus` section (Claude 隊 ON AIR vs Codex 隊 OFF AIR with a 示意 terminal log); Codex appears in the hero pile as a NO SIGNAL card. OG image rebuilt.
