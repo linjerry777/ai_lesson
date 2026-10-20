@@ -2,6 +2,10 @@
 
 Last updated: 2026-10-16 (JERRY.AI "24H ON AIR" redesign is local only; not pushed or deployed)
 
+## 2026-10-21 Claude vs Codex theme
+
+- Jerry: Codex's quota is exhausted, so Doro夫子/Doro公公 are removed from the site (channels, stickers, clips). Hero is now "兩個 AI 幫我開播，只有一個還醒著。"; new `Versus` section (Claude 隊 ON AIR vs Codex 隊 OFF AIR with a 示意 terminal log); Codex appears in the hero pile as a NO SIGNAL card. OG image rebuilt.
+
 ## 2026-10-21 paid delivery for kits (Stripe Payment Links)
 
 - Shorts Studio Kit is buyable: live Payment Link https://buy.stripe.com/7sYdR262V4ikfCReHu9MY00 (plink_1USfRk5t4WzXNwwb3bDQvCyD, NT$790 TWD, tax-inclusive, tax-ID collection off) on the Stripe account AILESSON (acct_1TJwRu5t4WzXNwwb, UK, payments + payouts active). After payment Stripe redirects to `/thanks?session_id={CHECKOUT_SESSION_ID}`.

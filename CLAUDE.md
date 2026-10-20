@@ -8,7 +8,7 @@ Before working in this repo:
 
 ## 2026-10-16 design + channel line-up (Jerry approved)
 
-- Public site brand is JERRY.AI: "一個人，五個頻道，每天自動開播。" Five channels live in `lib/site.ts` `CHANNELS` with their real daily publish times (訊號滿格 11:30, Doro夫子 18:00, 麻糬QQ 19:30, Doro公公 20:00, 奶烙 no fixed slot). Status of every channel: `docs/channel-status-2026-10-17.md`.
+- 2026-10-21 (Jerry): the site's theme is **Claude vs Codex** — Jerry lets two AIs run channels; Claude's team (訊號滿格 11:30, 麻糬QQ 19:30, 奶烙 口播 no slot) is on air, Codex's team is "OFF AIR, quota exhausted". Doro夫子／Doro公公 (Codex's channels) are removed from the site entirely (no stickers, clips or links). Keep the Codex jokes playful and hedged (示意, "有人說是降智"), never stated as fact. Data: `CHANNELS` and `RIVALRY` in `lib/site.ts`. Status of every channel: `docs/channel-status-2026-10-17.md`.
 - 奶烙 is the talk (口播) channel (2026-10-17, Jerry): the cat hosts, Jerry only voices it. This replaces the "monitor-head" avatar picked earlier in the 口播 session. Never show Jerry's face (his wife asked).
 - 鳴潮二創 is licensed for non-commercial Bilibili use only: no characters, clips or stickers on this site; only the footer link to Bilibili (`FAN_WORK`).
 - Client work lives on Jerry AI Studio (https://jerry-ai-studio-two.vercel.app); this site's studio section is only a hand-off link, do not duplicate case studies here.

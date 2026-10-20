@@ -68,7 +68,7 @@ export default function LinkPage() {
           </>
         )}
 
-        <p className="mt-10 font-mono text-[11px] font-bold tracking-[.16em]">五個頻道</p>
+        <p className="mt-10 font-mono text-[11px] font-bold tracking-[.16em]">Claude 隊的頻道</p>
         <div className="mt-3 grid grid-cols-2 gap-2">
           {CHANNELS.map(c => {
             const href = c.links.youtube ?? c.links.instagram

@@ -11,7 +11,7 @@ export default function FreeSection({ notes, resource }: { notes: NoteRow[]; res
     <section id="free" className="relative scroll-mt-16 px-4 py-24 sm:px-8" aria-labelledby="free-title">
       <div className="mx-auto grid max-w-[1440px] gap-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,.9fr)] lg:items-start">
         <div>
-          <Kicker color="#ff5d8f">03 — FREE / 免費教學</Kicker>
+          <Kicker color="#ff5d8f">04 — FREE / 免費教學</Kicker>
           <h2 id="free-title" className="mt-5 text-[clamp(34px,8.6vw,104px)] font-black leading-[1] tracking-[-.04em]">
             看完影片，<br /><span className="bg-[#ff5d8f] px-2 text-white [box-decoration-break:clone]">照著做</span>就會。
           </h2>

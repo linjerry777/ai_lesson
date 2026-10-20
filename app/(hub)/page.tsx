@@ -3,6 +3,7 @@ import FreeSection from '@/components/home/FreeSection'
 import Hero from '@/components/home/Hero'
 import Shop from '@/components/home/Shop'
 import Studio from '@/components/home/Studio'
+import Versus from '@/components/home/Versus'
 import Workflow from '@/components/home/Workflow'
 import { getPublishedResources, getPublishedVideos } from '@/lib/content'
 
@@ -13,6 +14,7 @@ export default function Home() {
   return (
     <main>
       <Hero />
+      <Versus />
       <Channels />
       <Workflow />
       <FreeSection notes={notes} resource={resource} />

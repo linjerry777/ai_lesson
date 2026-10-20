@@ -10,9 +10,9 @@ ROOT = Path(__file__).resolve().parents[1]
 ST = ROOT / 'public/stickers'
 W, H = 1200, 630
 PAPER, INK, RED = (243, 240, 232), (18, 18, 18), (255, 59, 48)
-COLORS = ['#2747ff', '#0e9f6e', '#ff5d8f', '#ff4a1c', '#f5a524']
+COLORS = ['#2747ff', '#ff5d8f', '#f5a524', '#d97757']
 
-heavy = ImageFont.truetype('C:/Windows/Fonts/NotoSansTC-VF.ttf', 92)
+heavy = ImageFont.truetype('C:/Windows/Fonts/NotoSansTC-VF.ttf', 78)
 heavy.set_variation_by_name('Black')
 mono = ImageFont.truetype('C:/Windows/Fonts/bahnschrift.ttf', 22)
 logo = ImageFont.truetype('C:/Windows/Fonts/impact.ttf', 44)
@@ -27,21 +27,31 @@ d.rounded_rectangle((250, 56, 372, 92), 18, fill=RED)
 d.ellipse((266, 69, 276, 79), fill='white')
 d.text((286, 61), 'ON AIR', font=mono, fill='white')
 
-y = 170
-for line, accent in [('一個人，', None), ('五個頻道，', (0, 2, '#ff5d8f')), ('每天自動開播。', (2, 4, '#ff4a1c'))]:
+y = 185
+for line, accent in [('兩個 AI 幫我開播，', None), ('只有一個', (0, 4, '#ff4a1c')), ('還醒著。', None)]:
     cx = 64
     for i, ch in enumerate(line):
         color = accent[2] if accent and accent[0] <= i < accent[1] else INK
         d.text((cx, y), ch, font=heavy, fill=color)
         cx += d.textlength(ch, font=heavy) * 0.94
-    y += 106
+    y += 92
 
 for i, c in enumerate(COLORS):
     d.rectangle((64 + i * 34, 540, 64 + i * 34 + 26, 556), fill=c)
-d.text((256, 534), 'FIVE CHANNELS · 24H ON AIR', font=mono, fill=(74, 71, 64))
+d.text((256, 534), 'CLAUDE vs CODEX', font=mono, fill=(74, 71, 64))
 
-pile = [('mochi', 850, 40, 190, 5, False), ('doro', 1000, 70, 180, 8, False), ('xun', 660, 90, 220, -6, False),
-        ('doro', 980, 320, 190, -7, True), ('nailao', 830, 260, 170, -3, False)]
+# Codex's corner: a powered-off monitor card.
+cx0, cy0 = 990, 360
+codex = Image.new('RGBA', (200, 180), (0, 0, 0, 0))
+cd = ImageDraw.Draw(codex)
+cd.rounded_rectangle((0, 0, 199, 179), 16, fill=(38, 40, 44), outline='white', width=6)
+cd.rounded_rectangle((18, 18, 181, 128), 8, fill=(22, 24, 27))
+cd.text((100, 73), 'NO SIGNAL', font=ImageFont.truetype('C:/Windows/Fonts/impact.ttf', 26), fill=(138, 143, 152), anchor='mm')
+cd.text((100, 154), 'CODEX  OFF AIR', font=mono, fill=(201, 204, 210), anchor='mm')
+codex = codex.rotate(9, expand=True, resample=Image.BICUBIC)
+img.paste(codex, (cx0, cy0), codex)
+
+pile = [('mochi', 860, 40, 200, 5, False), ('xun', 690, 110, 220, -6, False), ('nailao', 830, 280, 175, -3, False)]
 for name, px, py, w, r, mirror in pile:
     s = Image.open(ST / f'{name}.webp').convert('RGBA')
     if mirror:

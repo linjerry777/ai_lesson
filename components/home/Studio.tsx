@@ -7,7 +7,7 @@ export default function Studio() {
     <section id="studio" className="relative scroll-mt-16 overflow-hidden border-t-2 border-[var(--ink)] bg-[#fafaf8] px-4 py-20 sm:px-8" aria-labelledby="studio-title">
       <div className="mx-auto grid max-w-[1440px] items-end gap-10 lg:grid-cols-[minmax(0,1fr)_auto]">
         <div>
-          <p className="flex items-center gap-4 font-mono text-[11px] tracking-[.2em]">05 <span className="h-px w-10 bg-[var(--ink)]" /> STUDIO / 接案</p>
+          <p className="flex items-center gap-4 font-mono text-[11px] tracking-[.2em]">06 <span className="h-px w-10 bg-[var(--ink)]" /> STUDIO / 接案</p>
           <h2 id="studio-title" className="font-serif-tc mt-8 text-[clamp(36px,4.6vw,72px)] font-light leading-[1.15]">你的 AI 自動化，也可以交給我。</h2>
           <p className="mt-5 max-w-2xl text-[16px] leading-8 text-[var(--ink-2)]">AI 短影音流水線、網站與金流、LINE 與內部自動化工具。做過的案子和合作方式，都整理在 Jerry AI Studio。</p>
           <div className="mt-8 flex flex-wrap gap-3">

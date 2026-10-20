@@ -16,12 +16,28 @@ interface PileSticker {
 }
 
 const PILE: PileSticker[] = [
-  { src: 'mochi', alt: '麻糬', x: 37, y: 0, w: 31, r: 5, tag: { label: 'MOCHI', name: '麻糬QQ', color: '#ff5d8f', ink: '#fff', x: 60, y: 26, r: 7 } },
-  { src: 'doro', alt: 'Doro夫子', x: 67, y: 4, w: 31, r: 8, tag: { label: 'DORO', name: 'Doro夫子', color: '#0e9f6e', ink: '#fff', x: 22, y: 82, r: -4 } },
-  { src: 'xun', alt: '小訊', x: 1, y: 10, w: 35, r: -6, tag: { label: 'XUN', name: '訊號滿格', color: '#2747ff', ink: '#fff', x: 4, y: 84, r: -4 } },
-  { src: 'doro', alt: 'Doro公公', x: 64, y: 50, w: 33, r: -7, mirror: true, tag: { label: 'DORO', name: 'Doro公公', color: '#ff4a1c', ink: '#fff', x: 30, y: 80, r: 5 } },
-  { src: 'nailao', alt: '奶烙（橘白貓）', x: 36, y: 38, w: 27, r: -3, tag: { label: 'NAILAO', name: '奶烙', color: '#f5a524', ink: '#1a1208', x: 50, y: 86, r: -5 }, bubble: '喵，今天聊 AI' },
+  { src: 'mochi', alt: '麻糬', x: 34, y: 0, w: 32, r: 5, tag: { label: 'MOCHI', name: '麻糬QQ', color: '#ff5d8f', ink: '#fff', x: 60, y: 26, r: 7 } },
+  { src: 'xun', alt: '小訊', x: 0, y: 8, w: 37, r: -6, tag: { label: 'XUN', name: '訊號滿格', color: '#2747ff', ink: '#fff', x: 4, y: 84, r: -4 } },
+  { src: 'codex', alt: 'Codex 隊：額度見底，休息中', x: 67, y: 50, w: 32, r: 8 },
+  { src: 'mochi-love', alt: '麻糬比心', x: 72, y: 2, w: 18, r: 8 },
+  { src: 'nailao', alt: '奶烙（橘白貓）', x: 38, y: 38, w: 28, r: -3, tag: { label: 'NAILAO', name: '奶烙', color: '#f5a524', ink: '#1a1208', x: 50, y: 86, r: -5 }, bubble: '喵，Claude 隊報到' },
 ]
+
+/** Codex's corner of the pile: a powered-off monitor sticker instead of a character. */
+function CodexCard({ label }: { label: string }) {
+  return (
+    <div role="img" aria-label={label} className="sticker-img select-none rounded-[14px] border-[6px] border-white bg-[#26282c] p-3 text-[#c9ccd2]">
+      <div className="tv-static flex aspect-[4/3] flex-col items-center justify-center rounded-md border-2 border-[#3a3d42] bg-[#16181b] text-center">
+        <span className="font-display text-[clamp(16px,2.2vw,32px)] leading-none tracking-[.06em] text-[#8a8f98]">NO SIGNAL</span>
+        <span className="mt-1 font-mono text-[clamp(9px,.8vw,11px)] text-[#6b7079]">quota exceeded · zzz</span>
+      </div>
+      <div className="mt-2 flex items-center justify-between font-mono text-[clamp(9px,.85vw,12px)] font-bold">
+        <span className="tracking-[.12em]">CODEX 隊</span>
+        <span className="rounded-full bg-[#3a3d42] px-2 py-0.5 text-[#9aa0a8]">OFF AIR</span>
+      </div>
+    </div>
+  )
+}
 
 /**
  * The hero's pile of die-cut stickers. They drop in on load and can be dragged
@@ -66,13 +82,15 @@ export default function StickerPile() {
             onPointerUp={up}
             onPointerCancel={up}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={`/stickers/${s.src}.webp`}
-              alt={s.alt}
-              draggable={false}
-              className={`sticker-img block h-auto w-full ${s.mirror ? '-scale-x-100' : ''}`}
-            />
+            {s.src === 'codex' ? <CodexCard label={s.alt} /> : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={`/stickers/${s.src}.webp`}
+                alt={s.alt}
+                draggable={false}
+                className={`sticker-img block h-auto w-full ${s.mirror ? '-scale-x-100' : ''}`}
+              />
+            )}
             {s.tag && (
               <span
                 className="absolute whitespace-nowrap rounded-[3px] px-2.5 py-1 shadow-[2px_2px_0_var(--ink)]"

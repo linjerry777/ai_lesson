@@ -17,9 +17,9 @@ export default function Workflow() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/stickers/xun-explain.webp" alt="" loading="lazy" className="sticker-img pointer-events-none absolute right-6 top-16 hidden w-[150px] rotate-6 lg:block" />
       <div className="mx-auto max-w-[1440px]">
-        <Kicker color="#2747ff" className="text-[#c9c4b8]">02 — BEHIND THE SCENES / 幕後</Kicker>
+        <Kicker color="#2747ff" className="text-[#c9c4b8]">03 — BEHIND THE SCENES / 幕後</Kicker>
         <h2 id="workflow-title" className="mt-5 max-w-4xl text-[clamp(34px,8.6vw,104px)] font-black leading-[1] tracking-[-.04em]">
-          一個點子，<br />自動長成<span className="text-[#f5a524]">五支</span>影片。
+          一個點子，<br />自動長成<span className="text-[#f5a524]">好幾支</span>影片。
         </h2>
         <ol className="mt-16 grid border-t border-white/25 md:grid-cols-5">
           {STEPS.map((step, i) => (

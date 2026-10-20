@@ -5,10 +5,10 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ailesson-tw
 
 export const SITE = {
   name: 'JERRY.AI',
-  manifesto: '一個人，五個頻道，每天自動開播。',
+  manifesto: '一個人，兩個 AI，每天自動開播。',
   tagline: '把 AI 工作流做成你也能跑起來的東西',
   description:
-    '一個人用 AI 經營五個頻道。這裡有每支影片的重點筆記、可直接複製的 prompt、免費教學，以及照著貼就能跑的 AI 工作流套件。',
+    '一個人讓 Claude 和 Codex 各自經營頻道，看誰撐得久。這裡有每支影片的重點筆記、可直接複製的 prompt、免費教學，以及照著貼就能跑的 AI 工作流套件。',
   contactEmail: 'donutai08@gmail.com',
   studioUrl: 'https://jerry-ai-studio-two.vercel.app/',
 }
@@ -60,25 +60,11 @@ export const CHANNELS: Channel[] = [
     links: { youtube: yt('UCICMyW4asSzUxY2Bmkic7dQ'), instagram: ig('fullsignaltw') },
   },
   {
-    key: 'doro-fuzi', name: 'Doro夫子', code: 'DORO', hour: 18,
-    tagline: '科技日更，一則新聞拆成一分鐘',
-    description: 'Doro 夫子把官方公告與新功能，拆成看得懂的重點。',
-    color: '#0e9f6e', ink: '#ffffff', sticker: 'doro', clip: 'doro-fuzi',
-    links: { youtube: yt('UC54R75dyYA1bFIILBGM2k0w'), instagram: ig('_doro1998ai') },
-  },
-  {
     key: 'mochi', name: '麻糬QQ', code: 'MOCHI', hour: 19.5,
     tagline: '人類圖鑑短劇＋未解之謎紀錄片',
     description: '麻糬和她頭上的小麻糬，每天演一種「你是哪一派」；週末追一樁歷史懸案。',
     color: '#ff5d8f', ink: '#ffffff', sticker: 'mochi', clip: 'mochi-qq',
     links: { youtube: yt('UC2vBS0u5x6TWYjyxibH4MxA'), instagram: ig('mochiqqtw') },
-  },
-  {
-    key: 'doro-gonggong', name: 'Doro公公', code: 'DORO', hour: 20,
-    tagline: '娛樂日更，生活小劇場',
-    description: '說好只看五分鐘，天就亮了。Doro 公公的日常廢片。',
-    color: '#ff4a1c', ink: '#ffffff', sticker: 'doro', mirror: true, clip: 'doro-gonggong',
-    links: { youtube: yt('UCR50f1f7Ep81YsZOzUj6uQQ'), instagram: ig('_doro1998') },
   },
   {
     key: 'nailao', name: '奶烙', code: 'NAILAO', note: '口播籌備中',
@@ -89,6 +75,16 @@ export const CHANNELS: Channel[] = [
     links: { instagram: ig('_nailao1998') },
   },
 ]
+
+/**
+ * The running gag of the site: Jerry lets two AIs run channels side by side.
+ * Claude's team is on air; Codex's team ran out of quota (its two daily channels
+ * are paused and deliberately not featured on the site).
+ */
+export const RIVALRY = {
+  claude: { name: 'Claude', team: 'Claude 隊', status: 'ON AIR', note: '每天準時開播' },
+  codex: { name: 'Codex', team: 'Codex 隊', status: 'OFF AIR', note: '額度見底，休息中' },
+}
 
 /** Fan animation lives on Bilibili only (non-commercial licence); linked, never featured. */
 export const FAN_WORK = { label: '鳴潮同人動畫', site: 'B站 · 毛里球OVO', url: 'https://space.bilibili.com/6559547' }

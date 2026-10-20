@@ -69,8 +69,8 @@ export default function Channels() {
     <section id="channels" className="scroll-mt-16 pt-20" aria-labelledby="channels-title">
       <div className="mx-auto grid max-w-[1440px] gap-6 px-4 pb-14 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
-          <Kicker>01 — PROGRAMME / 今日節目表</Kicker>
-          <h2 id="channels-title" className="mt-5 text-[clamp(34px,8.6vw,104px)] font-black leading-[1] tracking-[-.04em]">五個頻道，<br />從早播到晚。</h2>
+          <Kicker>02 — PROGRAMME / Claude 隊節目表</Kicker>
+          <h2 id="channels-title" className="mt-5 text-[clamp(34px,8.6vw,104px)] font-black leading-[1] tracking-[-.04em]">還醒著的這一隊，<br />從早播到晚。</h2>
         </div>
         <p className="max-w-sm text-[15px] leading-7 text-[var(--ink-2)]">往下滑，時間會往前走。時段是每天實際發片的時間（台北），影片片段都是頻道裡播出的內容。</p>
       </div>

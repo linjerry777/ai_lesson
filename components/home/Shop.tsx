@@ -15,7 +15,7 @@ export default function Shop() {
     <section id="shop" className="relative scroll-mt-16 overflow-hidden border-t-2 border-[var(--ink)] bg-[#fafaf8] px-4 pt-24 sm:px-8" aria-labelledby="shop-title">
       <div className="mx-auto grid max-w-[1440px] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,.85fr)]">
         <div className="pb-20 lg:pb-28">
-          <p className="flex items-center gap-4 font-mono text-[11px] tracking-[.2em]">04 <span className="h-px w-10 bg-[var(--ink)]" /> SHOP</p>
+          <p className="flex items-center gap-4 font-mono text-[11px] tracking-[.2em]">05 <span className="h-px w-10 bg-[var(--ink)]" /> SHOP</p>
           <h2 id="shop-title" className="mt-8 leading-[.92]">
             <span className="font-serif block text-[clamp(56px,8vw,132px)] tracking-[-.02em]">Shorts Studio</span>
             <span className="font-serif-tc mt-2 block text-[clamp(36px,4.8vw,80px)] font-light tracking-[.02em]">AI 每日短影音工作流</span>
