@@ -1,82 +1,187 @@
 import { ArrowUpRight } from 'lucide-react'
-import { CHANNELS, PLATFORM_LABELS, pad2, slotLabel, type Channel, type PlatformKey } from '@/lib/site'
 import ClipVideo from '@/components/site/ClipVideo'
-import Schedule from '@/components/site/Schedule'
 import { Kicker } from '@/components/site/ui'
+import { CHANNELS, CODEX_CHANNELS, MATCHUPS, PLATFORM_LABELS, RIVALRY, getChannel, slotLabel, type PlatformKey } from '@/lib/site'
+import { ago, daysSince, type LatestVideo } from '@/lib/youtube'
 
-function Slot({ c, i }: { c: Channel; i: number }) {
-  const links = Object.entries(c.links) as [PlatformKey, string][]
+export type Feeds = Record<string, LatestVideo[]>
+
+const views = (n: number | null) => (n === null ? '—' : n.toLocaleString('en-US'))
+const total = (videos: LatestVideo[]) => videos.reduce((sum, video) => sum + (video.views ?? 0), 0)
+
+function Links({ links, dark }: { links: Partial<Record<PlatformKey, string>>; dark?: boolean }) {
   return (
-    <article id={`ch-${c.key}`} data-slot={i} className="grid scroll-mt-16 border-t-2 border-[var(--ink)] lg:min-h-[88svh] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-      <div className="reveal flex flex-col justify-center px-4 py-12 sm:px-8 lg:py-16 lg:pl-[max(2rem,calc((100vw-1440px)/2+2rem))]">
-        <p className="flex flex-wrap items-center gap-3 font-mono text-[11px] font-bold tracking-[.16em]">
-          <span className="h-2.5 w-2.5 rounded-full" style={{ background: c.color }} aria-hidden="true" />
-          CH {pad2(i + 1)}
-          <span className="h-3 w-px bg-[var(--ink)]" aria-hidden="true" />
-          <span className="text-[var(--ink-2)]">{c.code}</span>
-        </p>
-        {c.hour !== undefined ? (
-          <p className="font-display text-outline mt-4 text-[clamp(92px,12.5vw,210px)] leading-[.86]" aria-label={`每天 ${slotLabel(c)} 發片`}>{slotLabel(c)}</p>
-        ) : (
-          <p className="mt-4 flex items-end gap-4">
-            <span className="font-display text-outline text-[clamp(92px,12.5vw,210px)] leading-[.86]" aria-hidden="true">SOON</span>
-            <span className="mb-3 bg-[var(--ink)] px-2 py-1 text-sm font-bold text-[var(--paper)]">{c.note}</span>
-          </p>
-        )}
-        <h3 className="mt-3 text-[clamp(52px,6.6vw,112px)] font-black leading-[1] tracking-[-.04em]">{c.name}</h3>
-        <p className="mt-4 text-xl font-bold leading-snug sm:text-2xl">{c.tagline}</p>
-        <p className="mt-3 max-w-md text-[15px] leading-7 text-[var(--ink-2)]">{c.description}</p>
-        {c.credit && <p className="mt-5 border-y border-[var(--rule)] py-2 font-mono text-[11px] font-bold tracking-[.14em]">{c.credit}</p>}
-        <div className="mt-6 flex flex-wrap gap-2.5">
-          {links.length ? links.map(([platform, url]) => (
-            <a key={platform} href={url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1.5 border-2 border-[var(--ink)] bg-[var(--white)] px-4 font-mono text-[12px] font-bold tracking-[.1em] transition hover:-translate-y-0.5 hover:shadow-[3px_3px_0_var(--ink)]">
-              {PLATFORM_LABELS[platform].toUpperCase()} <ArrowUpRight size={14} aria-hidden="true" />
-            </a>
-          )) : (
-            <span className="inline-flex min-h-11 items-center border-2 border-dashed border-[var(--ink)] px-4 font-mono text-[12px] font-bold tracking-[.1em] text-[var(--ink-2)]">頻道整理中 · COMING SOON</span>
-          )}
-        </div>
-      </div>
+    <div className="flex flex-wrap gap-2">
+      {(Object.entries(links) as [PlatformKey, string][]).map(([platform, url]) => (
+        <a key={platform} href={url} target="_blank" rel="noopener noreferrer" className={`inline-flex min-h-9 items-center gap-1 border px-2.5 font-mono text-[11px] font-bold tracking-[.08em] transition hover:-translate-y-0.5 ${dark ? 'border-[#4a4e55] text-[#c9ccd2]' : 'border-[var(--ink)] bg-[var(--white)]'}`}>
+          {PLATFORM_LABELS[platform]} <ArrowUpRight size={12} aria-hidden="true" />
+        </a>
+      ))}
+    </div>
+  )
+}
 
-      <div className="relative flex min-h-[560px] items-center justify-center overflow-hidden px-6 py-14 lg:min-h-0" style={{ background: c.color, color: c.ink }}>
-        <span className="font-display pointer-events-none absolute -bottom-[0.18em] -left-[0.04em] select-none text-[clamp(220px,34vw,520px)] leading-none opacity-[.13]" aria-hidden="true">{pad2(i + 1)}</span>
-        <span className="absolute right-4 top-1/2 hidden -translate-y-1/2 font-mono text-[11px] font-bold tracking-[.3em] [writing-mode:vertical-rl] sm:block" aria-hidden="true">
-          SLOT {pad2(i + 1)} / {pad2(CHANNELS.length)}
-        </span>
-        <div className={`reveal relative w-[min(68vw,300px)]`}>
-          <div className={`relative overflow-hidden border-[3px] border-[var(--ink)] bg-black shadow-[10px_10px_0_var(--ink)] aspect-[9/16]`}>
-            <ClipVideo name={c.clip} label={`${c.name} 片段`} className="h-full w-full object-cover" />
-            <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 bg-black/55 px-2 py-1 font-mono text-[10px] font-bold tracking-[.14em] text-white">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--red)]" aria-hidden="true" />REC · {c.code}
-            </span>
+interface SideProps {
+  id: string
+  team: 'claude' | 'codex'
+  name: string
+  tagline: string
+  sticker?: string
+  color: string
+  links: Partial<Record<PlatformKey, string>>
+  videos: LatestVideo[]
+  now: number
+}
+
+/** One channel in a round: who it is, its newest upload and the two before it. */
+function Side({ id, team, name, tagline, sticker, color, links, videos, now }: SideProps) {
+  const dark = team === 'codex'
+  const [latest, ...rest] = videos
+  const idle = latest ? daysSince(latest.publishedAt, now) : null
+  return (
+    <article id={id} className={`relative min-w-0 scroll-mt-20 border-2 border-[var(--ink)] p-4 sm:p-5 ${dark ? 'tv-static bg-[#1b1d20] text-[#c9ccd2]' : 'bg-[var(--white)]'}`}>
+      <div className="relative z-10">
+        <header className="flex items-start gap-3">
+          {sticker ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={`/stickers/${sticker}.webp`} alt="" loading="lazy" className={`sticker-img h-16 w-auto shrink-0 ${dark ? 'opacity-80 grayscale-[.6]' : ''}`} />
+          ) : (
+            <span className="grid h-16 w-12 shrink-0 place-items-center border-2 border-[#4a4e55] font-mono text-[9px] font-bold leading-tight text-[#6b7079]">NO<br />SIG</span>
+          )}
+          <div className="min-w-0 flex-1">
+            <p className="flex items-center gap-2 font-mono text-[10px] font-bold tracking-[.14em]" style={{ color: dark ? '#8a8f98' : color }}>
+              {dark ? RIVALRY.codex.team : RIVALRY.claude.team}
+              {dark && idle !== null && idle >= 1.5 && <span className="rounded-full bg-[#3a3d42] px-2 py-0.5 text-[#c9ccd2]">停更 {Math.floor(idle)} 天</span>}
+              {!dark && <span className="rounded-full bg-[var(--ink)] px-2 py-0.5 text-white">ON AIR</span>}
+            </p>
+            <h3 className={`mt-1 text-[clamp(24px,2.4vw,36px)] font-black leading-none ${dark ? 'text-[#e2e4e8]' : ''}`}>{name}</h3>
+            <p className={`mt-1 text-sm font-bold ${dark ? 'text-[#8a8f98]' : 'text-[var(--ink-2)]'}`}>{tagline}</p>
           </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={`/stickers/${c.sticker}.webp`}
-            alt=""
-            loading="lazy"
-            className={`sticker-img pointer-events-none absolute -right-[30%] bottom-[-8%] w-[56%] sm:-right-[58%] sm:bottom-[-6%] sm:w-[78%]`}
-            style={{ transform: `rotate(${i % 2 ? -7 : 6}deg)${c.mirror ? ' scaleX(-1)' : ''}` }}
-          />
-        </div>
+        </header>
+
+        {latest ? (
+          <a href={latest.url} target="_blank" rel="noopener noreferrer" className="group mt-4 grid grid-cols-[96px_minmax(0,1fr)] gap-4 sm:grid-cols-[112px_minmax(0,1fr)]">
+            <span className={`relative block aspect-[9/16] overflow-hidden border-2 border-[var(--ink)] bg-black ${dark ? 'opacity-70 grayscale' : ''}`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={latest.thumb} alt="" loading="lazy" className="h-full w-full object-cover" />
+              <span className="absolute left-1 top-1 bg-black/70 px-1.5 py-0.5 font-mono text-[9px] font-bold tracking-[.1em] text-white">LATEST</span>
+            </span>
+            <span className="flex min-w-0 flex-col">
+              <span className={`font-mono text-[11px] font-bold tracking-[.06em] ${dark ? 'text-[#8a8f98]' : 'text-[var(--ink-2)]'}`}>最新一支 · {ago(latest.publishedAt, now)}</span>
+              <span className="mt-1 line-clamp-3 text-[15px] font-bold leading-6 group-hover:underline">{latest.title}</span>
+              <span className="font-display mt-auto pt-2 text-[clamp(28px,2.6vw,40px)] leading-none">{views(latest.views)}<span className="ml-1.5 font-mono text-[11px] font-bold">次觀看</span></span>
+            </span>
+          </a>
+        ) : (
+          <p className="mt-4 text-sm opacity-70">暫時讀不到這個頻道的最新影片。</p>
+        )}
+
+        {rest.length > 0 && (
+          <ul className={`mt-4 border-t text-[13px] ${dark ? 'border-[#3a3d42]' : 'border-[var(--rule)]'}`}>
+            {rest.map(video => (
+              <li key={video.id} className={`border-b ${dark ? 'border-[#3a3d42]' : 'border-[var(--rule)]'}`}>
+                <a href={video.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 py-2 hover:underline">
+                  <span className="min-w-0 flex-1 truncate">{video.title}</span>
+                  <span className="shrink-0 font-mono text-[11px] tabular-nums opacity-80">{views(video.views)} · {ago(video.publishedAt, now)}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="mt-4"><Links links={links} dark={dark} /></div>
       </div>
     </article>
   )
 }
 
-export default function Channels() {
+/** Who is ahead in a round: a stalled channel loses; otherwise recent views decide. */
+function verdict(claudeName: string, codexName: string, claude: LatestVideo[], codex: LatestVideo[], now: number) {
+  const idle = codex[0] ? daysSince(codex[0].publishedAt, now) : null
+  if (idle !== null && idle >= 1.5) return `${codexName} 已經 ${Math.floor(idle)} 天沒上片，${claudeName} 繼續每天更新。`
+  const a = total(claude)
+  const b = total(codex)
+  if (!a && !b) return '兩邊都在更新，比分整理中。'
+  return a >= b ? `近 3 支觀看 ${claudeName} 領先。` : `近 3 支觀看 ${codexName} 暫時領先，Claude 隊要加油。`
+}
+
+export default function Channels({ feeds, now }: { feeds: Feeds; now: number }) {
+  const nailao = getChannel('nailao')!
   return (
-    <section id="channels" className="scroll-mt-16 pt-20" aria-labelledby="channels-title">
-      <div className="mx-auto grid max-w-[1440px] gap-6 px-4 pb-14 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end">
-        <div>
-          <Kicker>02 — PROGRAMME / Claude 隊節目表</Kicker>
-          <h2 id="channels-title" className="mt-5 text-[clamp(34px,8.6vw,104px)] font-black leading-[1] tracking-[-.04em]">還醒著的這一隊，<br />從早播到晚。</h2>
+    <section id="channels" className="scroll-mt-16 border-b-2 border-[var(--ink)] px-4 py-16 sm:px-8 lg:py-20" aria-labelledby="channels-title">
+      <div className="mx-auto max-w-[1440px]">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <Kicker color="#d97757">01 — THE MATCH / 同類對決</Kicker>
+            <h2 id="channels-title" className="mt-3 text-[clamp(30px,4.2vw,64px)] font-black leading-[1.04] tracking-[-.04em]">
+              同一個類型，看<span className="text-[var(--red)]">誰還在更新</span>。
+            </h2>
+          </div>
+          <p className="max-w-md text-[14px] leading-7 text-[var(--ink-2)]">兩隊用同一個人的帳號、同一套查證與檢查標準。下面是兩邊頻道在 YouTube 上的最新影片，每 30 分鐘自動更新。</p>
         </div>
-        <p className="max-w-sm text-[15px] leading-7 text-[var(--ink-2)]">往下滑，時間會往前走。時段是每天實際發片的時間（台北），影片片段都是頻道裡播出的內容。</p>
+
+        <div className="mt-10 space-y-12">
+          {MATCHUPS.map(match => {
+            const claude = getChannel(match.claude)!
+            const codex = CODEX_CHANNELS.find(c => c.key === match.codex)!
+            const claudeVideos = feeds[claude.key] ?? []
+            const codexVideos = feeds[codex.key] ?? []
+            const a = total(claudeVideos)
+            const b = total(codexVideos)
+            const share = a + b ? Math.round((a / (a + b)) * 100) : 50
+            return (
+              <div key={match.key} className="reveal">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-[var(--ink)] pb-2">
+                  <p className="flex items-baseline gap-3">
+                    <span className="font-mono text-[11px] font-bold tracking-[.16em] text-[var(--ink-2)]">{match.round}</span>
+                    <span className="text-2xl font-black">{match.label}</span>
+                  </p>
+                  <p className="text-sm font-bold">{verdict(claude.name, codex.name, claudeVideos, codexVideos, now)}</p>
+                </div>
+                <div className="mt-4 grid grid-cols-[minmax(0,1fr)] items-stretch gap-3 lg:grid-cols-[minmax(0,1fr)_72px_minmax(0,1fr)]">
+                  <Side id={`ch-${claude.key}`} team="claude" name={claude.name} tagline={`${claude.tagline} · 每天 ${slotLabel(claude)}`} sticker={claude.sticker} color={claude.color} links={claude.links} videos={claudeVideos} now={now} />
+                  <div className="flex items-center justify-center" aria-hidden="true">
+                    <span className="font-display text-outline text-[clamp(40px,4vw,64px)] leading-none">VS</span>
+                  </div>
+                  <Side id={`ch-${codex.key}`} team="codex" name={codex.name} tagline={codex.tagline} sticker={codex.sticker} color="#8a8f98" links={codex.links} videos={codexVideos} now={now} />
+                </div>
+                <div className="mt-3">
+                  <div className="flex justify-between font-mono text-[11px] font-bold tabular-nums">
+                    <span>{claude.name} {views(a)}</span>
+                    <span className="text-[var(--ink-2)]">近 3 支觀看合計</span>
+                    <span>{views(b)} {codex.name}</span>
+                  </div>
+                  <div className="mt-1 flex h-2.5 overflow-hidden border border-[var(--ink)]" role="img" aria-label={`近 3 支觀看：${claude.name} ${a}，${codex.name} ${b}`}>
+                    <span style={{ width: `${share}%`, background: claude.color }} />
+                    <span className="flex-1 bg-[#3a3d42]" />
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* 奶烙 has no rival: it is the talk channel, hosted by the cat and voiced by Jerry. */}
+        <article id="ch-nailao" className="reveal mt-14 grid scroll-mt-20 items-center gap-6 border-2 border-[var(--ink)] p-5 sm:grid-cols-[auto_minmax(0,1fr)] sm:p-6 lg:grid-cols-[auto_minmax(0,1fr)_auto]" style={{ background: nailao.color, color: nailao.ink }}>
+          <div className="relative mx-auto w-[150px] sm:mx-0">
+            <div className="aspect-[9/16] overflow-hidden border-[3px] border-[var(--ink)] bg-black shadow-[6px_6px_0_var(--ink)]">
+              <ClipVideo name={nailao.clip} label={`${nailao.name} 片段`} className="h-full w-full object-cover" />
+            </div>
+          </div>
+          <div>
+            <p className="font-mono text-[11px] font-bold tracking-[.16em]">SOLO · {nailao.credit}</p>
+            <h3 className="mt-1 text-[clamp(36px,4vw,60px)] font-black leading-none">{nailao.name}</h3>
+            <p className="mt-2 text-xl font-bold">{nailao.tagline}</p>
+            <p className="mt-2 max-w-xl text-[15px] leading-7">{nailao.description}</p>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <span className="bg-[var(--ink)] px-2 py-1 text-sm font-bold text-[var(--paper)]">{nailao.note}</span>
+              <Links links={nailao.links} />
+            </div>
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={`/stickers/${nailao.sticker}.webp`} alt="" loading="lazy" className="sticker-img hidden h-[220px] w-auto rotate-3 lg:block" />
+        </article>
+        <p className="mt-4 font-mono text-[11px] text-[var(--ink-2)]">Claude 隊目前開播 {CHANNELS.length} 台；Codex 隊的兩台頻道排程暫停中。觀看數取自 YouTube 公開資料。</p>
       </div>
-      <Schedule>
-        {CHANNELS.map((c, i) => <Slot key={c.key} c={c} i={i} />)}
-      </Schedule>
     </section>
   )
 }

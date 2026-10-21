@@ -80,13 +80,47 @@ export const CHANNELS: Channel[] = [
 
 /**
  * The running gag of the site: Jerry lets two AIs run channels side by side.
- * Claude's team is on air; Codex's team ran out of quota (its two daily channels
- * are paused and deliberately not featured on the site).
+ * Claude's team is on air; Codex's team ran out of quota, so its channels stop
+ * updating. The homepage pairs them up by genre and compares their latest uploads.
  */
 export const RIVALRY = {
   claude: { name: 'Claude', team: 'Claude 隊', status: 'ON AIR', note: '每天準時開播' },
   codex: { name: 'Codex', team: 'Codex 隊', status: 'OFF AIR', note: '額度見底，休息中' },
 }
+
+export interface RivalChannel {
+  key: string
+  name: string
+  tagline: string
+  team: 'claude' | 'codex'
+  /** YouTube channel id: its public RSS feed supplies the latest uploads. */
+  youtubeId: string
+  links: Partial<Record<PlatformKey, string>>
+  sticker?: string
+}
+
+export const YOUTUBE_IDS: Record<string, string> = {
+  xun: 'UCICMyW4asSzUxY2Bmkic7dQ',
+  mochi: 'UC2vBS0u5x6TWYjyxibH4MxA',
+}
+
+/** Codex's two daily channels (automations paused when the quota ran out). */
+export const CODEX_CHANNELS: RivalChannel[] = [
+  {
+    key: 'doro-fuzi', name: 'Doro夫子', team: 'codex', tagline: '每日科技新聞', youtubeId: 'UC54R75dyYA1bFIILBGM2k0w',
+    links: { youtube: yt('UC54R75dyYA1bFIILBGM2k0w'), instagram: ig('_doro1998ai') },
+  },
+  {
+    key: 'doro-gonggong', name: 'Doro公公', team: 'codex', tagline: '原創小劇場', youtubeId: 'UCR50f1f7Ep81YsZOzUj6uQQ',
+    links: { youtube: yt('UCR50f1f7Ep81YsZOzUj6uQQ'), instagram: ig('_doro1998') }, sticker: 'doro',
+  },
+]
+
+/** Head-to-head rounds on the homepage: same genre, one channel from each team. */
+export const MATCHUPS = [
+  { key: 'tech', round: 'ROUND 1', label: '科技 vs 科技', claude: 'xun', codex: 'doro-fuzi' },
+  { key: 'ent', round: 'ROUND 2', label: '娛樂 vs 娛樂', claude: 'mochi', codex: 'doro-gonggong' },
+] as const
 
 /** Fan animation lives on Bilibili only (non-commercial licence); linked, never featured. */
 export const FAN_WORK = { label: '鳴潮同人動畫', site: 'B站 · 毛里球OVO', url: 'https://space.bilibili.com/6559547' }

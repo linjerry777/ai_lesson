@@ -8,16 +8,23 @@ export interface ResourceRef { slug: string; title: string; summary: string; for
 
 export default function FreeSection({ notes, resource }: { notes: NoteRow[]; resource: ResourceRef | null }) {
   return (
-    <section id="free" className="relative scroll-mt-16 px-4 py-24 sm:px-8" aria-labelledby="free-title">
+    <section id="free" className="relative scroll-mt-16 px-4 py-16 sm:px-8 lg:py-20" aria-labelledby="free-title">
       <div className="mx-auto grid max-w-[1440px] gap-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,.9fr)] lg:items-start">
         <div>
-          <Kicker color="#ff5d8f">04 — FREE / 免費教學</Kicker>
-          <h2 id="free-title" className="mt-5 text-[clamp(34px,8.6vw,104px)] font-black leading-[1] tracking-[-.04em]">
+          <Kicker color="#ff5d8f">02 — FREE / 免費教學</Kicker>
+          <h2 id="free-title" className="mt-3 text-[clamp(30px,4.2vw,64px)] font-black leading-[1.04] tracking-[-.04em]">
             看完影片，<br /><span className="bg-[#ff5d8f] px-2 text-white [box-decoration-break:clone]">照著做</span>就會。
           </h2>
-          <p className="mt-6 max-w-xl text-[16px] leading-8 text-[var(--ink-2)]">每支口播影片都有一頁筆記：重點整理、可以直接複製的 prompt、用到的工具。想動手的，下載免費資源就能開始。</p>
+          <div className="mt-6 flex items-end gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/stickers/xun.webp" alt="小訊" loading="lazy" className="sticker-img h-[110px] w-auto shrink-0 -rotate-3 sm:h-[130px]" />
+            <div className="relative mb-5 max-w-lg border-2 border-[var(--ink)] bg-white px-4 py-3 text-[14px] leading-6 shadow-[4px_4px_0_var(--ink)]">
+              <span className="absolute -left-[9px] bottom-4 h-4 w-4 rotate-45 border-b-2 border-l-2 border-[var(--ink)] bg-white" aria-hidden="true" />
+              <b>小訊：</b>每支影片我都整理成一頁筆記，重點、可以直接複製的 prompt、用到的工具都在裡面。想動手做，先下載右邊的免費資源。
+            </div>
+          </div>
 
-          <div className="mt-12 border-t-2 border-[var(--ink)]">
+          <div className="mt-8 border-t-2 border-[var(--ink)]">
             <p className="flex items-center justify-between py-3 font-mono text-[11px] font-bold tracking-[.16em]">
               LATEST NOTES <Link href="/videos" className="inline-flex items-center gap-1 hover:underline">全部影片筆記 <ArrowRight size={13} aria-hidden="true" /></Link>
             </p>
@@ -41,7 +48,7 @@ export default function FreeSection({ notes, resource }: { notes: NoteRow[]; res
         </div>
 
         {resource && (
-          <div className="relative mt-16 lg:mt-28">
+          <div className="relative mt-10 lg:mt-16">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/stickers/mochi-love.webp" alt="" loading="lazy" className="sticker-img pointer-events-none absolute bottom-full right-3 z-10 w-24 translate-y-[28%] rotate-[8deg]" />
             <Card className="relative p-6 sm:p-8">
