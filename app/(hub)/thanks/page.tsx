@@ -77,12 +77,6 @@ export default async function ThanksPage({ searchParams }: { searchParams: Promi
           </li>
         ))}
       </ul>
-      {SITE.lineCommunityUrl && (
-        <a href={SITE.lineCommunityUrl} target="_blank" rel="noopener noreferrer" className="mt-6 flex items-center justify-between gap-4 border-2 border-[#06c755] bg-[#06c755] p-5 font-bold text-white">
-          <span>加入 LINE 社群：卡住就問，我會回<span className="mt-1 block text-sm font-normal">常見問題會整理回教材，所有買家都看得到</span></span>
-          <ArrowUpRight size={20} aria-hidden="true" />
-        </a>
-      )}
       <div className="mt-12 border-t border-[#121212]/25 pt-8 text-[15px] leading-8 text-[var(--ink-2)]">
         <p><strong className="text-[var(--ink)]">請把這一頁加入書籤。</strong>之後有新版（或全套加入新工作流），回到這一頁就能下載。</p>
         <p className="mt-3">卡住了或下載有問題，來信 <a href={contact} className="underline">{SITE.contactEmail}</a>，附上你的付款 Email。</p>
