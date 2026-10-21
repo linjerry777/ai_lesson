@@ -55,6 +55,8 @@ const CATALOGUE: Product[] = [
     status: 'preorder',
     sticker: 'mochi',
     pack: { path: 'packs/shorts-script-pack-v1.json' },
+    paymentLink: 'https://buy.stripe.com/fZu00cajbbKM4Yd8j69MY04',
+    paymentLinkId: 'plink_1USx4T5t4WzXNwwby0UJsVd5',
     includes: [
       { title: '13 組填空式指令', text: '每組都寫好「什麼時候用」，把【】換成你的內容就能送出。' },
       { title: '4 種腳本格式', text: '口播重點、○○的人分四種、故事反轉、今日三則新聞，都是我們頻道每天在用的。' },
