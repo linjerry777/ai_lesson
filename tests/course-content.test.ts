@@ -20,4 +20,17 @@ describe('course delivery and access', () => {
     expect(getLearnerCourses([{ product_id: 'claude-code', tier: 'self', stripe_session_id: 'cs_test_valid' }], true).map(course => course.slug)).toEqual(['starter-free'])
     expect(getLearnerCourses([{ product_id: 'claude-code', tier: 'self', stripe_session_id: 'cs_test_valid' }, { product_id: 'codex-remotion', tier: 'fake', stripe_session_id: 'cs_test_other' }], false).map(course => course.slug)).toEqual(['starter-free', 'claude-code'])
   })
+
+  it('unlocks courses bought through a Payment Link in either Stripe mode', () => {
+    const purchases = [{ product_id: 'claude-code', tier: 'self', stripe_session_id: 'link:cs_live_abc:claude-code' }]
+    expect(getLearnerCourses(purchases, false).map(course => course.slug)).toEqual(['starter-free', 'claude-code'])
+    expect(getLearnerCourses(purchases, true).map(course => course.slug)).toEqual(['starter-free', 'claude-code'])
+  })
+
+  it('does not point learners at the old course website', async () => {
+    const { lessons } = await import('@/lib/course-data')
+    const text = JSON.stringify(lessons)
+    expect(text).not.toContain('ailesson-two.vercel.app')
+    expect(text).not.toContain('components/sections/')
+  })
 })

@@ -87,7 +87,7 @@ export const workbooks: Record<string, Record<string, Workbook>> = {
       exercise: '先核對有效 sk_test_、兩個 one-time TWD Price、每個 webhook 的 whsec_。Checkout 只能由伺服器挑 Price，metadata 帶 app_id、已驗證 user_id、product_id、tier。Webhook 用原始 request.text() 驗簽，再讀回 Stripe Session、Price 與 payment_intent，確認 paid、幣別、金額、退款狀態。以 (app_id,stripe_session_id) 唯一鍵處理重送，購買寫入後再回讀。測試卡只能在 Sandbox 使用；沒有有效 key 先跑本機合成事件，明確標示未測 Stripe 端。',
       code: { lang: 'sql', content: '-- 請在自己的 Sandbox DB 建表；共享 DB 須先看既有 schema。\n-- 主課售價 NT$990，Stripe amount 是 99000，存 integer。\ncreate unique index if not exists purchases_app_session_uidx\n  on public.purchases(app_id, stripe_session_id);\n-- 學員只有自己的 app-scoped SELECT；不得 INSERT/UPDATE 購買許可權。\n-- Webhook 驗簽成功、確認付清之後，服務端才可以寫入。' },
       evidence: 'sandbox-payment-receipt.md：Session/Event ID、事件送達、app/product、金額最小單位、DB 回讀和 learner 結果，不儲存 key 或測試卡欄位。',
-      checklist: ['NT$990 對應 99000；NT$1490 對應149000', '改 body 或假簽章回400且零寫入', '未付清與錯商品不能解鎖', '相同事件重送只有一筆', 'A 的 Session 不能讓 B 學員解鎖', 'Sandbox 紀錄不當作 live 購買', '退款／爭議會撤銷課程許可權'], reference: docs.currency,
+      checklist: ['NT$490 對應 49000；NT$1490 對應 149000', '改 body 或假簽章回400且零寫入', '未付清與錯商品不能解鎖', '相同事件重送只有一筆', 'A 的 Session 不能讓 B 學員解鎖', 'Sandbox 紀錄不當作 live 購買', '退款／爭議會撤銷課程許可權'], reference: docs.currency,
     },
     ch05: {
       outcome: '用固定網域驗收登入和 Sandbox 付款，留下可回復的部署證據。',

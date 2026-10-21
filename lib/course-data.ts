@@ -172,12 +172,17 @@ const baseLessons: Lesson[] = [
       {
         title: '告訴 Claude 你要什麼樣的網站',
         body: '專案建好之後，繼續在 Claude Code Desktop 貼這段：',
-        claude: `幫我參考這個網站的設計，幫我建一個一樣的課程銷售首頁：
-https://ailesson-two.vercel.app/
+        claude: `照我剛才的需求單，幫我建一個課程銷售首頁，由上到下：
+1. Hero：大標題、一句副標、「立即購買」按鈕
+2. 你會學到什麼：3–6 個重點
+3. 課程大綱：每章一行標題＋一句說明
+4. 價格：一個方案、價格、包含什麼、不包含什麼
+5. FAQ：5 題
+6. 頁尾：聯絡方式、隱私權、退費政策連結
 
-把課程名稱、文案換成我的內容，整體版型、配色、風格都照這個網站做。
-建完之後告訴我怎麼在瀏覽器預覽。`,
-        warning: '不要一次叫它做太多。先讓它建好整體、能在瀏覽器看到之後，再慢慢調整細節。如果 build 出現「找不到 brand-500 顏色」或網頁沒有橘色，告訴 Claude：「幫我在 globals.css 的 @theme 裡定義 brand-50 到 brand-900 的橘色系顏色，用 oklch 格式」，它會補上去。',
+品牌主色用 [你選的顏色]，在 Tailwind 設定裡定義成 brand-50 到 brand-900，全站只用這組主色。
+手機版要先能看。建完之後告訴我怎麼在瀏覽器預覽。`,
+        warning: '不要一次叫它做太多。先讓它建好整體、能在瀏覽器看到之後，再慢慢調整細節。如果 build 出現「找不到 brand-500」，告訴 Claude：「依照目前安裝的 Tailwind 版本，把 brand-50 到 brand-900 定義成我的主色」（v3 寫在 tailwind.config.ts，v4 寫在 globals.css 的 @theme）。',
         tip: '先描述版面與閱讀需求，再逐區調整。設計外掛是選用工具，只有在已安裝、已理解許可權時使用。',
       },
       {
@@ -185,7 +190,7 @@ https://ailesson-two.vercel.app/
         body: '看到不滿意的地方，不要自己去改程式碼，繼續告訴 Claude：',
         claude: `Hero 的大標題改成這樣：
 第一行「你現在看到的」
-第二行「這個網站」（用橘色 brand-500）
+第二行「這個網站」（用主色 brand-500）
 第三行「是 Claude Code 做的」
 
         然後在 Hero 右側加一個深色 terminal 風格的裝飾方塊，裡面顯示幾行假的 claude 指令輸出，讓人一看就知道這是 AI 生的。`,
@@ -232,10 +237,10 @@ https://ailesson-two.vercel.app/
     steps: [
       {
         title: '建立 Supabase 專案',
-        body: '登入 Supabase（帳號在 ch00 已建好），點右上角「New project」建一個新專案。建完之後點左側「Project Settings → API」，把這三個值複製起來：\n\n• Project URL（長得像 https://xxx.supabase.co）\n• anon / public key（很長的 JWT）\n• service_role key（另一個，許可權更高）',
+        body: '登入 Supabase（帳號在 ch00 已建好），點右上角「New project」建一個新專案。建完之後點左側「Project Settings → API Keys」，把這三個值複製起來：\n\n• Project URL（長得像 https://xxx.supabase.co）\n• Publishable key（sb_publishable_ 開頭，可以放前端）\n• Secret key（sb_secret_ 開頭，許可權最高，只能放後端）\n\n舊專案可能只看到「Legacy API keys」分頁的 anon / service_role（eyJ 開頭的長字串），一樣可以用；但 Supabase 已公告舊格式會在 2026 年底前淘汰，新專案請用新格式。',
         link: { text: '開啟 Supabase Dashboard', url: 'https://supabase.com/dashboard' },
         screenshot: 'supabase-api-keys.png',
-        warning: 'service_role key 絕對不能公開！只能在後端用。不能 commit 到 git，不能放到前端程式碼。',
+        warning: 'Secret key（或舊的 service_role key）絕對不能公開！只能在後端用，不能 commit 到 git，不能放到前端程式碼。Secret key 從瀏覽器呼叫會被 Supabase 直接拒絕（401），這是正常的保護。',
       },
       {
         title: '把 Supabase 的 key 存到專案',
@@ -243,8 +248,8 @@ https://ailesson-two.vercel.app/
         code: {
           lang: 'bash',
           content: `NEXT_PUBLIC_SUPABASE_URL=https://你的專案id.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...（anon key）
-SUPABASE_SERVICE_ROLE_KEY=eyJ...（service role key）
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_...（Publishable key；舊專案是 eyJ 開頭的 anon key）
+SUPABASE_SERVICE_ROLE_KEY=sb_secret_...（Secret key；舊專案是 eyJ 開頭的 service_role key）
 NEXT_PUBLIC_SITE_URL=http://localhost:3000`,
         },
       },
@@ -252,7 +257,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000`,
         title: '叫 Claude 把 Google 登入接起來',
         claude: `幫我加 Google 登入功能，用 Supabase Auth。
 
-參考這個登入頁面的設計風格：https://ailesson-two.vercel.app/login
+登入頁沿用首頁的主色和字體，置中一張卡片就好。
 
 我要的效果：
 - 有一個 /login 頁面，上面有「用 Google 登入」按鈕
@@ -335,8 +340,8 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000`,
           lang: 'bash',
           content: `# ── 現在填（從 Supabase Dashboard 複製）──
 NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_...
+SUPABASE_SERVICE_ROLE_KEY=sb_secret_...
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 # ── ch04 填（建好 Stripe 商品後再補）──
@@ -381,6 +386,7 @@ StripeConnectionError: An error occurred with our connection to Stripe.
 - 所有環境變數有沒有設定好
 
 環境變數只顯示「已設定」或「未設定」就好，不要把實際的值顯示出來。`,
+        warning: '/api/debug 會透露登入狀態和購買紀錄，上線前請 Claude 加上保護：只有你的 Email 登入時才回應，其他人一律 404；正式對外前也可以直接刪掉。',
         tip: '部署完之後，遇到任何問題先開啟 /api/debug 看。沒登入或 env 顯示「未設定」，就知道問題在哪了。\n\n⚠️ 現在開啟 /api/debug，「購買紀錄」那欄可能會顯示查詢錯誤——這是正常的，因為 purchases 資料表要在 ch04 才會建立。env 和登入狀態正常就沒問題了。',
       },
       {
@@ -445,10 +451,10 @@ AI_LESSON_STRIPE_MODE=sandbox
       },
       {
         title: '在 Stripe 建立商品和價格',
-        body: '1. 開啟 Stripe Dashboard（確認左下角是 Test mode）\n2. 左側 Product catalog → + Add product\n3. 填入課程名稱\n4. 價格填 990，幣別選 TWD，選「One time」\n5. 建立後點進商品，複製 Price ID（格式是 price_xxx）',
+        body: '1. 開啟 Stripe Dashboard（確認左下角是 Test mode）\n2. 左側 Product catalog → + Add product\n3. 填入課程名稱\n4. 價格填你的售價（例如 490），幣別選 TWD，選「One time」\n5. 建立後點進商品，複製 Price ID（格式是 price_xxx）',
         link: { text: '開啟 Stripe Product Catalog', url: 'https://dashboard.stripe.com/test/products' },
         screenshot: 'stripe-create-product.png',
-        warning: 'Dashboard 的售價填 NT$990；Stripe Price.unit_amount 和 session.amount_total 使用最小貨幣單位，TWD 收款 NT$990 = 99000。TWD 的整數規則針對 payouts，不能套用到 charges。資料庫存 99000 整數，顯示時才轉成 NT$990。',
+        warning: 'Dashboard 的售價填 NT$490；Stripe Price.unit_amount 和 session.amount_total 使用最小貨幣單位，TWD 收款 NT$490 = 49000。TWD 的整數規則針對 payouts，不能套用到 charges。資料庫存 49000 整數，顯示時才轉成 NT$490。',
       },
       {
         title: '把 Stripe keys 補入 .env.local',
@@ -495,7 +501,7 @@ create policy "Users can view own purchases"
       },
       {
         title: '叫 Claude 把 Stripe 付款接起來',
-        claude: `幫我把 Stripe 付款接起來。請參考這個網站的付款流程和成功頁設計：https://ailesson-two.vercel.app/
+        claude: `幫我把 Stripe 付款接起來（Checkout Session ＋ Webhook）。
 
 我要的功能：
 1. 點「購課」按鈕 → 跳到 Stripe 付款頁
@@ -504,7 +510,7 @@ create policy "Users can view own purchases"
 4. 已買過的使用者再點購課按鈕，直接進 /dashboard，不用重複付款
 
 .env.local 裡已有 STRIPE_SECRET_KEY 和 STRIPE_PRICE_ID。
-幣別是臺幣（TWD），資料庫 amount 存 Stripe 原始最小單位整數，990 元 = 99000；顯示價格時才除以 100。
+幣別是臺幣（TWD），資料庫 amount 存 Stripe 原始最小單位整數，490 元 = 49000；顯示價格時才除以 100。
 
 ⚠️ 重要：Webhook handler 裡讀取 request body 要用 request.text()，不是 request.json()，不然 Stripe signature 驗證會失敗。`,
         warning: 'Webhook 如果沒有觸發，先去 Vercel Function Logs 看錯誤訊息。最常見的原因是 STRIPE_WEBHOOK_SECRET 填錯、或 request body 用錯方式讀取。\n\n如果 TypeScript 出現 `apiVersion` 相關的型別錯誤，告訴 Claude：「把 Stripe 初始化的 apiVersion 改成已安裝 SDK 支援的版本，或是直接拿掉 apiVersion 讓 TypeScript 自動推斷」。',
@@ -808,7 +814,7 @@ __
         code: {
           lang: 'text',
           content: `① Landing Page
-   components/sections/ 裡的所有 section
+   首頁各區塊（Hero、大綱、價格、FAQ）
    → 換文案、換設計，架構不動
 
 ② 登入系統
@@ -826,16 +832,14 @@ __
       },
       {
         title: '叫 Claude 幫你改成自己的產品',
-        claude: `我想把這個課程網站的模板改成 [你的產品描述]。請先看這個網站了解現有設計：https://ailesson-two.vercel.app/
+        claude: `我想把這個專案改成 [你的產品描述]。請先讀整個專案，列出首頁各區塊在哪些檔案，再幫我：
+1. Hero 的文案換成 [你的產品標題和賣點]
+2. 價格區塊改成 [你的價格與方案]
+3. 痛點／你會學到什麼換成 [你的目標客群的痛點]
+4. 課程或產品內容資料換成 [你的內容結構]
 
-請幫我：
-1. 把 components/sections/Hero.tsx 的文案換成 [你的產品標題和賣點]
-2. 把 components/sections/Pricing.tsx 的價格改成 [你的價格]
-3. 把 components/sections/Problems.tsx 的痛點換成 [你的目標客群的痛點]
-4. 把 lib/course-data.ts 的課程資料換成 [你的內容結構]
-
-品牌色保持橘色，版面結構不變，只換內容。`,
-        tip: '把 [括號內的東西] 換成你自己的產品描述，然後貼給 Claude。它會幫你把所有文案一次換完。也可以先用 /ui-ux-pro-max 讓 Claude 自動最佳化整體視覺。',
+版面結構不變，只換內容。改完列出改了哪些檔案。`,
+        tip: '把 [括號內的東西] 換成你自己的產品描述，然後貼給 Claude。先讓它「列出檔案」再改，比直接指定檔名可靠，因為每個人做出來的專案結構不完全一樣。',
       },
       {
         title: '把你的內容先整理成資料，不要先改畫面',

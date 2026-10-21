@@ -3,7 +3,8 @@ import { FREE_PRODUCT, getCourse, isValidTier } from './courses'
 export interface LearnerPurchase { product_id?: string | null; tier?: string | null; stripe_session_id?: string | null }
 
 export function purchaseMatchesMode(sessionId: string | null | undefined, live: boolean) {
-  return !!sessionId && (sessionId.startsWith('external:') || sessionId.startsWith(live ? 'cs_live_' : 'cs_test_'))
+  // `link:` rows come from Payment Link orders that lib/kit-orders.ts already verified with its own key.
+  return !!sessionId && (sessionId.startsWith('external:') || sessionId.startsWith('link:') || sessionId.startsWith(live ? 'cs_live_' : 'cs_test_'))
 }
 
 /** Caller must query completed purchases for the verified user and this app. */
