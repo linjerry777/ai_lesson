@@ -30,6 +30,10 @@ export interface Product {
   hidden?: boolean
   /** Delivered file in the private `ai-lesson-downloads` bucket. */
   file?: { path: string; downloadName: string }
+  /** Copy-paste pack delivered as a web page (JSON in the private bucket). */
+  pack?: { path: string }
+  /** A few items shown free on the product page. */
+  samples?: { name: string; prompt: string }[]
   /** Course unlocked in /dashboard (Google login with the purchase email). */
   grantsCourse?: 'claude-code'
   /** A bundle: slugs of the products it delivers (current and future versions). */
@@ -39,6 +43,40 @@ export interface Product {
 }
 
 const CATALOGUE: Product[] = [
+  {
+    slug: 'shorts-script-pack',
+    kind: 'kit',
+    name: '短影音爆款腳本指令包',
+    latin: 'Shorts Script Pack',
+    tagline: '複製、貼上、填空，30 秒拿到一支短影音腳本。',
+    description:
+      '13 組照著用就好的指令：找題目、四種腳本格式、開場鉤子、標題、字幕、說明欄、發布前檢查、一週排程。用免費版 ChatGPT、Gemini 或 Claude 就能跑，不用安裝任何東西，手機也能用。',
+    price: 199,
+    status: 'preorder',
+    sticker: 'mochi',
+    pack: { path: 'packs/shorts-script-pack-v1.json' },
+    includes: [
+      { title: '13 組填空式指令', text: '每組都寫好「什麼時候用」，把【】換成你的內容就能送出。' },
+      { title: '4 種腳本格式', text: '口播重點、○○的人分四種、故事反轉、今日三則新聞，都是我們頻道每天在用的。' },
+      { title: '標題、字幕、說明欄一次搞定', text: '上傳前要的文字一次產好，含 AI 內容標示提醒。' },
+      { title: '發布前檢查＆爛腳本救援', text: '讓 AI 用觀眾角度挑毛病，告訴你改哪裡分數最高。' },
+      { title: '網頁版，按一下就複製', text: '付款完成直接打開，手機電腦都能用，之後更新免費。' },
+    ],
+    steps: ['付款完成，頁面直接打開指令包', '打開 ChatGPT／Gemini／Claude（免費版就行）', '按「複製」貼上，把【】換成你的內容', '照順序用下一組，拿到完整腳本'],
+    requirements: ['一個免費的 ChatGPT、Gemini 或 Claude 帳號', '會複製貼上'],
+    excluded: ['幫你拍片或剪片', '保證爆紅或保證收益'],
+    samples: [
+      {
+        name: '試用｜10 個會被點開的題目',
+        prompt: '幫我想 10 個短影音題目，主題是【你的主題，例：網購】。\n\n每個題目都要：\n1. 讓觀眾看到第一秒就覺得「這在說我」\n2. 有一個具體的畫面或數字（例：「購物車放了 87 天」）\n3. 一句話講得完\n\n用表格列出：題目｜第一秒畫面｜為什麼會想看完。\n最後幫我圈出你覺得最有機會爆的 3 個，說明原因。',
+      },
+    ],
+    faq: [
+      { q: '我完全不會用 AI 也可以嗎？', a: '可以。頁面最上面有 4 步驟教學，會複製貼上就能用。' },
+      { q: '要付費的 ChatGPT 嗎？', a: '不用，免費版的 ChatGPT、Gemini、Claude 都可以。' },
+      { q: '買了之後去哪裡看？', a: '付款完成會直接打開指令包網頁，請加入書籤，之後更新回同一頁就看得到。' },
+    ],
+  },
   {
     slug: 'shorts-studio-kit',
     kind: 'kit',
@@ -147,19 +185,20 @@ const CATALOGUE: Product[] = [
   {
     slug: 'all-in-one',
     kind: 'kit',
-    name: '全套：工作流套件＋Claude Code 實戰課',
+    name: '全套：指令包＋工作流套件＋Claude Code 實戰課',
     latin: 'All-in-one Pass',
     tagline: '一次買齊，之後新上架的工作流也自動加進來。',
     description:
       'AI 每日短影音工作流套件加上 Claude Code 實戰課。之後上架的工作流（自動發布、懸案紀錄片、Q 版 MV）會直接加進全套，回到付款完成頁就能下載。',
     price: 799,
-    compareAt: 889,
+    compareAt: 1088,
     status: 'preorder',
     sticker: 'mochi-popcorn',
-    bundle: ['shorts-studio-kit', 'claude-code-course'],
+    bundle: ['shorts-script-pack', 'shorts-studio-kit', 'claude-code-course'],
     paymentLink: 'https://buy.stripe.com/eVq5kw8b3bKM4Yd9na9MY03',
     paymentLinkId: 'plink_1USgfk5t4WzXNwwb4TEd29ND',
     includes: [
+      { title: '短影音爆款腳本指令包', text: '13 組複製貼上就能用的指令，網頁版，按一下就複製。' },
       { title: 'AI 每日短影音工作流套件', text: 'Claude Code plugin（5 個 skills）＋可直接渲染的 Remotion 專案。' },
       { title: 'Claude Code 實戰課', text: '8 章文字實作：登入、Stripe 付款、部署上線，做出會收錢的網站。' },
       { title: '之後上架的工作流', text: '自動發布、懸案紀錄片、Q 版 MV 推出後直接加進全套，不用再付錢。' },
@@ -214,7 +253,7 @@ export function deliverables(product: Product): Product[] {
   return product.bundle.map(slug => CATALOGUE.find(item => item.slug === slug)).filter((item): item is Product => Boolean(item))
 }
 
-export const isDeliverable = (product: Product) => deliverables(product).some(item => item.file || item.grantsCourse)
+export const isDeliverable = (product: Product) => deliverables(product).some(item => item.file || item.grantsCourse || item.pack)
 
 export const canBuy = (product: Product) => Boolean(product.paymentLink && isDeliverable(product))
 

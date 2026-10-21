@@ -31,7 +31,7 @@ export default function ShopPage() {
                 >
                   <span className="font-mono text-[11px] text-[var(--ink-2)]">0{index + 1}</span>
                   <span>
-                    <span className="font-mono text-[10px] tracking-[.2em] text-[var(--ink-2)]">{product.kind === 'kit' ? 'WORKFLOW KIT' : 'COURSE'} · {product.latin}</span>
+                    <span className="font-mono text-[10px] tracking-[.2em] text-[var(--ink-2)]">{product.pack ? 'PROMPT PACK' : product.kind === 'kit' ? 'WORKFLOW KIT' : 'COURSE'} · {product.latin}</span>
                     <span className="font-serif-tc mt-2 block text-[clamp(28px,3.4vw,44px)] leading-tight group-hover:underline">{product.name}</span>
                     <span className="mt-2 block text-[15px] leading-7 text-[var(--ink-2)]">{product.tagline}</span>
                   </span>

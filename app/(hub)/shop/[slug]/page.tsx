@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ArrowRight } from 'lucide-react'
 import LeadForm from '@/components/site/LeadForm'
+import PromptCard from '@/components/site/PromptCard'
 import { BackLink } from '@/components/site/ui'
 import { getPublishedResources } from '@/lib/content'
 import { PRODUCTS, canBuy, compareLabel, getProduct, priceLabel } from '@/lib/products'
@@ -41,7 +42,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
         <section className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_400px] lg:items-start">
           <div>
-            <Label>{product.kind === 'kit' ? 'WORKFLOW KIT' : 'COURSE'} <span className="h-px w-10 bg-[var(--ink)]" /> {product.latin}</Label>
+            <Label>{product.pack ? 'PROMPT PACK' : product.kind === 'kit' ? 'WORKFLOW KIT' : 'COURSE'} <span className="h-px w-10 bg-[var(--ink)]" /> {product.latin}</Label>
             <h1 className="font-serif-tc mt-8 text-[clamp(40px,5.6vw,84px)] font-light leading-[1.1]">{product.name}</h1>
             <p className="mt-6 text-xl leading-9">{product.tagline}</p>
             <p className="mt-4 max-w-2xl text-[16px] leading-8 text-[var(--ink-2)]">{product.description}</p>
@@ -109,6 +110,18 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </li>
               ))}
             </ul>
+          </section>
+        )}
+
+        {product.samples && product.samples.length > 0 && (
+          <section className="mt-24 max-w-3xl">
+            <Label>FREE SAMPLE <span className="h-px w-10 bg-[var(--ink)]" /> 先試一組</Label>
+            <p className="mt-5 text-[15px] leading-7 text-[var(--ink-2)]">這是包裡的其中一組，直接複製貼到 ChatGPT 試試看。</p>
+            <div className="mt-6 space-y-6">
+              {product.samples.map((sample, index) => (
+                <PromptCard key={sample.name} index={`試用 ${index + 1}`} name={sample.name} prompt={sample.prompt} />
+              ))}
+            </div>
           </section>
         )}
 
