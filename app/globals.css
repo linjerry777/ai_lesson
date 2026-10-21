@@ -82,3 +82,30 @@ html { scroll-padding-top: 84px; }
 }
 @keyframes tv-static { 0% { transform: translate(0, 0); } 50% { transform: translate(-6%, 4%); } 100% { transform: translate(4%, -6%); } }
 @media (prefers-reduced-motion: reduce) { .tv-static::after { animation: none; } }
+
+/* Hero fight: panels slide in, fighters idle-bob, VS pulses, sparks fly, Codex snores. */
+.fight-in-left { animation: fight-in-left .7s cubic-bezier(.2, 1.2, .4, 1) both; }
+.fight-in-right { animation: fight-in-right .7s cubic-bezier(.2, 1.2, .4, 1) both; }
+@keyframes fight-in-left { from { translate: -60% 0; opacity: 0; } to { translate: 0 0; opacity: 1; } }
+@keyframes fight-in-right { from { translate: 60% 0; opacity: 0; } to { translate: 0 0; opacity: 1; } }
+.fighter-bob { animation: fighter-bob 1.6s ease-in-out infinite; }
+@keyframes fighter-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+.fighter-lunge { animation: fighter-lunge 3.2s ease-in-out infinite; }
+@keyframes fighter-lunge { 0%, 70%, 100% { translate: 0 0; } 78% { translate: 26px -6px; } 86% { translate: 0 0; } }
+.fighter-snore { animation: fighter-snore 3s ease-in-out infinite; transform-origin: 50% 100%; }
+@keyframes fighter-snore { 0%, 100% { scale: 1 1; } 50% { scale: 1.03 .97; } }
+.zzz-float { animation: zzz-float 2.4s ease-in infinite; }
+@keyframes zzz-float { from { translate: 0 0; opacity: 0; } 20% { opacity: 1; } to { translate: 30px -60px; opacity: 0; } }
+.vs-pulse { animation: vs-pulse 1.2s ease-in-out infinite; }
+@keyframes vs-pulse { 0%, 100% { scale: 1; } 50% { scale: 1.12; } }
+.clash-spark { animation: clash-spark 1.2s ease-out infinite; }
+@keyframes clash-spark { from { scale: .2; opacity: 1; } to { scale: 1.6; opacity: 0; } }
+.hp-shine { background-image: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.55) 45%, transparent 60%); background-size: 250% 100%; animation: hp-shine 2.2s linear infinite; }
+@keyframes hp-shine { from { background-position: 150% 0; } to { background-position: -100% 0; } }
+.hp-blink { animation: hp-blink .9s steps(2) infinite; }
+@keyframes hp-blink { 50% { opacity: .25; } }
+.energy-line { background: repeating-linear-gradient(180deg, #fff 0 14px, transparent 14px 26px); animation: energy-line .5s linear infinite; }
+@keyframes energy-line { to { background-position: 0 26px; } }
+@media (prefers-reduced-motion: reduce) {
+  .fight-in-left, .fight-in-right, .fighter-bob, .fighter-lunge, .fighter-snore, .zzz-float, .vs-pulse, .clash-spark, .hp-shine, .hp-blink, .energy-line { animation: none; }
+}

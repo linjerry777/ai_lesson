@@ -84,8 +84,8 @@ export const CHANNELS: Channel[] = [
  * updating. The homepage pairs them up by genre and compares their latest uploads.
  */
 export const RIVALRY = {
-  claude: { name: 'Claude', team: 'Claude 隊', status: 'ON AIR', note: '每天準時開播' },
-  codex: { name: 'Codex', team: 'Codex 隊', status: 'OFF AIR', note: '額度見底，休息中' },
+  claude: { name: 'Claude', model: 'Opus 5.5', team: 'Claude 隊', status: 'ON AIR', note: '每天準時開播' },
+  codex: { name: 'Codex', model: 'Astra 6.0', team: 'Codex 隊', status: 'OFF AIR', note: '額度見底，休息中' },
 }
 
 export interface RivalChannel {

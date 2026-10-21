@@ -39,30 +39,47 @@ export default function Hero({ stats }: { stats: HeroStats }) {
         </div>
       </div>
 
-      {/* The arena: Claude's team on the left, Codex's team on the right. */}
-      <div className="relative grid h-[320px] grid-cols-2 border-t-2 border-[var(--ink)] sm:h-[clamp(380px,calc(100svh-300px),620px)]">
-        <div className="relative overflow-hidden bg-[#d97757] text-[#1a0f0a]">
-          <div className="relative z-10 p-3 sm:p-6 lg:p-8">
-            <p className="font-display text-[clamp(30px,5vw,80px)] leading-none">{RIVALRY.claude.team}</p>
+      {/* The arena, fighting-game style: Claude's team on the left, Codex's team on the right. */}
+      <div className="relative grid h-[340px] grid-cols-2 overflow-hidden border-t-2 border-[var(--ink)] sm:h-[clamp(400px,calc(100svh-300px),620px)]">
+        {/* HUD: life bars with the two models' names. */}
+        <div className="absolute inset-x-0 top-0 z-30 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-3 pt-3 sm:gap-4 sm:px-6 sm:pt-4" aria-hidden="true">
+          <div>
+            <p className="flex items-baseline justify-between font-display text-[clamp(16px,2vw,30px)] leading-none text-[#1a0f0a]"><span>{RIVALRY.claude.model}</span><span className="font-mono text-[10px] font-bold tracking-[.12em]">HP 100%</span></p>
+            <div className="mt-1 h-3 skew-x-[-18deg] border-2 border-[var(--ink)] bg-[#1a0f0a] sm:h-4">
+              <div className="hp-shine h-full w-full bg-[#ffd23f]" />
+            </div>
+          </div>
+          <p className="font-display grid h-10 w-12 place-items-center border-2 border-[var(--ink)] bg-[var(--paper)] text-2xl leading-none sm:h-12 sm:w-16 sm:text-3xl">∞</p>
+          <div>
+            <p className="flex items-baseline justify-between font-display text-[clamp(16px,2vw,30px)] leading-none text-[#c9ccd2]"><span className="hp-blink font-mono text-[10px] font-bold tracking-[.12em] text-[#ff5252]">QUOTA 0%</span><span>{RIVALRY.codex.model}</span></p>
+            <div className="mt-1 flex h-3 skew-x-[18deg] justify-end border-2 border-[#c9ccd2] bg-[#111214] sm:h-4">
+              <div className="hp-blink h-full w-[4%] bg-[#ff5252]" />
+            </div>
+          </div>
+        </div>
+
+        <div className="fight-in-left relative overflow-hidden bg-[#d97757] text-[#1a0f0a]">
+          <div className="relative z-10 p-3 pt-[64px] sm:p-6 sm:pt-[88px] lg:px-8">
+            <p className="font-display text-[clamp(26px,4.2vw,68px)] leading-none">{RIVALRY.claude.team}</p>
             <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[var(--ink)] px-2.5 py-1 font-mono text-[10px] font-bold tracking-[.12em] text-white sm:text-[11px]">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#4ade80]" aria-hidden="true" />{RIVALRY.claude.status}
             </p>
             <p className="mt-2 hidden w-fit bg-[#1a0f0a] px-2 py-1 font-mono text-[12px] font-bold tracking-[.08em] text-white sm:block">開播中 {CHANNELS.length} 台 · 24 小時內上片 {stats.claudeToday} 支</p>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 flex h-[58%] items-end justify-center px-1 sm:left-auto sm:h-[78%] sm:justify-end sm:pr-[clamp(48px,6vw,96px)]">
-            {CLAUDE_CAST.map(member => (
-              <figure key={member.src} className={`relative -mx-[2%] items-end ${member.src === 'nailao' ? 'hidden sm:flex' : 'flex'}`} style={{ height: `${member.h}%` }}>
+          <div className="fighter-lunge absolute bottom-0 left-0 right-0 flex h-[52%] items-end justify-center px-1 sm:left-auto sm:h-[70%] sm:justify-end sm:pr-[clamp(48px,6vw,96px)]">
+            {CLAUDE_CAST.map((member, i) => (
+              <figure key={member.src} className={`fighter-bob relative -mx-[2%] items-end ${member.src === 'nailao' ? 'hidden sm:flex' : 'flex'}`} style={{ height: `${member.h}%`, animationDelay: `${i * 220}ms` }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={`/stickers/${member.src}.webp`} alt={member.alt} className="sticker-img sticker-drop h-full w-auto max-w-none" style={{ rotate: `${member.r}deg` }} />
+                <img src={`/stickers/${member.src}.webp`} alt={member.alt} className="sticker-img h-full w-auto max-w-none" style={{ rotate: `${member.r}deg` }} />
                 <figcaption className="absolute bottom-3 left-1/2 hidden -translate-x-1/2 whitespace-nowrap px-2 py-0.5 text-[11px] font-black text-white shadow-[2px_2px_0_var(--ink)] sm:block" style={{ background: member.color }}>{member.tag}</figcaption>
               </figure>
             ))}
           </div>
         </div>
 
-        <div className="tv-static relative overflow-hidden bg-[#1b1d20] text-[#c9ccd2]">
-          <div className="relative z-10 p-3 text-right sm:p-6 lg:p-8">
-            <p className="font-display text-[clamp(30px,5vw,80px)] leading-none text-[#8a8f98]">{RIVALRY.codex.team}</p>
+        <div className="fight-in-right tv-static relative overflow-hidden bg-[#1b1d20] text-[#c9ccd2]">
+          <div className="relative z-10 p-3 pt-[64px] text-right sm:p-6 sm:pt-[88px] lg:px-8">
+            <p className="font-display text-[clamp(26px,4.2vw,68px)] leading-none text-[#8a8f98]">{RIVALRY.codex.team}</p>
             <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-[#4a4e55] px-2.5 py-1 font-mono text-[10px] font-bold tracking-[.12em] text-[#9aa0a8] sm:text-[11px]">
               <span className="h-1.5 w-1.5 rounded-full bg-[#4a4e55]" aria-hidden="true" />{RIVALRY.codex.status}
             </p>
@@ -76,14 +93,23 @@ $ codex exec "那…明天見？"
 … zzz`}
             </pre>
           </div>
-          <figure className="absolute bottom-0 left-[10%] h-[46%] sm:left-[14%] sm:h-[64%]">
+          <figure className="absolute bottom-0 left-[10%] h-[42%] sm:left-[14%] sm:h-[60%]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/stickers/doro.webp" alt="Doro（Codex 隊）：睡著了" className="sticker-img h-full w-auto max-w-none rotate-[8deg] opacity-80 grayscale-[.65]" />
-            <span className="font-display absolute -top-[6%] right-[-8%] rotate-[-8deg] text-[clamp(22px,3vw,44px)] leading-none text-[#9aa0a8]" aria-hidden="true">zzz</span>
+            <img src="/stickers/doro.webp" alt="Doro（Codex 隊）：睡著了" className="fighter-snore sticker-img h-full w-auto max-w-none rotate-[8deg] opacity-80 grayscale-[.65]" />
+            {[0, 800, 1600].map(delay => (
+              <span key={delay} className="zzz-float font-display absolute -top-[4%] right-[-4%] text-[clamp(18px,2.4vw,36px)] leading-none text-[#9aa0a8]" style={{ animationDelay: `${delay}ms` }} aria-hidden="true">z</span>
+            ))}
           </figure>
         </div>
 
-        <span className="font-display absolute left-1/2 top-1/2 z-20 grid h-[clamp(64px,8vw,120px)] w-[clamp(64px,8vw,120px)] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-[3px] border-[var(--ink)] bg-[var(--paper)] text-[clamp(26px,3.4vw,52px)] leading-none shadow-[5px_5px_0_var(--ink)]" aria-hidden="true">VS</span>
+        {/* Clash in the middle: an energy seam, sparks and a pulsing VS. */}
+        <span className="energy-line absolute inset-y-0 left-1/2 z-10 w-[3px] -translate-x-1/2 opacity-70" aria-hidden="true" />
+        <span className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2" aria-hidden="true">
+          {[0, 400, 800].map(delay => (
+            <span key={delay} className="clash-spark absolute left-1/2 top-1/2 -ml-[60px] -mt-[60px] h-[120px] w-[120px] rounded-full border-4 border-[#ffd23f]" style={{ animationDelay: `${delay}ms` }} />
+          ))}
+          <span className="vs-pulse font-display relative grid h-[clamp(64px,8vw,116px)] w-[clamp(64px,8vw,116px)] place-items-center rounded-full border-[3px] border-[var(--ink)] bg-[#ffd23f] text-[clamp(26px,3.4vw,50px)] leading-none shadow-[5px_5px_0_var(--ink)]">VS</span>
+        </span>
       </div>
     </section>
   )

@@ -1,5 +1,6 @@
 import { ArrowUpRight } from 'lucide-react'
 import ClipVideo from '@/components/site/ClipVideo'
+import VideoReel from '@/components/site/VideoReel'
 import { Kicker } from '@/components/site/ui'
 import { CHANNELS, CODEX_CHANNELS, MATCHUPS, PLATFORM_LABELS, RIVALRY, getChannel, slotLabel, type PlatformKey } from '@/lib/site'
 import { ago, daysSince, type LatestVideo } from '@/lib/youtube'
@@ -36,7 +37,7 @@ interface SideProps {
 /** One channel in a round: who it is, its newest upload and the two before it. */
 function Side({ id, team, name, tagline, sticker, color, links, videos, now }: SideProps) {
   const dark = team === 'codex'
-  const [latest, ...rest] = videos
+  const latest = videos[0]
   const idle = latest ? daysSince(latest.publishedAt, now) : null
   return (
     <article id={id} className={`relative min-w-0 scroll-mt-20 border-2 border-[var(--ink)] p-4 sm:p-5 ${dark ? 'tv-static bg-[#1b1d20] text-[#c9ccd2]' : 'bg-[var(--white)]'}`}>
@@ -59,34 +60,12 @@ function Side({ id, team, name, tagline, sticker, color, links, videos, now }: S
           </div>
         </header>
 
-        {latest ? (
-          <a href={latest.url} target="_blank" rel="noopener noreferrer" className="group mt-4 grid grid-cols-[96px_minmax(0,1fr)] gap-4 sm:grid-cols-[112px_minmax(0,1fr)]">
-            <span className={`relative block aspect-[9/16] overflow-hidden border-2 border-[var(--ink)] bg-black ${dark ? 'opacity-70 grayscale' : ''}`}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={latest.thumb} alt="" loading="lazy" className="h-full w-full object-cover" />
-              <span className="absolute left-1 top-1 bg-black/70 px-1.5 py-0.5 font-mono text-[9px] font-bold tracking-[.1em] text-white">LATEST</span>
-            </span>
-            <span className="flex min-w-0 flex-col">
-              <span className={`font-mono text-[11px] font-bold tracking-[.06em] ${dark ? 'text-[#8a8f98]' : 'text-[var(--ink-2)]'}`}>最新一支 · {ago(latest.publishedAt, now)}</span>
-              <span className="mt-1 line-clamp-3 text-[15px] font-bold leading-6 group-hover:underline">{latest.title}</span>
-              <span className="font-display mt-auto pt-2 text-[clamp(28px,2.6vw,40px)] leading-none">{views(latest.views)}<span className="ml-1.5 font-mono text-[11px] font-bold">次觀看</span></span>
-            </span>
-          </a>
+        {videos.length ? (
+          <div className="mt-4">
+            <VideoReel videos={videos} dark={dark} labels={videos.map((video, i) => `${i === 0 ? 'LATEST' : `#${i + 1}`} · ${ago(video.publishedAt, now)}`)} />
+          </div>
         ) : (
           <p className="mt-4 text-sm opacity-70">暫時讀不到這個頻道的最新影片。</p>
-        )}
-
-        {rest.length > 0 && (
-          <ul className={`mt-4 border-t text-[13px] ${dark ? 'border-[#3a3d42]' : 'border-[var(--rule)]'}`}>
-            {rest.map(video => (
-              <li key={video.id} className={`border-b ${dark ? 'border-[#3a3d42]' : 'border-[var(--rule)]'}`}>
-                <a href={video.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 py-2 hover:underline">
-                  <span className="min-w-0 flex-1 truncate">{video.title}</span>
-                  <span className="shrink-0 font-mono text-[11px] tabular-nums opacity-80">{views(video.views)} · {ago(video.publishedAt, now)}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
         )}
         <div className="mt-4"><Links links={links} dark={dark} /></div>
       </div>
