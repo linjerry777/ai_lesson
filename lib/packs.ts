@@ -4,7 +4,7 @@
 import { createServiceClient } from '@/lib/supabase/server'
 import { DOWNLOAD_BUCKET } from '@/lib/leads'
 
-export interface PackItem { name: string; when: string; prompt: string; tip?: string }
+export interface PackItem { name: string; when: string; prompt: string; tip?: string; example?: string }
 export interface Pack {
   slug: string
   version: string

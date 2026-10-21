@@ -55,25 +55,36 @@ export default async function PackPage({ params, searchParams }: { params: Promi
   const offsets = pack.sections.map((_, i) => pack.sections.slice(0, i).reduce((sum, section) => sum + section.items.length, 0))
   return (
     <main className="px-4 pb-28 pt-10 sm:px-8 sm:pt-16">
-      <div className="mx-auto max-w-3xl">
-        <p className="font-mono text-[11px] font-bold tracking-[.16em] text-[var(--ink-2)]">PROMPT PACK · v{pack.version}</p>
-        <h1 className="mt-3 text-[clamp(32px,6vw,56px)] font-black leading-[1.08] tracking-[-.02em]">{pack.title}</h1>
-        <p className="mt-4 text-[16px] leading-8 text-[var(--ink-2)]">{pack.intro}</p>
-
-        <section className="mt-8 border-2 border-[var(--ink)] bg-[#f5a524] p-5 shadow-[5px_5px_0_var(--ink)]" aria-labelledby="quickstart">
-          <h2 id="quickstart" className="text-xl font-black">第一次用？照這 4 步</h2>
-          <ol className="mt-3 space-y-2 text-[16px] leading-7">
-            {pack.quickstart.map((step, i) => <li key={step}><b>{i + 1}.</b> {step}</li>)}
-          </ol>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {AI_LINKS.map(link => (
-              <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center border-2 border-[var(--ink)] bg-white px-4 text-sm font-black">
-                打開 {link.name} ↗
-              </a>
-            ))}
+      <div className="mx-auto max-w-[1200px]">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start">
+          <div>
+            <p className="font-mono text-[11px] font-bold tracking-[.16em] text-[var(--ink-2)]">PROMPT PACK · v{pack.version}</p>
+            <h1 className="mt-3 text-[clamp(32px,4.4vw,52px)] font-black leading-[1.08] tracking-[-.02em]">{pack.title}</h1>
+            <p className="mt-3 text-[16px] leading-8 text-[var(--ink-2)]">{pack.intro}</p>
+            <div className="mt-4 flex items-end gap-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/stickers/xun-explain.webp" alt="小訊" className="sticker-img h-[110px] w-auto shrink-0" />
+              <p className="relative mb-4 border-2 border-[var(--ink)] bg-white px-4 py-3 text-[14px] leading-6 shadow-[4px_4px_0_var(--ink)]">
+                <b>小訊：</b>每一組都附「什麼時候用」和小提醒，按「看 AI 回覆範例」就知道 AI 會回什麼。粉紅色的地方記得換成你的內容！
+              </p>
+            </div>
           </div>
-          <p className="mt-3 text-sm">👉 把這一頁<b>加入書籤</b>，之後有新版回到這裡就看得到。</p>
-        </section>
+
+          <section className="border-2 border-[var(--ink)] bg-[#f5a524] p-5 shadow-[5px_5px_0_var(--ink)]" aria-labelledby="quickstart">
+            <h2 id="quickstart" className="text-xl font-black">第一次用？照這 4 步</h2>
+            <ol className="mt-3 space-y-2 text-[16px] leading-7">
+              {pack.quickstart.map((step, i) => <li key={step}><b>{i + 1}.</b> {step}</li>)}
+            </ol>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {AI_LINKS.map(link => (
+                <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center border-2 border-[var(--ink)] bg-white px-4 text-sm font-black">
+                  打開 {link.name} ↗
+                </a>
+              ))}
+            </div>
+            <p className="mt-3 text-sm">👉 把這一頁<b>加入書籤</b>，之後有新版回到這裡就看得到。</p>
+          </section>
+        </div>
 
         <nav className="sticky top-16 z-30 -mx-4 mt-8 flex gap-2 overflow-x-auto border-y border-[var(--rule)] bg-[#f3f0e8]/95 px-4 py-2 backdrop-blur sm:mx-0 sm:px-0" aria-label="章節">
           {pack.sections.map((section, i) => (
@@ -86,9 +97,9 @@ export default async function PackPage({ params, searchParams }: { params: Promi
         {pack.sections.map((section, i) => (
           <section key={section.title} id={`s${i}`} className="scroll-mt-32 pt-10">
             <h2 className="text-2xl font-black">{section.title}</h2>
-            <div className="mt-5 space-y-6">
+            <div className="mt-5 grid items-start gap-6 lg:grid-cols-2">
               {section.items.map((entry, j) => (
-                <PromptCard key={entry.name} index={String(offsets[i] + j + 1).padStart(2, '0')} name={entry.name} when={entry.when} prompt={entry.prompt} tip={entry.tip} />
+                <PromptCard key={entry.name} index={String(offsets[i] + j + 1).padStart(2, '0')} name={entry.name} when={entry.when} prompt={entry.prompt} tip={entry.tip} example={entry.example} />
               ))}
             </div>
           </section>

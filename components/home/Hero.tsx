@@ -41,20 +41,18 @@ export default function Hero({ stats }: { stats: HeroStats }) {
 
       {/* The arena, fighting-game style: Claude's team on the left, Codex's team on the right. */}
       <div className="relative grid h-[340px] grid-cols-2 overflow-hidden border-t-2 border-[var(--ink)] sm:h-[clamp(400px,calc(100svh-300px),620px)]">
-        {/* HUD: life bars with the two models' names. */}
-        <div className="absolute inset-x-0 top-0 z-30 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-3 pt-3 sm:gap-4 sm:px-6 sm:pt-4" aria-hidden="true">
-          <div>
-            <p className="flex items-baseline justify-between font-display text-[clamp(16px,2vw,30px)] leading-none text-[#1a0f0a]"><span>{RIVALRY.claude.model}</span><span className="font-mono text-[10px] font-bold tracking-[.12em]">HP 100%</span></p>
-            <div className="mt-1 h-3 skew-x-[-18deg] border-2 border-[var(--ink)] bg-[#1a0f0a] sm:h-4">
-              <div className="hp-shine h-full w-full bg-[#ffd23f]" />
-            </div>
+        {/* HUD: one shared beam — the two models firing at each other, Claude's side pushing. */}
+        <div className="absolute inset-x-0 top-0 z-30 px-3 pt-3 sm:px-6 sm:pt-4" aria-hidden="true">
+          <div className="flex items-baseline justify-between font-display text-[clamp(16px,2vw,30px)] leading-none">
+            <span className="text-[#1a0f0a]">{RIVALRY.claude.model}</span>
+            <span className="hp-blink font-mono text-[10px] font-bold tracking-[.14em] text-[#1a0f0a] sm:text-[11px]">BEAM CLASH</span>
+            <span className="text-[#c9ccd2]">{RIVALRY.codex.model}</span>
           </div>
-          <p className="font-display grid h-10 w-12 place-items-center border-2 border-[var(--ink)] bg-[var(--paper)] text-2xl leading-none sm:h-12 sm:w-16 sm:text-3xl">∞</p>
-          <div>
-            <p className="flex items-baseline justify-between font-display text-[clamp(16px,2vw,30px)] leading-none text-[#c9ccd2]"><span className="hp-blink font-mono text-[10px] font-bold tracking-[.12em] text-[#ff5252]">QUOTA 0%</span><span>{RIVALRY.codex.model}</span></p>
-            <div className="mt-1 flex h-3 skew-x-[18deg] justify-end border-2 border-[#c9ccd2] bg-[#111214] sm:h-4">
-              <div className="hp-blink h-full w-[4%] bg-[#ff5252]" />
+          <div className="relative mt-1.5 flex h-5 border-2 border-[var(--ink)] bg-[#111214] sm:h-6">
+            <div className="beam-push beam-claude relative h-full">
+              <span className="clash-point absolute right-0 top-1/2 h-12 w-12 -translate-y-1/2 translate-x-1/2 rounded-full sm:h-16 sm:w-16" />
             </div>
+            <div className="beam-codex h-full flex-1" />
           </div>
         </div>
 

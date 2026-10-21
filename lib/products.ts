@@ -34,6 +34,14 @@ export interface Product {
   pack?: { path: string }
   /** A few items shown free on the product page. */
   samples?: { name: string; prompt: string }[]
+  /** What an AI typically answers to the first sample (shown beside it). */
+  sampleOutput?: { columns: string[]; rows: string[][] }
+  /** Product images (in /public) shown on the product page. */
+  gallery?: { src: string; alt: string; caption: string; phone?: boolean }[]
+  /** Short highlights shown as chips under the title. */
+  highlights?: string[]
+  /** Who it is (and is not) for. */
+  audience?: { yes: string[]; no: string[] }
   /** Course unlocked in /dashboard (Google login with the purchase email). */
   grantsCourse?: 'claude-code'
   /** A bundle: slugs of the products it delivers (current and future versions). */
@@ -55,6 +63,26 @@ const CATALOGUE: Product[] = [
     status: 'preorder',
     sticker: 'mochi',
     pack: { path: 'packs/shorts-script-pack-v1.json' },
+    highlights: ['13 組指令', '免費版 AI 就能用', '手機也能用', '網頁版・按一下複製', '之後更新免費'],
+    audience: {
+      yes: ['想開短影音頻道，但每天不知道拍什麼', '寫好腳本卻沒人看完，不知道哪裡有問題', '沒寫過程式，只想複製貼上就好'],
+      no: ['想要有人幫你拍、幫你剪', '想要保證爆紅的人'],
+    },
+    gallery: [
+      { src: '/shop/pack-desktop.webp', alt: '指令包網頁：第一次用的 4 個步驟與章節', caption: '付款後打開的指令包網頁：4 步驟教學、章節一鍵跳轉' },
+      { src: '/shop/pack-phone.webp', alt: '手機上的指令包網頁', caption: '手機也能用', phone: true },
+      { src: '/shop/pack-phone-prompt.webp', alt: '指令卡片，要換的地方用粉紅色標出', caption: '要換的地方用粉紅色標好', phone: true },
+    ],
+    sampleOutput: {
+      columns: ['題目', '第一秒畫面', '為什麼會想看完'],
+      rows: [
+        ['購物車放了 87 天，終於降價了', '購物車截圖，加入日期圈紅', '每個人都有一件「等降價」的東西'],
+        ['凌晨兩點下單，早上完全不記得', '手機跳出出貨通知＋一臉疑惑', '深夜購物是大家的共同秘密'],
+        ['為了免運 60 元，又多買了 400 元', '結帳頁「再買 340 元免運」', '湊免運的心情每個人都懂'],
+        ['包裹到了，但我已經不想要了', '拆到一半就放棄的表情', '反轉＋自嘲，很容易被標記'],
+        ['比價 3 小時，最後買了第一家', '瀏覽器開著 27 個分頁', '誇張數字，一秒看懂'],
+      ],
+    },
     paymentLink: 'https://buy.stripe.com/fZu00cajbbKM4Yd8j69MY04',
     paymentLinkId: 'plink_1USx4T5t4WzXNwwby0UJsVd5',
     includes: [
@@ -110,6 +138,11 @@ const CATALOGUE: Product[] = [
     ],
     requirements: ['Node.js 20+、Python 3.10+、ffmpeg', 'Claude Code（訂閱或 API）', '會打開終端機、複製貼上指令'],
     excluded: ['自動上傳到 YouTube / IG（「YouTube＋IG 自動發布」課程即將推出）', 'Fish Audio、Claude 等第三方費用', '觀看數或收益保證'],
+    highlights: ['5 個 Claude Code skills', 'Remotion 9:16 模板', '一行指令出片', '免費配音可用', '9 個檢查點'],
+    audience: {
+      yes: ['想每天穩定產出短影音，又不想每支都手動剪', '會開終端機、願意照步驟貼指令', '已經在用或想試 Claude Code'],
+      no: ['完全沒碰過終端機（先買指令包）', '想要自動上傳（課程即將推出）'],
+    },
     previews: [
       { src: '/kits/shorts-news-sample.mp4', poster: '/kits/shorts-news-sample.jpg', label: '範例：今日科技三則（45 秒）' },
       { src: '/kits/shorts-meme-sample.mp4', poster: '/kits/shorts-meme-sample.jpg', label: '範例：吃到飽人圖鑑（30 秒）' },
@@ -173,6 +206,19 @@ const CATALOGUE: Product[] = [
     status: 'preorder',
     sticker: 'xun-thumbsup',
     grantsCourse: 'claude-code',
+    highlights: ['8 章文字實作', 'Google 登入', 'Stripe 收款', 'Vercel 部署', '每章驗收清單'],
+    audience: {
+      yes: ['想做自己的產品網站並真的收到錢', '看得懂基本 TypeScript 與錯誤訊息', '想學會用 Claude Code 做完整專案'],
+      no: ['完全沒寫過程式（先買指令包）', '想看影片授課'],
+    },
+    gallery: [
+      { src: '/shop/course-google-cloud-oauth-credentials.webp', alt: 'Google Cloud OAuth 憑證設定畫面', caption: '第 2 章：設定 Google 登入憑證' },
+      { src: '/shop/course-supabase-google-provider.webp', alt: 'Supabase 開啟 Google 登入', caption: '第 2 章：Supabase 開啟 Google 登入' },
+      { src: '/shop/course-stripe-create-product.webp', alt: 'Stripe 建立商品', caption: '第 4 章：在 Stripe 建立商品與價格' },
+      { src: '/shop/course-stripe-webhook-setup.webp', alt: 'Stripe Webhook 設定', caption: '第 4 章：設定付款完成的 Webhook' },
+      { src: '/shop/course-vercel-env-vars.webp', alt: 'Vercel 環境變數', caption: '第 5 章：部署時要填的環境變數' },
+      { src: '/shop/course-vercel-function-logs.webp', alt: 'Vercel 函式紀錄', caption: '第 6 章：出錯時去哪裡看 log' },
+    ],
     paymentLink: 'https://buy.stripe.com/dRm6oA2QJbKM76lare9MY02',
     paymentLinkId: 'plink_1USgdt5t4WzXNwwbmc8Rpd6G',
     includes: [
@@ -191,12 +237,18 @@ const CATALOGUE: Product[] = [
     latin: 'All-in-one Pass',
     tagline: '一次買齊，之後新上架的工作流也自動加進來。',
     description:
-      'AI 每日短影音工作流套件加上 Claude Code 實戰課。之後上架的工作流（自動發布、懸案紀錄片、Q 版 MV）會直接加進全套，回到付款完成頁就能下載。',
+      '短影音爆款腳本指令包、AI 每日短影音工作流套件，加上 Claude Code 實戰課。之後上架的工作流（自動發布、懸案紀錄片、Q 版 MV）會直接加進全套，回到付款完成頁就能下載。',
     price: 799,
     compareAt: 1088,
     status: 'preorder',
     sticker: 'mochi-popcorn',
     bundle: ['shorts-script-pack', 'shorts-studio-kit', 'claude-code-course'],
+    highlights: ['3 個產品一次拿', '省 NT$289', '之後新工作流自動加入'],
+    gallery: [
+      { src: '/shop/pack-desktop.webp', alt: '指令包網頁', caption: '指令包：網頁版，按一下複製' },
+      { src: '/kits/shorts-news-sample.jpg', alt: '工作流套件渲染出來的新聞短片', caption: '工作流套件：直接渲染出來的範例片', phone: true },
+      { src: '/shop/course-stripe-create-product.webp', alt: 'Stripe 建立商品', caption: '實戰課：從登入、收款到部署' },
+    ],
     paymentLink: 'https://buy.stripe.com/eVq5kw8b3bKM4Yd9na9MY03',
     paymentLinkId: 'plink_1USgfk5t4WzXNwwb4TEd29ND',
     includes: [

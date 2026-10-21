@@ -20,7 +20,7 @@ function Highlighted({ text }: { text: string }) {
 }
 
 /** One copy-paste prompt: what it is for, the prompt, one big copy button and a tip. */
-export default function PromptCard({ index, name, when, prompt, tip }: { index: string; name: string; when?: string; prompt: string; tip?: string }) {
+export default function PromptCard({ index, name, when, prompt, tip, example }: { index: string; name: string; when?: string; prompt: string; tip?: string; example?: string }) {
   const [state, setState] = useState<'idle' | 'done' | 'failed'>('idle')
 
   async function copy() {
@@ -56,6 +56,14 @@ export default function PromptCard({ index, name, when, prompt, tip }: { index: 
           {state === 'done' ? '已複製！貼到 ChatGPT 吧' : state === 'failed' ? '複製失敗，請長按文字手動複製' : '複製這段指令'}
         </button>
         {tip && <p className="mt-3 text-sm leading-6 text-[var(--ink-2)]">💡 {tip}</p>}
+        {example && (
+          <details className="group mt-3 border border-[var(--ink)] bg-[#f3f0e8]">
+            <summary className="flex cursor-pointer list-none items-center justify-between px-3 py-2 text-sm font-black">
+              看 AI 回覆範例 <span className="font-mono text-xs transition group-open:rotate-45">＋</span>
+            </summary>
+            <pre className="whitespace-pre-wrap break-words border-t border-[var(--ink)] px-3 py-3 font-[family-name:var(--font-tc)] text-[13px] leading-6">{example}</pre>
+          </details>
+        )}
       </div>
     </article>
   )

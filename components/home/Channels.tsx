@@ -7,8 +7,6 @@ import { ago, daysSince, type LatestVideo } from '@/lib/youtube'
 
 export type Feeds = Record<string, LatestVideo[]>
 
-const views = (n: number | null) => (n === null ? '—' : n.toLocaleString('en-US'))
-const total = (videos: LatestVideo[]) => videos.reduce((sum, video) => sum + (video.views ?? 0), 0)
 
 function Links({ links, dark }: { links: Partial<Record<PlatformKey, string>>; dark?: boolean }) {
   return (
@@ -73,14 +71,11 @@ function Side({ id, team, name, tagline, sticker, color, links, videos, now }: S
   )
 }
 
-/** Who is ahead in a round: a stalled channel loses; otherwise recent views decide. */
-function verdict(claudeName: string, codexName: string, claude: LatestVideo[], codex: LatestVideo[], now: number) {
+/** A round is decided by who keeps uploading (view counts are deliberately not shown). */
+function verdict(claudeName: string, codexName: string, codex: LatestVideo[], now: number) {
   const idle = codex[0] ? daysSince(codex[0].publishedAt, now) : null
   if (idle !== null && idle >= 1.5) return `${codexName} 已經 ${Math.floor(idle)} 天沒上片，${claudeName} 繼續每天更新。`
-  const a = total(claude)
-  const b = total(codex)
-  if (!a && !b) return '兩邊都在更新，比分整理中。'
-  return a >= b ? `近 3 支觀看 ${claudeName} 領先。` : `近 3 支觀看 ${codexName} 暫時領先，Claude 隊要加油。`
+  return '兩隊都還在更新，明天見真章。'
 }
 
 export default function Channels({ feeds, now }: { feeds: Feeds; now: number }) {
@@ -95,7 +90,7 @@ export default function Channels({ feeds, now }: { feeds: Feeds; now: number }) 
               同一個類型，看<span className="text-[var(--red)]">誰還在更新</span>。
             </h2>
           </div>
-          <p className="max-w-md text-[14px] leading-7 text-[var(--ink-2)]">兩隊用同一個人的帳號、同一套查證與檢查標準。下面是兩邊頻道在 YouTube 上的最新影片，每 30 分鐘自動更新。</p>
+          <p className="max-w-md text-[14px] leading-7 text-[var(--ink-2)]">兩隊用同一個人的帳號、同一套查證與檢查標準。下面是兩邊頻道在 YouTube 上的最新影片，每 30 分鐘自動更新，點影片直接播。</p>
         </div>
 
         <div className="mt-10 space-y-12">
@@ -104,9 +99,6 @@ export default function Channels({ feeds, now }: { feeds: Feeds; now: number }) 
             const codex = CODEX_CHANNELS.find(c => c.key === match.codex)!
             const claudeVideos = feeds[claude.key] ?? []
             const codexVideos = feeds[codex.key] ?? []
-            const a = total(claudeVideos)
-            const b = total(codexVideos)
-            const share = a + b ? Math.round((a / (a + b)) * 100) : 50
             return (
               <div key={match.key} className="reveal">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-[var(--ink)] pb-2">
@@ -114,7 +106,7 @@ export default function Channels({ feeds, now }: { feeds: Feeds; now: number }) 
                     <span className="font-mono text-[11px] font-bold tracking-[.16em] text-[var(--ink-2)]">{match.round}</span>
                     <span className="text-2xl font-black">{match.label}</span>
                   </p>
-                  <p className="text-sm font-bold">{verdict(claude.name, codex.name, claudeVideos, codexVideos, now)}</p>
+                  <p className="text-sm font-bold">{verdict(claude.name, codex.name, codexVideos, now)}</p>
                 </div>
                 <div className="mt-4 grid grid-cols-[minmax(0,1fr)] items-stretch gap-3 lg:grid-cols-[minmax(0,1fr)_72px_minmax(0,1fr)]">
                   <Side id={`ch-${claude.key}`} team="claude" name={claude.name} tagline={`${claude.tagline} · 每天 ${slotLabel(claude)}`} sticker={claude.sticker} color={claude.color} links={claude.links} videos={claudeVideos} now={now} />
@@ -122,17 +114,6 @@ export default function Channels({ feeds, now }: { feeds: Feeds; now: number }) 
                     <span className="font-display text-outline text-[clamp(40px,4vw,64px)] leading-none">VS</span>
                   </div>
                   <Side id={`ch-${codex.key}`} team="codex" name={codex.name} tagline={codex.tagline} sticker={codex.sticker} color="#8a8f98" links={codex.links} videos={codexVideos} now={now} />
-                </div>
-                <div className="mt-3">
-                  <div className="flex justify-between font-mono text-[11px] font-bold tabular-nums">
-                    <span>{claude.name} {views(a)}</span>
-                    <span className="text-[var(--ink-2)]">近 3 支觀看合計</span>
-                    <span>{views(b)} {codex.name}</span>
-                  </div>
-                  <div className="mt-1 flex h-2.5 overflow-hidden border border-[var(--ink)]" role="img" aria-label={`近 3 支觀看：${claude.name} ${a}，${codex.name} ${b}`}>
-                    <span style={{ width: `${share}%`, background: claude.color }} />
-                    <span className="flex-1 bg-[#3a3d42]" />
-                  </div>
                 </div>
               </div>
             )
@@ -159,7 +140,7 @@ export default function Channels({ feeds, now }: { feeds: Feeds; now: number }) 
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={`/stickers/${nailao.sticker}.webp`} alt="" loading="lazy" className="sticker-img hidden h-[220px] w-auto rotate-3 lg:block" />
         </article>
-        <p className="mt-4 font-mono text-[11px] text-[var(--ink-2)]">Claude 隊目前開播 {CHANNELS.length} 台；Codex 隊的兩台頻道排程暫停中。觀看數取自 YouTube 公開資料。</p>
+        <p className="mt-4 font-mono text-[11px] text-[var(--ink-2)]">Claude 隊目前開播 {CHANNELS.length} 台；Codex 隊的兩台頻道排程暫停中。影片取自 YouTube 公開資料。</p>
       </div>
     </section>
   )

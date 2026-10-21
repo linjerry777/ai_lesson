@@ -7,8 +7,6 @@ import type { LatestVideo } from '@/lib/youtube'
 const embed = (id: string, muted: boolean) =>
   `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0&modestbranding=1${muted ? `&mute=1&loop=1&playlist=${id}` : ''}`
 
-const views = (n: number | null) => (n === null ? '—' : n.toLocaleString('en-US'))
-
 /**
  * A channel's latest uploads side by side as vertical players. The newest one
  * starts playing muted while the reel is on screen; any card plays (with sound)
@@ -73,7 +71,6 @@ export default function VideoReel({ videos, labels, dark = false }: { videos: La
             </div>
             <a href={video.url} target="_blank" rel="noopener noreferrer" className="mt-2 block hover:underline">
               <span className="line-clamp-2 text-[13px] font-bold leading-5">{video.title}</span>
-              <span className={`mt-0.5 block font-mono text-[11px] tabular-nums ${dark ? 'text-[#8a8f98]' : 'text-[var(--ink-2)]'}`}>{views(video.views)} 次觀看</span>
             </a>
           </li>
         )

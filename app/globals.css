@@ -109,3 +109,17 @@ html { scroll-padding-top: 84px; }
 @media (prefers-reduced-motion: reduce) {
   .fight-in-left, .fight-in-right, .fighter-bob, .fighter-lunge, .fighter-snore, .zzz-float, .vs-pulse, .clash-spark, .hp-shine, .hp-blink, .energy-line { animation: none; }
 }
+
+/* One beam, two models: Claude's beam pushes, the clash point wobbles, Codex barely holds. */
+.beam-push { width: 78%; animation: beam-push 2.6s ease-in-out infinite; }
+@keyframes beam-push { 0%, 100% { width: 74%; } 35% { width: 82%; } 55% { width: 78%; } 75% { width: 86%; } }
+.beam-claude { background: repeating-linear-gradient(90deg, #ffd23f 0 18px, #ffe98a 18px 30px); background-size: 60px 100%; animation: beam-push 2.6s ease-in-out infinite, beam-flow-r .35s linear infinite; }
+.beam-codex { background: repeating-linear-gradient(90deg, #6b7079 0 18px, #8a8f98 18px 30px); background-size: 60px 100%; animation: beam-flow-l .6s linear infinite; }
+@keyframes beam-flow-r { to { background-position: 60px 0; } }
+@keyframes beam-flow-l { to { background-position: -60px 0; } }
+.clash-point {
+  background: radial-gradient(circle, #fff 0 22%, #ffd23f 32%, rgba(255, 120, 40, .55) 52%, transparent 70%);
+  animation: clash-flicker .18s steps(2) infinite;
+}
+@keyframes clash-flicker { 50% { scale: 1.25; opacity: .85; } }
+@media (prefers-reduced-motion: reduce) { .beam-push, .beam-claude, .beam-codex, .clash-point { animation: none; } }
