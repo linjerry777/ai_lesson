@@ -44,7 +44,7 @@ export default async function OrdersPage() {
   )
 }
 
-async function OrderList({ email }: { email: string }) {
+export async function OrderList({ email }: { email: string }) {
   const orders = await ordersForEmail(email)
   if (orders === null) {
     return <p className="mt-6 text-[16px] leading-8 text-[var(--ink-2)]">暫時查不到訂單，請過一分鐘重新整理；一直不行請來信 {SITE.contactEmail}。</p>
