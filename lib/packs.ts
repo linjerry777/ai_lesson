@@ -23,6 +23,8 @@ export interface Pack {
   title: string
   intro: string
   quickstart: string[]
+  /** Where the example replies came from (shown once near the top). */
+  exampleNote?: string
   /** Buttons under the quickstart (defaults to ChatGPT / Gemini / Claude). */
   links?: { name: string; url: string }[]
   sections: { title: string; items: PackItem[] }[]

@@ -56,7 +56,7 @@ export default async function PackPage({ params, searchParams }: { params: Promi
   const links = pack.links ?? AI_LINKS
   const download = item.file && !previewing ? `/api/kit-download?session_id=${encodeURIComponent(sessionId)}&item=${item.slug}` : item.file ? '#' : null
 
-  // Running number across sections, so cards read #01…#13.
+  // Running number across sections, so cards read #01…#14.
   const offsets = pack.sections.map((_, i) => pack.sections.slice(0, i).reduce((sum, section) => sum + section.items.length, 0))
   return (
     <main className="px-4 pb-28 pt-10 sm:px-8 sm:pt-16">
@@ -73,6 +73,7 @@ export default async function PackPage({ params, searchParams }: { params: Promi
                 <b>小訊：</b>{course ? '一關一關來：複製指令貼給 Claude Code，做完對照綠色的「成功長這樣」，卡住就打開紅色的「卡住救援」。粉紅色的地方換成你的內容！' : '每一組都附「什麼時候用」和小提醒，按「看 AI 回覆範例」就知道 AI 會回什麼。粉紅色的地方記得換成你的內容！'}
               </p>
             </div>
+            {pack.exampleNote && <p className="mt-1 text-[13px] leading-6 text-[var(--ink-2)]">ℹ️ {pack.exampleNote}</p>}
           </div>
 
           <section className="border-2 border-[var(--ink)] bg-[#f5a524] p-5 shadow-[5px_5px_0_var(--ink)]" aria-labelledby="quickstart">

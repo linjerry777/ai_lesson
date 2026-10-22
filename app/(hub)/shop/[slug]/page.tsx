@@ -66,7 +66,7 @@ function SampleOutput({ output }: { output: NonNullable<Product['sampleOutput']>
     <div className="border-2 border-[var(--ink)] bg-white shadow-[5px_5px_0_var(--ink)]">
       <p className="flex items-center justify-between gap-3 border-b-2 border-[var(--ink)] px-4 py-3">
         <span className="text-lg font-black">AI 會回你這樣的東西</span>
-        <span className="font-mono text-[10px] font-bold tracking-[.12em] text-[var(--ink-2)]">範例・節錄</span>
+        <span className="font-mono text-[10px] font-bold tracking-[.12em] text-[var(--ink-2)]">Claude 實際回覆・節錄 5 / 10</span>
       </p>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[420px] text-left text-[13px] leading-5">
