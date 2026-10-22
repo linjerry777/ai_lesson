@@ -19,18 +19,42 @@ function Highlighted({ text }: { text: string }) {
   )
 }
 
-/** One copy-paste prompt: what it is for, the prompt, one big copy button and a tip. */
+/**
+ * Copy text, falling back to a hidden textarea where the Clipboard API is blocked
+ * (IG / LINE in-app browsers, some embedded views). Returns whether it worked.
+ */
+async function copyText(text: string) {
+  try {
+    await navigator.clipboard.writeText(text)
+    return true
+  } catch {
+    const area = document.createElement('textarea')
+    area.value = text
+    area.setAttribute('readonly', '')
+    area.style.position = 'fixed'
+    area.style.opacity = '0'
+    document.body.appendChild(area)
+    area.select()
+    area.setSelectionRange(0, text.length)
+    let ok = false
+    try {
+      ok = document.execCommand('copy')
+    } catch {
+      ok = false
+    }
+    area.remove()
+    return ok
+  }
+}
+
 /** Small copy button for secondary prompts (the rescue prompt). */
 function CopyText({ text, label }: { text: string; label: string }) {
   const [done, setDone] = useState(false)
   async function copy() {
-    try {
-      await navigator.clipboard.writeText(text)
-      setDone(true)
-      window.setTimeout(() => setDone(false), 2500)
-    } catch {
-      // Clipboard blocked: the text is visible above, so it can still be copied by hand.
-    }
+    // If both copy methods are blocked, the text is visible above and can be selected by hand.
+    if (!(await copyText(text))) return
+    setDone(true)
+    window.setTimeout(() => setDone(false), 2500)
   }
   return (
     <button type="button" onClick={copy} aria-live="polite" className="mt-2 inline-flex min-h-10 items-center gap-1.5 border-2 border-[var(--ink)] bg-white px-3 text-sm font-black">
@@ -39,6 +63,7 @@ function CopyText({ text, label }: { text: string; label: string }) {
   )
 }
 
+/** One copy-paste prompt: what it is for, the prompt, one big copy button and a tip. */
 export default function PromptCard({ index, name, when, prompt, tip, example, success, rescue, target = 'ChatGPT' }: {
   index: string
   name: string
@@ -54,13 +79,9 @@ export default function PromptCard({ index, name, when, prompt, tip, example, su
   const [state, setState] = useState<'idle' | 'done' | 'failed'>('idle')
 
   async function copy() {
-    try {
-      await navigator.clipboard.writeText(prompt)
-      setState('done')
-    } catch {
-      setState('failed')
-    }
-    window.setTimeout(() => setState('idle'), 2500)
+    const ok = await copyText(prompt)
+    setState(ok ? 'done' : 'failed')
+    window.setTimeout(() => setState('idle'), ok ? 2500 : 6000)
   }
 
   return (
