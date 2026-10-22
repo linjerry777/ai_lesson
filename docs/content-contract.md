@@ -22,11 +22,12 @@
   "prompts":  [{ "title": "prompt 名稱", "text": "可直接複製的完整 prompt" }],
   "tools":    [{ "name": "Claude Code", "url": "https://…", "note": "一句話用途（選填）" }],
   "cta": { "kind": "free", "slug": "autovideo-prompt-pack", "pitch": "影片頁上的一句話（選填）" }
+  // 或導到商品頁："cta": { "kind": "product", "slug": "image-prompt-pack", "pitch": "…" }（slug 必須是商店上架中的商品）
 }
 ```
 
 - 平台欄位都可以先留空，影片上架後再補；不認得的平台名稱會被擋下。
-- `cta.slug` 必須對應一份 `published` 的免費資源。
+- `cta.kind` 是 `free` 時，`cta.slug` 必須對應一份 `published` 的免費資源；是 `product` 時，必須是 `/shop` 上架中的商品（lib/products.ts），影片也會自動出現在那個商品頁的「小訊的介紹影片」。
 
 ## 免費資源：`content/free/<slug>.json`
 

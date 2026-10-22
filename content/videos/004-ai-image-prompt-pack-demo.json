@@ -1,0 +1,50 @@
+{
+  "slug": "ai-image-prompt-pack-demo",
+  "code": "x2",
+  "title": "不會畫圖也能做縮圖：貼一段文字，AI 畫出 10 張圖",
+  "channel": "xun",
+  "publishedAt": "2026-10-22",
+  "status": "published",
+  "summary": "縮圖、貼圖、Logo、海報、資訊圖表、頭貼，一張指令卡畫一種圖。這篇示範怎麼用：挑卡、把【】換成你的內容、貼進 ChatGPT 或 Gemini，不滿意只改一處。附一張可以直接試的縮圖指令。",
+  "platforms": {
+    "youtube": "0RlYcMnuBMQ",
+    "instagram": "https://www.instagram.com/reel/DezSzEYlGXo/"
+  },
+  "sections": [
+    {
+      "heading": "4 步就會用",
+      "body": "1. 打開 ChatGPT 或 Gemini（免費版每天有生圖次數限制）。\n2. 挑一張你要的卡，複製，貼進對話框。\n3. 把所有【】裡的字換成你自己的內容，送出。\n4. 不滿意就說「只改 OO，其他不要動」，一次改一個地方。"
+    },
+    {
+      "heading": "為什麼一次只改一個地方",
+      "body": "整張重畫，構圖和風格常常會跑掉。只說要改哪裡，其他照舊，通常一兩次就能修好，而且比重畫快。\n\n中文字寫錯是最常見的狀況，直接說「把字改成 XXX，其他都不要動」就好。"
+    },
+    {
+      "heading": "影片裡的圖是怎麼來的",
+      "body": "影片裡每一張都是 2026-10-22 把指令原封不動丟給 OpenAI 的生圖功能畫出來的，沒有修圖。理財、咖啡店、健身三個主題和裡面的店名都是示範用的虛構內容。同一段指令每次畫的都會不太一樣。"
+    }
+  ],
+  "prompts": [
+    {
+      "title": "YouTube 縮圖",
+      "text": "幫我畫一張 YouTube 影片縮圖，16:9 橫式。\n\n影片主題：【一句話，例：月薪 3 萬怎麼存到第一桶金】\n畫面上的大字：「【8 個字以內】」\n主角：【例：一個 25 歲上班族，驚訝表情，手拿存錢筒】\n\n要求：\n1. 大字放左半邊，粗黑體、白字加黑色外框，手機上一眼看得清楚\n2. 主角放右半邊，表情誇張\n3. 背景簡單、高對比（例如亮黃色），不要太多小東西\n4. 中文字一定要正確、不要亂碼"
+    }
+  ],
+  "tools": [
+    {
+      "name": "ChatGPT",
+      "url": "https://chatgpt.com/",
+      "note": "對話裡直接畫圖"
+    },
+    {
+      "name": "Gemini",
+      "url": "https://gemini.google.com/",
+      "note": "對話裡直接畫圖"
+    }
+  ],
+  "cta": {
+    "kind": "product",
+    "slug": "image-prompt-pack",
+    "pitch": "完整 11 張生圖指令卡，每張都附實際畫出來的圖，貼進 ChatGPT 或 Gemini 就會畫。"
+  }
+}

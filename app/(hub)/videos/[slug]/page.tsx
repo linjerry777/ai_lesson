@@ -1,10 +1,13 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowUpRight, PlayCircle } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, PlayCircle } from 'lucide-react'
 import CopyButton from '@/components/site/CopyButton'
 import LeadForm from '@/components/site/LeadForm'
 import { BackLink, Card, Kicker, Lede, PageTitle } from '@/components/site/ui'
 import { getPublishedVideos, getResource, getVideo } from '@/lib/content'
+import { compareLabel, getProduct, priceLabel } from '@/lib/products'
+import { isYouTubeShort } from '@/lib/youtube'
 import { PLATFORM_LABELS, SITE, getChannel, type PlatformKey } from '@/lib/site'
 
 export function generateStaticParams() {
@@ -40,10 +43,12 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 export default async function VideoPage({ params }: { params: Promise<{ slug: string }> }) {
   const video = getVideo((await params).slug)
   if (!video) notFound()
-  const resource = getResource(video.cta.slug)
+  const resource = video.cta.kind === 'free' ? getResource(video.cta.slug) : null
+  const product = video.cta.kind === 'product' ? getProduct(video.cta.slug) : null
   const channel = getChannel(video.channel)
   const ep = video.code.padStart(2, '0').toUpperCase()
   const links = Object.entries(video.platforms) as [PlatformKey, string][]
+  const vertical = video.platforms.youtube ? await isYouTubeShort(video.platforms.youtube) : false
   const embed = video.platforms.youtube
     ? `https://www.youtube-nocookie.com/embed/${video.platforms.youtube}`
     : video.platforms.bilibili
@@ -60,9 +65,9 @@ export default async function VideoPage({ params }: { params: Promise<{ slug: st
       </header>
 
       <div className="mx-auto mt-12 max-w-5xl">
-        <div className="overflow-hidden border-[3px] border-[var(--ink)] bg-black shadow-[10px_10px_0_var(--ink)]">
+        <div className={`overflow-hidden border-[3px] border-[var(--ink)] bg-black shadow-[10px_10px_0_var(--ink)] ${vertical ? 'mx-auto max-w-[360px]' : ''}`}>
           {embed ? (
-            <iframe src={embed} title={video.title} className="aspect-video w-full" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
+            <iframe src={embed} title={video.title} className={vertical ? 'mx-auto block aspect-[9/16] w-full max-w-[360px]' : 'aspect-video w-full'} allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
           ) : (
             <div className="relative flex aspect-video items-center justify-center overflow-hidden" style={{ background: channel?.color ?? 'var(--ink)', color: channel?.ink ?? '#fff' }}>
               <span className="font-display absolute -bottom-[0.2em] right-4 text-[clamp(160px,26vw,320px)] leading-none opacity-20">{ep}</span>
@@ -132,6 +137,22 @@ export default async function VideoPage({ params }: { params: Promise<{ slug: st
             </section>
           )}
         </article>
+
+        {product && (
+          <Card as="aside" className="p-6 lg:sticky lg:top-24">
+            <SectionLabel>影片裡的商品</SectionLabel>
+            <h2 className="mt-3 text-xl font-black leading-snug">{product.name}</h2>
+            <p className="mt-2 text-sm leading-7 text-[var(--ink-2)]">{video.cta.pitch ?? product.tagline}</p>
+            <p className="mt-4 flex items-end gap-2">
+              <span className="font-display text-4xl leading-none">{priceLabel(product)}</span>
+              {compareLabel(product) && <s className="mb-0.5 text-sm text-[var(--ink-2)]">{compareLabel(product)}</s>}
+            </p>
+            <Link href={`/shop/${product.slug}`} className="mt-5 flex min-h-12 items-center justify-center gap-2 bg-[var(--ink)] px-5 text-[15px] font-black text-white">
+              看內容・實測成果 <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+            <p className="mt-4 text-xs leading-6 text-[var(--ink-2)]">買東西不用註冊。想先免費試試？<Link href="/free" className="underline">拿免費 Prompt 包</Link></p>
+          </Card>
+        )}
 
         {resource && (
           <Card as="aside" className="p-6 lg:sticky lg:top-24">

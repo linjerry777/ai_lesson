@@ -43,7 +43,7 @@ describe('content files', () => {
     [{ platforms: { instagram: 'http://insecure' } }, 'instagram'],
     [{ platforms: { myspace: 'https://x' } }, 'unknown platform'],
     [{ tools: [{ name: 'x', url: 'javascript:alert(1)' }] }, 'https'],
-    [{ cta: { kind: 'product', slug: 'x' } }, 'cta'],
+    [{ cta: { kind: 'course', slug: 'x' } }, 'cta'],
   ])('rejects invalid video %o', (patch, message) => {
     expect(() => parseVideo({ ...video, ...patch }, 'v.json')).toThrow(message)
   })
@@ -62,6 +62,9 @@ describe('content files', () => {
     expect(() => validateLibrary([v, { ...v, slug: 'other' }], [r])).toThrow('duplicate video code')
     expect(() => validateLibrary([v], [])).toThrow('not found')
     expect(() => validateLibrary([v], [{ ...r, status: 'draft' }])).toThrow('not published')
+    // A note can point at a shop product instead of a free resource.
+    expect(() => validateLibrary([{ ...v, cta: { kind: 'product', slug: 'image-prompt-pack' } }], [])).not.toThrow()
+    expect(() => validateLibrary([{ ...v, cta: { kind: 'product', slug: 'claude-code-course' } }], [])).toThrow('not in the shop')
   })
 })
 

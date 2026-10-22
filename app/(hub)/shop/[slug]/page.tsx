@@ -7,7 +7,7 @@ import PromptCard from '@/components/site/PromptCard'
 import { productType } from '@/components/site/ProductGrid'
 import Showcase from '@/components/site/Showcase'
 import { BackLink } from '@/components/site/ui'
-import { getPublishedResources } from '@/lib/content'
+import { getPublishedResources, getPublishedVideos } from '@/lib/content'
 import { PRODUCTS, canBuy, compareLabel, deliverables, getProduct, priceLabel, type Product } from '@/lib/products'
 import { showcaseFor } from '@/lib/showcase'
 import { SITE } from '@/lib/site'
@@ -103,6 +103,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const items = deliverables(product)
   // Real test runs, spread between the sections instead of piled at the end.
   const runs = showcaseFor(product.slug)
+  const intros = getPublishedVideos().filter(video => video.cta.kind === 'product' && video.cta.slug === product.slug)
   const run = (i: number) => runs[i] ? (
     <div>
       {i === 0 && <Label>REAL RUNS · 實測成果（同一個商品，換不同情境真的跑過）</Label>}
@@ -133,6 +134,28 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </section>
 
             {product.gallery && <section aria-label="產品畫面"><Gallery items={product.gallery} /></section>}
+
+            {intros.length > 0 && (
+              <section>
+                <Label>VIDEO · 小訊的介紹影片</Label>
+                <div className="mt-4 grid gap-4 sm:grid-cols-[260px_minmax(0,1fr)] sm:items-start">
+                  {intros.map(video => (
+                    <div key={video.slug} className="contents">
+                      {video.platforms.youtube && (
+                        <div className="aspect-[9/16] w-full max-w-[260px] overflow-hidden border-2 border-[var(--ink)] bg-black shadow-[4px_4px_0_var(--ink)]">
+                          <iframe src={`https://www.youtube-nocookie.com/embed/${video.platforms.youtube}`} title={video.title} allow="encrypted-media; picture-in-picture" allowFullScreen loading="lazy" className="h-full w-full" />
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-lg font-black leading-snug">{video.title}</p>
+                        <p className="mt-2 text-[14px] leading-7 text-[var(--ink-2)]">{video.summary}</p>
+                        <Link href={`/videos/${video.slug}`} className="mt-3 inline-block text-sm font-black underline">看影片筆記（重點＋可以直接複製的指令）→</Link>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {product.previews && (
               <section>

@@ -52,3 +52,13 @@ export function ago(iso: string, now = Date.now()) {
 }
 
 export const daysSince = (iso: string, now = Date.now()) => (now - new Date(iso).getTime()) / 86_400_000
+
+/** True for a YouTube Short (vertical): /shorts/<id> answers 200, a normal video redirects to /watch. */
+export async function isYouTubeShort(id: string): Promise<boolean> {
+  try {
+    const res = await fetch(`https://www.youtube.com/shorts/${id}`, { method: 'HEAD', redirect: 'manual', next: { revalidate: 86400 } })
+    return res.status === 200
+  } catch {
+    return false
+  }
+}

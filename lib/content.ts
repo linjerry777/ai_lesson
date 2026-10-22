@@ -6,6 +6,7 @@
 
 import { readdirSync, readFileSync } from 'node:fs'
 import path from 'node:path'
+import { getProduct } from './products'
 import { CHANNELS, type PlatformKey } from './site'
 
 export const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
@@ -29,7 +30,8 @@ export interface VideoNote {
   sections: { heading: string; body: string }[]
   prompts: { title: string; text: string }[]
   tools: { name: string; url: string; note?: string }[]
-  cta: { kind: 'free'; slug: string; pitch?: string }
+  /** 'free' → a free resource (email-gated download); 'product' → a shop product page. */
+  cta: { kind: 'free' | 'product'; slug: string; pitch?: string }
 }
 
 export interface FreeResource {
@@ -103,7 +105,7 @@ export function parseVideo(input: unknown, file: string): VideoNote {
   }
 
   const ctaRaw = raw.cta as Raw | undefined
-  if (!ctaRaw || ctaRaw.kind !== 'free') fail(file, '"cta.kind" must be "free"')
+  if (!ctaRaw || (ctaRaw.kind !== 'free' && ctaRaw.kind !== 'product')) fail(file, '"cta.kind" must be "free" or "product"')
   const ctaSlug = str(ctaRaw, 'slug', file, 80)
 
   return {
@@ -118,7 +120,7 @@ export function parseVideo(input: unknown, file: string): VideoNote {
       url: httpsUrl(str(item, 'url', file, 500), file, 'tools.url'),
       note: optStr(item, 'note', file, 200),
     })),
-    cta: { kind: 'free', slug: ctaSlug, pitch: optStr(ctaRaw, 'pitch', file, 200) },
+    cta: { kind: ctaRaw.kind as 'free' | 'product', slug: ctaSlug, pitch: optStr(ctaRaw, 'pitch', file, 200) },
   }
 }
 
@@ -167,6 +169,10 @@ export function validateLibrary(videos: VideoNote[], resources: FreeResource[]) 
     for (const key of [`slug:${video.slug}`, `code:${video.code}`]) {
       if (seen.has(key)) throw new ContentError(`duplicate video ${key}`)
       seen.add(key)
+    }
+    if (video.cta.kind === 'product') {
+      if (!getProduct(video.cta.slug)) throw new ContentError(`video ${video.slug}: cta product "${video.cta.slug}" is not in the shop`)
+      continue
     }
     const target = resources.find(item => item.slug === video.cta.slug)
     if (!target) throw new ContentError(`video ${video.slug}: cta.slug "${video.cta.slug}" not found`)
