@@ -17,6 +17,7 @@ export default function SiteFooter() {
             <ul className="mt-4 space-y-2.5 text-sm">
               {NAV.map(item => <li key={item.href}><Link href={item.href} className="hover:underline">{item.label}</Link></li>)}
               <li><Link href="/videos" className="hover:underline">影片筆記</Link></li>
+              <li><Link href="/orders" className="hover:underline">找回購買內容</Link></li>
               <li><a href={SITE.studioUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">Jerry AI Studio ↗</a></li>
             </ul>
           </div>

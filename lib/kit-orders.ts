@@ -23,6 +23,8 @@ export type VerifiedOrder = {
   amountTotal: number
   currency: string
   livemode: boolean
+  /** Unix seconds when the checkout was created. */
+  createdAt?: number
 }
 
 export type VerifyResult = { ok: true; order: VerifiedOrder } | { ok: false; reason: 'invalid' | 'unpaid' | 'unknown_product' | 'unavailable' }
@@ -66,6 +68,7 @@ export function checkSession(session: Stripe.Checkout.Session): VerifyResult {
       amountTotal: session.amount_total ?? 0,
       currency: session.currency ?? 'twd',
       livemode: session.livemode,
+      createdAt: session.created,
     },
   }
 }
@@ -81,6 +84,30 @@ export async function verifySession(sessionId: string): Promise<VerifyResult> {
     if (error instanceof Stripe.errors.StripeInvalidRequestError) return { ok: false, reason: 'invalid' }
     console.error('[kit-orders] stripe read failed')
     return { ok: false, reason: 'unavailable' }
+  }
+}
+
+/**
+ * Every paid order made with this email, read straight from Stripe (so it also finds
+ * buyers who closed the window before reaching /thanks). Newest first. The caller must
+ * have verified that the visitor owns this email (signed in with it).
+ */
+export async function ordersForEmail(email: string): Promise<VerifiedOrder[] | null> {
+  const stripe = kitStripe()
+  if (!stripe) return null
+  try {
+    // Stripe matches the email exactly; try the lower-cased spelling too.
+    const spellings = [...new Set([email, email.toLowerCase()])]
+    const pages = await Promise.all(spellings.map(value => stripe.checkout.sessions.list({ customer_details: { email: value }, limit: 100, expand: ['data.payment_link'] })))
+    const seen = new Set<string>()
+    return pages.flatMap(page => page.data)
+      .filter(session => !seen.has(session.id) && Boolean(seen.add(session.id)))
+      .sort((a, b) => b.created - a.created)
+      .map(checkSession)
+      .flatMap(result => (result.ok ? [result.order] : []))
+  } catch {
+    console.error('[kit-orders] stripe list failed')
+    return null
   }
 }
 

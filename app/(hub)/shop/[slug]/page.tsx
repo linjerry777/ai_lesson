@@ -251,7 +251,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   </a>
                   <ul className="mt-4 space-y-1 text-[12px] leading-6 text-[var(--ink-2)]">
                     <li>・Stripe 安全付款：信用卡、Apple Pay、Google Pay</li>
-                    <li>・付款完成立刻拿到，不用等寄信</li>
+                    <li>・付款完成立刻拿到，不用註冊、不用登入</li>
+                    <li>・頁面弄丟了？到<Link href="/orders" className="underline">找回購買內容</Link>用付款 Email 找回</li>
                     <li>・之後的更新版本免費</li>
                     <li>・7 天內不滿意可退費，見<Link href="/refund" className="underline">退費政策</Link></li>
                   </ul>

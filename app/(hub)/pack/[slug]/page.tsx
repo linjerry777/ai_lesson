@@ -28,7 +28,7 @@ function Locked({ reason }: { reason: string }) {
         <h1 className="text-3xl font-black">打不開這個頁面</h1>
         <p className="mt-4 text-[16px] leading-8 text-[var(--ink-2)]">{reason}</p>
         <p className="mt-4 text-[16px] leading-8 text-[var(--ink-2)]">
-          如果你已經付款，請把 Stripe 寄給你的收據轉寄到 <a href={`mailto:${SITE.contactEmail}`} className="underline">{SITE.contactEmail}</a>，我會把連結重新寄給你。
+          如果你已經付款，到 <Link href="/orders" className="underline">找回購買內容</Link> 用付款時的 Email 登入就能找回；還是不行，把 Stripe 收據轉寄到 <a href={`mailto:${SITE.contactEmail}`} className="underline">{SITE.contactEmail}</a>。
         </p>
       </div>
     </main>

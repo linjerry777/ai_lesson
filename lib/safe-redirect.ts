@@ -1,6 +1,6 @@
 // Where a login may send you back to. The old /api/checkout course flow is off, so the
 // default is now the dashboard (earlier course buyers) instead of a dead checkout.
-const ALLOWED_REDIRECT_PATHS = ['/', '/dashboard', '/api/checkout', '/admin/stats', '/admin/products']
+const ALLOWED_REDIRECT_PATHS = ['/', '/dashboard', '/api/checkout', '/admin/stats', '/admin/products', '/orders']
 
 export function normalizeRedirectPath(
   value: string | null | undefined,
