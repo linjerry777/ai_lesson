@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Download } from 'lucide-react'
 import PromptCard from '@/components/site/PromptCard'
+import { currentAdmin } from '@/lib/admin-session'
 import { recordOrder, verifySession } from '@/lib/kit-orders'
 import { loadPack } from '@/lib/packs'
 import { deliverables, findProduct } from '@/lib/products'
@@ -40,8 +41,8 @@ export default async function PackPage({ params, searchParams }: { params: Promi
   const item = findProduct(slug)
   if (!item?.pack) notFound()
 
-  // Local preview only: lets Jerry look at the page without buying.
-  const previewing = process.env.NODE_ENV === 'development' && preview === '1'
+  // Local preview (dev) or a signed-in admin: look at the page without buying.
+  const previewing = (process.env.NODE_ENV === 'development' && preview === '1') || Boolean(await currentAdmin())
   if (!previewing) {
     const result = await verifySession(sessionId)
     if (!result.ok) return <Locked reason="這個網址少了訂單資訊，或付款還沒完成。請從付款完成頁的按鈕進來。" />
@@ -54,7 +55,7 @@ export default async function PackPage({ params, searchParams }: { params: Promi
 
   const course = pack.kind === 'course'
   const links = pack.links ?? AI_LINKS
-  const download = item.file && !previewing ? `/api/kit-download?session_id=${encodeURIComponent(sessionId)}&item=${item.slug}` : item.file ? '#' : null
+  const download = !item.file ? null : previewing ? `/api/admin/download?item=${item.slug}` : `/api/kit-download?session_id=${encodeURIComponent(sessionId)}&item=${item.slug}`
 
   // Running number across sections, so cards read #01…#14.
   const offsets = pack.sections.map((_, i) => pack.sections.slice(0, i).reduce((sum, section) => sum + section.items.length, 0))

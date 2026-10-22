@@ -5,9 +5,11 @@ import { ArrowRight, Check, X } from 'lucide-react'
 import LeadForm from '@/components/site/LeadForm'
 import PromptCard from '@/components/site/PromptCard'
 import { productType } from '@/components/site/ProductGrid'
+import Showcase from '@/components/site/Showcase'
 import { BackLink } from '@/components/site/ui'
 import { getPublishedResources } from '@/lib/content'
 import { PRODUCTS, canBuy, compareLabel, deliverables, getProduct, priceLabel, type Product } from '@/lib/products'
+import { showcaseFor } from '@/lib/showcase'
 import { SITE } from '@/lib/site'
 
 export function generateStaticParams() {
@@ -99,6 +101,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const buyable = canBuy(product)
   const type = productType(product)
   const items = deliverables(product)
+  // Real test runs, spread between the sections instead of piled at the end.
+  const runs = showcaseFor(product.slug)
+  const run = (i: number) => runs[i] ? (
+    <div>
+      {i === 0 && <Label>REAL RUNS · 實測成果（同一個商品，換不同情境真的跑過）</Label>}
+      <div className={i === 0 ? 'mt-4' : ''}><Showcase scenario={runs[i]} index={i} /></div>
+    </div>
+  ) : null
 
   return (
     <main className="bg-[#fafaf8] px-4 pb-24 pt-8 sm:px-8 sm:pt-10">
@@ -157,6 +167,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               </section>
             )}
 
+            {run(0)}
+
             {product.samples && product.samples.length > 0 && (
               <section>
                 <Label>FREE SAMPLE · 先試一組，複製貼到 ChatGPT 看看</Label>
@@ -168,6 +180,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </div>
               </section>
             )}
+
+            {run(1)}
 
             {product.audience && (
               <section className="grid gap-3 sm:grid-cols-2">
@@ -185,6 +199,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </div>
               </section>
             )}
+
+            {run(2)}
+            {runs.slice(3).map((scenario, i) => <Showcase key={scenario.title} scenario={scenario} index={i + 3} />)}
 
             {product.steps.length > 0 && (
               <section className="grid gap-6 border-y border-[var(--ink)] py-6 sm:grid-cols-3">

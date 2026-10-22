@@ -336,7 +336,7 @@ const CATALOGUE: Product[] = [
     gallery: [
       { src: '/shop/carousel-sheet.webp', alt: '一句話做出來的 8 張養貓輪播', caption: '實測：只說「新手第一次養貓要準備的東西，帳號 @meow.daily，風格 mint」做出來的 8 張' },
       { src: '/shop/carousel-cat-01.webp', alt: '養貓輪播封面', caption: 'mint 風格封面', phone: true },
-      { src: '/shop/carousel-sample-01.webp', alt: '存錢輪播封面', caption: 'paper 風格封面', phone: true },
+      { src: '/shop/carousel-sample-01.webp', alt: '手沖咖啡輪播封面', caption: 'dark 風格封面', phone: true },
     ],
     highlights: ['一句話出一整組', '1080×1350 PNG', '4 種風格', '自動檢查字被切掉', '附貼文說明'],
     audience: {
@@ -508,6 +508,8 @@ const CATALOGUE: Product[] = [
 
 /** Everything the site lists. Hidden products stay out of pages, sitemap and links. */
 export const PRODUCTS: Product[] = CATALOGUE.filter(product => !product.hidden)
+/** Every product, hidden ones included (admin pages only). */
+export const ALL_PRODUCTS: Product[] = CATALOGUE
 
 export function getProduct(slug: string) {
   return PRODUCTS.find(product => product.slug === slug) ?? null
