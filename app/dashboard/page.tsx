@@ -44,7 +44,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
   const courses = getLearnerCourses(purchases ?? [], stripeIsLive())
 
-  if (!courses.length) redirect('/#pricing')
+  if (!courses.length) redirect('/shop')
 
   return (
     <CoursePage

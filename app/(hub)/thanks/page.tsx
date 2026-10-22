@@ -78,7 +78,7 @@ export default async function ThanksPage({ searchParams }: { searchParams: Promi
         ))}
       </ul>
       <div className="mt-12 border-t border-[#121212]/25 pt-8 text-[15px] leading-8 text-[var(--ink-2)]">
-        <p><strong className="text-[var(--ink)]">請把這一頁加入書籤。</strong>之後有新版（或全套加入新工作流），回到這一頁就能下載。</p>
+        <p><strong className="text-[var(--ink)]">請把這一頁加入書籤。</strong>之後有新版，回到這一頁就能看、就能下載，不用登入。</p>
         <p className="mt-3">卡住了或下載有問題，來信 <a href={contact} className="underline">{SITE.contactEmail}</a>，附上你的付款 Email。</p>
         <p className="mt-3"><Link href="/free" className="underline">順便拿免費的 AI 短影音 Prompt 包 →</Link></p>
       </div>

@@ -11,6 +11,11 @@ describe('normalizeRedirectPath', () => {
     )
   })
 
+  it('lets admins come back to the admin pages', () => {
+    expect(normalizeRedirectPath('/admin/products')).toBe('/admin/products')
+    expect(normalizeRedirectPath('/admin/stats')).toBe('/admin/stats')
+  })
+
   it.each([
     'https://evil.example/dashboard',
     '//evil.example/dashboard',
@@ -18,7 +23,7 @@ describe('normalizeRedirectPath', () => {
     'dashboard',
     '',
   ])('rejects unsafe or unsupported next value %s', (value) => {
-    expect(normalizeRedirectPath(value)).toBe('/api/checkout')
+    expect(normalizeRedirectPath(value)).toBe('/dashboard')
   })
 
   it('uses the caller fallback when no next value is present', () => {

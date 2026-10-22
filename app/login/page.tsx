@@ -16,7 +16,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const supabase = await createClient()
   const { data: { session } } = await supabase.auth.getSession()
 
-  // Already logged in → send to checkout (redirects to dashboard if already purchased)
+  // Already logged in → straight to where they were going
   if (session) {
     redirect(next)
   }
@@ -31,7 +31,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           </div>
           <h1 className="text-2xl font-black text-gray-900">登入 / 註冊</h1>
           <p className="text-gray-500 text-sm mt-1">
-            購課前請先登入或建立帳號
+            給管理員和舊版課程學員用的。買指令包、套件不需要登入。
           </p>
         </div>
 
