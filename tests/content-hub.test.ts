@@ -24,7 +24,8 @@ describe('content files', () => {
     const { videos, resources } = loadLibrary()
     expect(videos.length).toBeGreaterThan(0)
     expect(resources.length).toBeGreaterThan(0)
-    expect(getVideoByCode('1')?.slug).toBe('ai-short-video-factory')
+    // Drafts are parsed and validated but never reachable from the site.
+    for (const draft of videos.filter(video => video.status === 'draft')) expect(getVideoByCode(draft.code)).toBeNull()
   })
 
   it('parses a valid video and resource', () => {

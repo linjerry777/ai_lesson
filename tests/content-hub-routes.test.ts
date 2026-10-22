@@ -14,6 +14,12 @@ vi.mock('@/lib/supabase/server', () => {
   return { createServiceClient: () => client, createClient: async () => client }
 })
 
+// Short links resolve against a fixed published note, independent of what is checked into content/.
+vi.mock('@/lib/content', async importOriginal => {
+  const actual = await importOriginal<typeof import('@/lib/content')>()
+  return { ...actual, getVideoByCode: (code: string) => (code === '1' ? { slug: 'ai-short-video-factory', code: '1' } : null) }
+})
+
 import { POST as postLead } from '@/app/api/leads/route'
 import { GET as shortLink } from '@/app/v/[code]/route'
 

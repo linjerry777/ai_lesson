@@ -5,7 +5,7 @@ import { Download } from 'lucide-react'
 import PromptCard from '@/components/site/PromptCard'
 import { recordOrder, verifySession } from '@/lib/kit-orders'
 import { loadPack } from '@/lib/packs'
-import { deliverables, getProduct } from '@/lib/products'
+import { deliverables, findProduct } from '@/lib/products'
 import { SITE } from '@/lib/site'
 
 export const metadata: Metadata = {
@@ -37,7 +37,7 @@ function Locked({ reason }: { reason: string }) {
 export default async function PackPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ session_id?: string; preview?: string }> }) {
   const { slug } = await params
   const { session_id: sessionId = '', preview } = await searchParams
-  const item = getProduct(slug)
+  const item = findProduct(slug)
   if (!item?.pack) notFound()
 
   // Local preview only: lets Jerry look at the page without buying.

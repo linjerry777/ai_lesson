@@ -195,6 +195,7 @@ const CATALOGUE: Product[] = [
   },
   {
     slug: 'claude-code-course',
+    hidden: true, // 2026-10-22 Jerry: unlisted until the 6 levels pass a real-account run-through
     kind: 'course',
     name: 'Claude Code 實戰課：做出會收錢的網站',
     latin: 'Claude Code Course',
@@ -238,6 +239,7 @@ const CATALOGUE: Product[] = [
   },
   {
     slug: 'all-in-one',
+    hidden: true, // contains the unlisted Claude Code course
     kind: 'kit',
     name: '全套：指令包＋工作流套件＋Claude Code 實戰課',
     latin: 'All-in-one Pass',
@@ -305,6 +307,16 @@ export const PRODUCTS: Product[] = CATALOGUE.filter(product => !product.hidden)
 
 export function getProduct(slug: string) {
   return PRODUCTS.find(product => product.slug === slug) ?? null
+}
+
+/** Any product, including hidden ones: earlier buyers still get what they paid for after a product is unlisted. */
+export function findProduct(slug: string) {
+  return CATALOGUE.find(product => product.slug === slug) ?? null
+}
+
+/** Any product sold through this Payment Link (hidden ones included, for the same reason). */
+export function findByPaymentLink(linkId: string) {
+  return CATALOGUE.find(product => product.paymentLinkId === linkId) ?? null
 }
 
 /** What a purchase of `product` delivers: files to download and/or a course to unlock. */

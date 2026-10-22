@@ -19,7 +19,7 @@ export default function Shop() {
             <img src="/stickers/xun-explain.webp" alt="小訊" loading="lazy" className="sticker-img h-[120px] w-auto shrink-0 sm:h-[150px]" />
             <div className="relative mb-6 max-w-sm border-2 border-[var(--ink)] bg-white px-4 py-3 text-[14px] leading-6 shadow-[4px_4px_0_var(--ink)]">
               <span className="absolute -left-[9px] bottom-4 h-4 w-4 rotate-45 border-b-2 border-l-2 border-[var(--ink)] bg-white" aria-hidden="true" />
-              <b>小訊幫你挑：</b>沒寫過程式，先拿 <b>NT$199 指令包</b>，複製貼上就能用。想自己架網站收錢，選 <b>Claude Code 課</b>；全都要，<b>全套最划算</b>。
+              <b>小訊幫你挑：</b>沒寫過程式，先拿 <b>NT$199 指令包</b>，複製貼上就能用。想每天自動出片，選 <b>NT$399 工作流套件</b>，裝好說一句話就出一支。
             </div>
           </div>
         </div>

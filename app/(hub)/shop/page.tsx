@@ -4,7 +4,7 @@ import { SITE } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: `工作流與課程 | ${SITE.name}`,
-  description: '複製貼上就能用的 AI 指令包、照著跑的短影音工作流套件，以及做出會收錢網站的 Claude Code 實戰課。',
+  description: '複製貼上就能用的 AI 指令包，以及照著跑的短影音工作流套件。每一個上架前都實際跑過一次。',
   alternates: { canonical: '/shop' },
 }
 
@@ -16,14 +16,14 @@ export default function ShopPage() {
           <div>
             <p className="font-mono text-[11px] font-bold tracking-[.16em] text-[var(--ink-2)]">SHOP · 工作流與課程</p>
             <h1 className="mt-3 text-[clamp(34px,4.6vw,68px)] font-black leading-[1.04] tracking-[-.04em]">照著貼，就能跑。</h1>
-            <p className="mt-3 max-w-xl text-[16px] leading-8 text-[var(--ink-2)]">每個產品都是 Claude 隊每天實際在用的東西：複製貼上的指令、下載就能跑的工作流，或一步一步帶你做出網站的課程。</p>
+            <p className="mt-3 max-w-xl text-[16px] leading-8 text-[var(--ink-2)]">每個產品都是 Claude 隊每天實際在用的東西：複製貼上的指令，或下載就能跑的工作流。每一個上架前都實際跑過一次。</p>
           </div>
           <div className="flex items-end gap-3 lg:justify-end">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/stickers/xun-explain.webp" alt="小訊" className="sticker-img h-[120px] w-auto shrink-0 sm:h-[150px]" />
             <div className="relative mb-6 max-w-sm border-2 border-[var(--ink)] bg-white px-4 py-3 text-[14px] leading-6 shadow-[4px_4px_0_var(--ink)]">
               <span className="absolute -left-[9px] bottom-4 h-4 w-4 rotate-45 border-b-2 border-l-2 border-[var(--ink)] bg-white" aria-hidden="true" />
-              <b>小訊幫你挑：</b>沒寫過程式，先拿 <b>NT$199 指令包</b>。想自己架網站收錢，選 <b>Claude Code 課</b>；全都要，<b>全套最划算</b>。
+              <b>小訊幫你挑：</b>沒寫過程式，先拿 <b>NT$199 指令包</b>，複製貼上就能用。想每天自動出片，選 <b>NT$399 工作流套件</b>，裝好說一句話就出一支。
             </div>
           </div>
         </div>

@@ -20,7 +20,7 @@ export default function FreeSection({ notes, resource }: { notes: NoteRow[]; res
             <img src="/stickers/xun.webp" alt="小訊" loading="lazy" className="sticker-img h-[110px] w-auto shrink-0 -rotate-3 sm:h-[130px]" />
             <div className="relative mb-5 max-w-lg border-2 border-[var(--ink)] bg-white px-4 py-3 text-[14px] leading-6 shadow-[4px_4px_0_var(--ink)]">
               <span className="absolute -left-[9px] bottom-4 h-4 w-4 rotate-45 border-b-2 border-l-2 border-[var(--ink)] bg-white" aria-hidden="true" />
-              <b>小訊：</b>每支影片我都整理成一頁筆記，重點、可以直接複製的 prompt、用到的工具都在裡面。想動手做，先下載右邊的免費資源。
+              <b>小訊：</b>{notes.length ? '每支影片我都整理成一頁筆記，重點、可以直接複製的 prompt、用到的工具都在裡面。想動手做，先下載右邊的免費資源。' : '教學影片的筆記整理中，上線後會放在這裡。先下載右邊的免費 Prompt 包，是我們頻道每天做片用的同一套規則。'}
             </div>
           </div>
 

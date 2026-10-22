@@ -9,7 +9,7 @@
 import Stripe from 'stripe'
 import { createServiceClient } from '@/lib/supabase/server'
 import { DOWNLOAD_BUCKET } from '@/lib/leads'
-import { PRODUCTS, deliverables, getProduct, isDeliverable, type Product } from '@/lib/products'
+import { deliverables, findByPaymentLink, findProduct, isDeliverable, type Product } from '@/lib/products'
 import { PLATFORM_APP_ID } from '@/lib/platform'
 import { purchaseUpsert } from '@/lib/purchase-entitlements'
 
@@ -43,7 +43,7 @@ export function productSlugOf(session: Pick<Stripe.Checkout.Session, 'payment_li
   if (link && typeof link === 'object' && link.metadata?.product_slug) return link.metadata.product_slug
   if (session.metadata?.product_slug) return session.metadata.product_slug
   const linkId = typeof link === 'string' ? link : link?.id
-  return PRODUCTS.find(product => product.paymentLinkId && product.paymentLinkId === linkId)?.slug ?? null
+  return linkId ? findByPaymentLink(linkId)?.slug ?? null : null
 }
 
 export function checkSession(session: Stripe.Checkout.Session): VerifyResult {
@@ -51,7 +51,7 @@ export function checkSession(session: Stripe.Checkout.Session): VerifyResult {
   if (session.status !== 'complete' || !['paid', 'no_payment_required'].includes(session.payment_status)) return { ok: false, reason: 'unpaid' }
   const discounted = (session.total_details?.amount_discount ?? 0) > 0
   const slug = productSlugOf(session)
-  const product = slug ? getProduct(slug) : null
+  const product = slug ? findProduct(slug) : null
   if (!product || !isDeliverable(product)) return { ok: false, reason: 'unknown_product' }
   if (!discounted && product.price !== null && session.currency === 'twd' && (session.amount_total ?? 0) < product.price * 100) {
     // Paid less than the listed price (e.g. a mis-configured link): do not deliver automatically.
@@ -133,7 +133,7 @@ export async function claimKitCourses(userId: string, email: string) {
   if (error) throw error
   let granted = 0
   for (const row of data ?? []) {
-    const product = getProduct(row.product_slug)
+    const product = findProduct(row.product_slug)
     if (!product) continue
     for (const item of deliverables(product)) {
       if (!item.grantsCourse) continue
