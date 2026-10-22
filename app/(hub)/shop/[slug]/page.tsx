@@ -162,7 +162,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 <Label>FREE SAMPLE · 先試一組，複製貼到 ChatGPT 看看</Label>
                 <div className="mt-4 grid items-start gap-5 xl:grid-cols-2">
                   {product.samples.map((sample, index) => (
-                    <PromptCard key={sample.name} index={`試用 ${index + 1}`} name={sample.name} prompt={sample.prompt} />
+                    <PromptCard key={sample.name} index={`試用 ${index + 1}`} name={sample.name} prompt={sample.prompt} example={sample.example} exampleImage={sample.exampleImage} />
                   ))}
                   {product.sampleOutput && <SampleOutput output={product.sampleOutput} />}
                 </div>

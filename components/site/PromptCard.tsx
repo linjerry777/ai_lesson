@@ -64,13 +64,14 @@ function CopyText({ text, label }: { text: string; label: string }) {
 }
 
 /** One copy-paste prompt: what it is for, the prompt, one big copy button and a tip. */
-export default function PromptCard({ index, name, when, prompt, tip, example, success, rescue, target = 'ChatGPT' }: {
+export default function PromptCard({ index, name, when, prompt, tip, example, exampleImage, success, rescue, target = 'ChatGPT' }: {
   index: string
   name: string
   when?: string
   prompt: string
   tip?: string
   example?: string
+  exampleImage?: string
   success?: string[]
   rescue?: string
   /** Where the prompt gets pasted, for the "copied" message. */
@@ -115,6 +116,13 @@ export default function PromptCard({ index, name, when, prompt, tip, example, su
           </div>
         )}
         {tip && <p className="mt-3 text-sm leading-6 text-[var(--ink-2)]">💡 {tip}</p>}
+        {exampleImage && (
+          <figure className="mt-3 border border-[var(--ink)] bg-[#f3f0e8] p-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={exampleImage} alt={`${name} 實際畫出來的圖`} loading="lazy" className="w-full" />
+            <figcaption className="mt-1.5 text-[12px] text-[var(--ink-2)]">實際丟進 AI 畫出來的圖（同一段指令，每次畫的都會不太一樣）</figcaption>
+          </figure>
+        )}
         {example && (
           <details className="group mt-3 border border-[var(--ink)] bg-[#f3f0e8]">
             <summary className="flex cursor-pointer list-none items-center justify-between px-3 py-2 text-sm font-black">

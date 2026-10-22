@@ -11,6 +11,8 @@ export interface PackItem {
   tip?: string
   /** What the AI typically replies (collapsible). */
   example?: string
+  /** A real image this prompt produced (public URL), for image packs. */
+  exampleImage?: string
   /** Course levels: what success looks like, and a prompt to paste when stuck. */
   success?: string[]
   rescue?: string

@@ -110,7 +110,7 @@ export default async function PackPage({ params, searchParams }: { params: Promi
             <h2 className="text-2xl font-black">{section.title}</h2>
             <div className="mt-5 grid items-start gap-6 lg:grid-cols-2">
               {section.items.map((entry, j) => (
-                <PromptCard key={entry.name} index={String(offsets[i] + j + 1).padStart(2, '0')} name={entry.name} when={entry.when} prompt={entry.prompt} tip={entry.tip} example={entry.example} success={entry.success} rescue={entry.rescue} target={course ? 'Claude Code' : 'ChatGPT'} />
+                <PromptCard key={entry.name} index={String(offsets[i] + j + 1).padStart(2, '0')} name={entry.name} when={entry.when} prompt={entry.prompt} tip={entry.tip} example={entry.example} exampleImage={entry.exampleImage} success={entry.success} rescue={entry.rescue} target={course ? 'Claude Code' : 'ChatGPT'} />
               ))}
             </div>
           </section>
