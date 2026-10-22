@@ -49,7 +49,7 @@ describe('POST /api/leads', () => {
     expect(state.rpc).toHaveBeenCalledWith('ai_lesson_capture_lead', expect.objectContaining({
       target_email: 'fan@example.com', target_resource: 'autovideo-prompt-pack', target_video: '1', target_source: 'youtube',
     }))
-    expect(state.signed).toHaveBeenCalledWith('autovideo-prompt-pack/autovideo-prompt-pack-v2.md', 600, { download: 'ai-short-video-prompt-pack-v2.md' })
+    expect(state.signed).toHaveBeenCalledWith('autovideo-prompt-pack/autovideo-prompt-pack-v3.md', 600, { download: 'ai-short-video-prompt-pack-v3.md' })
   })
 
   it('rejects missing consent, unknown resources and malformed bodies without touching the DB', async () => {
