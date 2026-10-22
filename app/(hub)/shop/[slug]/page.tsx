@@ -261,7 +261,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                       <Check size={15} className="mt-0.5 shrink-0" aria-hidden="true" />
                       <span>
                         <b>{item.name}</b>
-                        <span className="block text-[var(--ink-2)]">{item.pack ? '網頁版，付款完成頁直接打開' : item.grantsCourse ? '用付款 Email 登入 Google 自動開通' : '付款完成頁直接下載 zip'}</span>
+                        <span className="block text-[var(--ink-2)]">{item.pack && item.file ? '課程網頁＋starter 專案下載，付款完成頁直接打開' : item.pack ? '網頁版，付款完成頁直接打開' : item.grantsCourse ? '用付款 Email 登入 Google 自動開通' : '付款完成頁直接下載 zip'}</span>
                       </span>
                     </li>
                   ))}

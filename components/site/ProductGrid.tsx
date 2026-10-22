@@ -4,8 +4,8 @@ import { PRODUCTS, canBuy, compareLabel, priceLabel, type Product } from '@/lib/
 
 export function productType(product: Product) {
   if (product.bundle) return { label: '全套組合', color: '#121212', ink: '#ffffff' }
-  if (product.pack) return { label: '指令包・新手', color: '#ff5d8f', ink: '#ffffff' }
   if (product.kind === 'course') return { label: '線上課程', color: '#2747ff', ink: '#ffffff' }
+  if (product.pack) return { label: '指令包・新手', color: '#ff5d8f', ink: '#ffffff' }
   return { label: '工作流套件', color: '#f5a524', ink: '#1a1208' }
 }
 

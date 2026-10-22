@@ -20,7 +20,37 @@ function Highlighted({ text }: { text: string }) {
 }
 
 /** One copy-paste prompt: what it is for, the prompt, one big copy button and a tip. */
-export default function PromptCard({ index, name, when, prompt, tip, example }: { index: string; name: string; when?: string; prompt: string; tip?: string; example?: string }) {
+/** Small copy button for secondary prompts (the rescue prompt). */
+function CopyText({ text, label }: { text: string; label: string }) {
+  const [done, setDone] = useState(false)
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(text)
+      setDone(true)
+      window.setTimeout(() => setDone(false), 2500)
+    } catch {
+      // Clipboard blocked: the text is visible above, so it can still be copied by hand.
+    }
+  }
+  return (
+    <button type="button" onClick={copy} aria-live="polite" className="mt-2 inline-flex min-h-10 items-center gap-1.5 border-2 border-[var(--ink)] bg-white px-3 text-sm font-black">
+      {done ? <Check size={15} aria-hidden="true" /> : <Copy size={15} aria-hidden="true" />}{done ? '已複製' : label}
+    </button>
+  )
+}
+
+export default function PromptCard({ index, name, when, prompt, tip, example, success, rescue, target = 'ChatGPT' }: {
+  index: string
+  name: string
+  when?: string
+  prompt: string
+  tip?: string
+  example?: string
+  success?: string[]
+  rescue?: string
+  /** Where the prompt gets pasted, for the "copied" message. */
+  target?: string
+}) {
   const [state, setState] = useState<'idle' | 'done' | 'failed'>('idle')
 
   async function copy() {
@@ -53,8 +83,16 @@ export default function PromptCard({ index, name, when, prompt, tip, example }: 
           className={`flex min-h-12 w-full items-center justify-center gap-2 text-[15px] font-black transition ${state === 'done' ? 'bg-[#0e9f6e] text-white' : 'bg-[var(--ink)] text-[var(--paper)] hover:bg-[#333]'}`}
         >
           {state === 'done' ? <Check size={18} aria-hidden="true" /> : <Copy size={18} aria-hidden="true" />}
-          {state === 'done' ? '已複製！貼到 ChatGPT 吧' : state === 'failed' ? '複製失敗，請長按文字手動複製' : '複製這段指令'}
+          {state === 'done' ? `已複製！貼到 ${target} 吧` : state === 'failed' ? '複製失敗，請長按文字手動複製' : '複製這段指令'}
         </button>
+        {success && success.length > 0 && (
+          <div className="mt-3 border-2 border-[#0e9f6e] bg-[#ecfdf5] px-3 py-2.5">
+            <p className="text-sm font-black text-[#065f46]">✅ 成功長這樣</p>
+            <ul className="mt-1 space-y-1 text-[14px] leading-6">
+              {success.map(item => <li key={item}>□ {item}</li>)}
+            </ul>
+          </div>
+        )}
         {tip && <p className="mt-3 text-sm leading-6 text-[var(--ink-2)]">💡 {tip}</p>}
         {example && (
           <details className="group mt-3 border border-[var(--ink)] bg-[#f3f0e8]">
@@ -62,6 +100,17 @@ export default function PromptCard({ index, name, when, prompt, tip, example }: 
               看 AI 回覆範例 <span className="font-mono text-xs transition group-open:rotate-45">＋</span>
             </summary>
             <pre className="whitespace-pre-wrap break-words border-t border-[var(--ink)] px-3 py-3 font-[family-name:var(--font-tc)] text-[13px] leading-6">{example}</pre>
+          </details>
+        )}
+        {rescue && (
+          <details className="group mt-3 border border-[var(--red)] bg-[#fff1f0]">
+            <summary className="flex cursor-pointer list-none items-center justify-between px-3 py-2 text-sm font-black text-[#b42318]">
+              🆘 卡住救援 <span className="font-mono text-xs transition group-open:rotate-45">＋</span>
+            </summary>
+            <div className="border-t border-[var(--red)] px-3 py-3">
+              <pre className="whitespace-pre-wrap break-words font-[family-name:var(--font-tc)] text-[13px] leading-6"><Highlighted text={rescue} /></pre>
+              <CopyText text={rescue} label="複製救援指令" />
+            </div>
           </details>
         )}
       </div>

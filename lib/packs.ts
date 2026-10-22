@@ -4,13 +4,27 @@
 import { createServiceClient } from '@/lib/supabase/server'
 import { DOWNLOAD_BUCKET } from '@/lib/leads'
 
-export interface PackItem { name: string; when: string; prompt: string; tip?: string; example?: string }
+export interface PackItem {
+  name: string
+  when: string
+  prompt: string
+  tip?: string
+  /** What the AI typically replies (collapsible). */
+  example?: string
+  /** Course levels: what success looks like, and a prompt to paste when stuck. */
+  success?: string[]
+  rescue?: string
+}
 export interface Pack {
   slug: string
   version: string
+  /** 'course' packs are step-by-step levels for Claude Code; default is a prompt pack for any chat AI. */
+  kind?: 'pack' | 'course'
   title: string
   intro: string
   quickstart: string[]
+  /** Buttons under the quickstart (defaults to ChatGPT / Gemini / Claude). */
+  links?: { name: string; url: string }[]
   sections: { title: string; items: PackItem[] }[]
 }
 

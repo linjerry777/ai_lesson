@@ -60,7 +60,7 @@ export default async function ThanksPage({ searchParams }: { searchParams: Promi
               <>
                 <p className="mt-1 text-sm leading-7 text-[var(--ink-2)]">網頁版，手機電腦都能開。打開後記得<strong className="text-[var(--ink)]">加入書籤</strong>，之後隨時回來複製。</p>
                 <Link href={`/pack/${item.slug}?session_id=${encodeURIComponent(order.sessionId)}`} className="mt-4 inline-flex min-h-12 items-center gap-3 bg-[var(--ink)] px-6 text-[14px] tracking-[.06em] text-[#fafaf8] transition hover:bg-[#333]">
-                  <ArrowUpRight size={17} aria-hidden="true" /> 打開指令包
+                  <ArrowUpRight size={17} aria-hidden="true" /> {item.kind === 'course' ? '打開課程' : '打開指令包'}
                 </Link>
               </>
             )}

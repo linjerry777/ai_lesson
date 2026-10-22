@@ -29,12 +29,10 @@ Historical note: this project started as a text-first paid course platform. Do n
 
 Preserve Claude Code course content unless Jerry explicitly asks to reposition the product. Codex / Image2 / Remotion now has its own separate course product, so do not merge that workflow back into the Claude Code course unless asked.
 
-Current course positioning:
-- Text-first Claude Code course at roughly NT$990.
-- Promise: build a real product website with Landing Page, Google login, Stripe payment, purchase records, dashboard unlock, and Vercel deployment.
-- Not for total non-programmers. The copy should say basic engineering literacy is expected.
-- Do not lead with MCP / Hook / Sub-Agent claims unless the course content actually teaches them in depth.
-- Current structure is 8 stages: ch00 setup, ch01 landing, ch02 auth, ch03 env/debug, ch04 Stripe, ch05 deployment, ch06 debug rescue, ch07 reuse template.
+Current course positioning (2026-10-22, Jerry approved):
+- Claude Code 實戰課 NT$490 is now the 「照貼就會」 version: 6 levels (跑起來 → 換成你的產品 → Google 登入 → 收錢 → 上線 → 開賣前檢查), each a prompt to paste into Claude Code + 「成功長這樣」 checklist + 卡住救援 prompt. No screenshots (Jerry discarded them; Claude Code guides dashboards in text).
+- Delivered like the prompt pack: course JSON `packs/claude-code-course-v2.json` (source `../jerry-ai-kits/packs/claude-code-course/build.py`) rendered at `/pack/claude-code-course`, plus the starter zip `kits/claude-code-starter-v1.0.zip` (source `../jerry-ai-kits/claude-code-starter`). It no longer grants the old dashboard course.
+- The old 8-chapter text course in `lib/course-data.ts` stays only for earlier dashboard buyers.
 
 Second course product:
 - Product slug: `codex-remotion`.
