@@ -1,0 +1,45 @@
+{
+ "slug": "ai-carousel-studio-demo",
+ "code": "x4",
+ "title": "說一句話做出 IG 輪播：Claude Code 輪播圖產生器",
+ "channel": "xun",
+ "publishedAt": "2026-10-27",
+ "status": "published",
+ "summary": "跟 Claude Code 說主題、帳號、風格，就輸出一整組 1080×1350 的輪播圖，附總覽圖和貼文說明。",
+ "platforms": {
+  "youtube": "Hsz0BylAgJ8",
+  "instagram": "https://www.instagram.com/reel/De_z9BTEU6q/"
+ },
+ "sections": [
+  {
+   "heading": "怎麼用",
+   "body": "裝好之後，每次只要說：「用 carousel 幫我做一組輪播：主題是 OOO，帳號 @OOO，風格 bold」。它會寫文案、排版，輸出 6–10 張 1080×1350 的直式圖，再附一段貼文說明。"
+  },
+  {
+   "heading": "為什麼不會跑版",
+   "body": "每次輸出都會自動檢查：字有沒有被切掉、有沒有太靠近底邊。有問題，Claude 會自己把文案改短再重畫，最後給你一張總覽圖，一眼看完整組。"
+  },
+  {
+   "heading": "需要準備",
+   "body": "Claude Code（訂閱或 API 都可以）和 Node.js 20 以上。解壓縮到路徑短的資料夾，把設定說明整段貼給 Claude Code，它會裝好環境、先渲染一組範例。"
+  }
+ ],
+ "prompts": [
+  {
+   "title": "每次要做新輪播時說這句",
+   "text": "用 carousel 幫我做一組輪播：主題是【主題】，帳號 @【帳號】，風格【paper／bold／dark／mint】"
+  }
+ ],
+ "tools": [
+  {
+   "name": "Claude Code",
+   "url": "https://docs.anthropic.com/en/docs/claude-code/overview",
+   "note": "跑套件的 AI"
+  }
+ ],
+ "cta": {
+  "kind": "product",
+  "slug": "carousel-studio-kit",
+  "pitch": "一句話輸出整組 IG／Threads 輪播圖。"
+ }
+}
