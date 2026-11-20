@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
-import { getPublishedVideos } from '@/lib/content'
+import { getLinkableVideos } from '@/lib/content'
 import { isAdminEmail } from '@/lib/admin'
 
 export const dynamic = 'force-dynamic'
@@ -19,7 +19,7 @@ export default async function StatsPage() {
     db.rpc('ai_lesson_video_stats'),
     db.from('ai_lesson_leads').select('id', { count: 'exact', head: true }).eq('app_id', 'ai-lesson'),
   ])
-  const titles = new Map(getPublishedVideos().map(video => [video.code, video.title]))
+  const titles = new Map(getLinkableVideos().map(video => [video.code, video.title]))
   const rows = (stats ?? []) as Row[]
 
   return (
