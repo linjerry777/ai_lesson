@@ -1,0 +1,18 @@
+{
+  "slug": "claude-handoff-kit",
+  "title": "Claude 交接檔套件",
+  "summary": "Claude 聊越久越健忘時，用一份交接檔換到新對話接著做。兩段直接貼的指令、HANDOFF.md 空白模板，以及網頁版／App 也能用的版本。",
+  "status": "published",
+  "format": "Markdown · 2 段指令＋模板",
+  "bullets": [
+    "什麼時候該換對話：三個信號",
+    "指令一：在舊對話叫它寫 HANDOFF.md（五段）",
+    "指令二：在新對話叫它讀回來，先講給你確認",
+    "HANDOFF.md 空白模板，可以自己填或拿來對照",
+    "沒有 Claude Code 也能用：網頁版／App 版指令"
+  ],
+  "file": {
+    "path": "claude-handoff-kit/claude-handoff-kit-v1.md",
+    "downloadName": "claude-handoff-kit-v1.md"
+  }
+}

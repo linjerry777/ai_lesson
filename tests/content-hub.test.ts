@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  ContentError, loadLibrary, parseFreeResource, parseVideo, validateLibrary, getVideoByCode,
+  ContentError, loadLibrary, parseFreeResource, parseVideo, validateLibrary, getVideoByCode, getPublishedVideos,
 } from '@/lib/content'
 import {
   attributionFromSearch, decodeAttribution, encodeAttribution, isLikelyBot, sanitizeAttribution,
@@ -24,8 +24,15 @@ describe('content files', () => {
     const { videos, resources } = loadLibrary()
     expect(videos.length).toBeGreaterThan(0)
     expect(resources.length).toBeGreaterThan(0)
-    // Drafts are parsed and validated but never reachable from the site.
-    for (const draft of videos.filter(video => video.status === 'draft')) expect(getVideoByCode(draft.code)).toBeNull()
+    // Drafts are reachable by their own link but never listed.
+    for (const draft of videos.filter(video => video.status === 'draft')) {
+      expect(getVideoByCode(draft.code)?.slug).toBe(draft.slug)
+      expect(getPublishedVideos().some(video => video.slug === draft.slug)).toBe(false)
+    }
+  })
+
+  it('lets a draft go without a date until the video is out', () => {
+    expect(parseVideo({ ...video, status: 'draft', publishedAt: null, platforms: { youtube: '' } }, 'v.json').publishedAt).toBe('')
   })
 
   it('parses a valid video and resource', () => {
@@ -38,6 +45,7 @@ describe('content files', () => {
     [{ code: 'has space' }, 'code'],
     [{ channel: 'nope' }, 'channel'],
     [{ publishedAt: '2026/10/01' }, 'publishedAt'],
+    [{ publishedAt: null }, 'publishedAt'],
     [{ status: 'live' }, 'status'],
     [{ platforms: { youtube: 'https://youtu.be/x' } }, 'youtube'],
     [{ platforms: { instagram: 'http://insecure' } }, 'instagram'],

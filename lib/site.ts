@@ -42,7 +42,7 @@ export interface Channel {
   /** Sticker in /public/stickers and clip basename in /public/clips. */
   sticker: string
   mirror?: boolean
-  clip: string
+  clip?: string
   credit?: string
   links: Partial<Record<PlatformKey, string>>
 }
@@ -53,16 +53,16 @@ const ig = (handle: string) => `https://www.instagram.com/${handle}/`
 /** Channels in programme order: fixed daily slots first, then 奶烙 (no fixed slot yet). */
 export const CHANNELS: Channel[] = [
   {
-    key: 'xun', name: '訊號滿格', code: 'XUN', hour: 11.5,
-    tagline: '小訊每天幫你整理 AI 新聞',
-    description: '只用官方來源，挑三則當天的 AI 與科技新聞，一支短片講完。',
-    color: '#2747ff', ink: '#ffffff', sticker: 'xun', clip: 'xun-signal',
+    key: 'xun', name: '訊號滿格', code: 'XUN', note: '不定時',
+    tagline: '小訊教你用 AI：Claude、Codex、AI 剪片',
+    description: '一支短片教一招，片尾留言關鍵字就收到筆記：重點、可以直接複製的指令和用到的工具。',
+    color: '#2747ff', ink: '#ffffff', sticker: 'xun-avatar',
     links: { youtube: yt('UCICMyW4asSzUxY2Bmkic7dQ'), instagram: ig('fullsignaltw') },
   },
   {
     key: 'mochi', name: '麻糬QQ', code: 'MOCHI', hour: 19.5,
-    tagline: '人類圖鑑短劇＋未解之謎紀錄片',
-    description: '麻糬和她頭上的小麻糬，每天演一種「你是哪一派」；週末追一樁歷史懸案。',
+    tagline: '人類圖鑑短劇',
+    description: '麻糬和她頭上的小麻糬，每天演一種「你是哪一派」。',
     color: '#ff5d8f', ink: '#ffffff', sticker: 'mochi', clip: 'mochi-qq',
     links: { youtube: yt('UC2vBS0u5x6TWYjyxibH4MxA'), instagram: ig('mochiqqtw') },
   },

@@ -16,13 +16,17 @@ ROOT = Path(__file__).resolve().parents[1]
 GH = ROOT.parent
 AV = GH / 'AutoVideo'
 SPR = AV / 'studio/remotion/public/sprites'
+XUN = AV / 'output/reviews/pivot_20261120/char_v5/cut'  # 小訊 v5 (2026-11-20, Jerry picked)
+HALF = (0, 0, 1024, 1050)  # v5 cut-outs are realistic: the site shows her from the waist up only
 OUT = ROOT / 'public/stickers'
 
 # name: (source, crop box or None, background removal: False | True (rembg) | 'flood' (white sheet))
 STICKERS = {
-    'xun': (SPR / 'xun-happy.png', None, False),
-    'xun-explain': (SPR / 'xun-explain.png', None, False),
-    'xun-thumbsup': (SPR / 'xun-thumbsup.png', None, False),
+    'xun': (XUN / 'xun_v5_master_cut.png', HALF, False),
+    'xun-explain': (XUN / 'xun_v5_3_point_right_cut.png', HALF, False),
+    'xun-thumbsup': (XUN / 'xun_v5_5_thumbs_up_cut.png', HALF, False),
+    'xun-wave': (XUN / 'xun_v5_7_wave_cut.png', HALF, False),
+    'xun-avatar': (XUN / 'xun_v5_master_cut.png', (212, 120, 812, 720), 'circle'),
     'mochi': (SPR / 'mochi-hello.png', None, False),
     'mochi-love': (SPR / 'mochi-love.png', None, False),
     'mochi-popcorn': (SPR / 'mochi-popcorn.png', None, False),
@@ -66,7 +70,15 @@ def sticker(name: str) -> None:
     img = Image.open(src).convert('RGBA')
     if box:
         img = img.crop(box)
-    if rembg == 'flood':
+    if rembg == 'circle':  # round head shot on the paper colour, for small channel cards
+        mask = Image.new('L', img.size, 0)
+        from PIL import ImageDraw
+        ImageDraw.Draw(mask).ellipse((0, 0, img.width - 1, img.height - 1), fill=255)
+        disc = Image.new('RGBA', img.size, (232, 228, 218, 255))
+        disc.alpha_composite(img)
+        disc.putalpha(mask)
+        img = disc
+    elif rembg == 'flood':
         img = flood_white(img)
     elif rembg:
         img = remove_bg(img).convert('RGBA')

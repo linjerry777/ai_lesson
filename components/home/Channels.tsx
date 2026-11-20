@@ -109,7 +109,7 @@ export default function Channels({ feeds, now }: { feeds: Feeds; now: number }) 
                   <p className="text-sm font-bold">{verdict(claude.name, codex.name, codexVideos, now)}</p>
                 </div>
                 <div className="mt-4 grid grid-cols-[minmax(0,1fr)] items-stretch gap-3 lg:grid-cols-[minmax(0,1fr)_72px_minmax(0,1fr)]">
-                  <Side id={`ch-${claude.key}`} team="claude" name={claude.name} tagline={`${claude.tagline} · 每天 ${slotLabel(claude)}`} sticker={claude.sticker} color={claude.color} links={claude.links} videos={claudeVideos} now={now} />
+                  <Side id={`ch-${claude.key}`} team="claude" name={claude.name} tagline={claude.hour !== undefined ? `${claude.tagline} · 每天 ${slotLabel(claude)}` : claude.tagline} sticker={claude.sticker} color={claude.color} links={claude.links} videos={claudeVideos} now={now} />
                   <div className="flex items-center justify-center" aria-hidden="true">
                     <span className="font-display text-outline text-[clamp(40px,4vw,64px)] leading-none">VS</span>
                   </div>
@@ -124,7 +124,7 @@ export default function Channels({ feeds, now }: { feeds: Feeds; now: number }) 
         <article id="ch-nailao" className="reveal mt-14 grid scroll-mt-20 items-center gap-6 border-2 border-[var(--ink)] p-5 sm:grid-cols-[auto_minmax(0,1fr)] sm:p-6 lg:grid-cols-[auto_minmax(0,1fr)_auto]" style={{ background: nailao.color, color: nailao.ink }}>
           <div className="relative mx-auto w-[150px] sm:mx-0">
             <div className="aspect-[9/16] overflow-hidden border-[3px] border-[var(--ink)] bg-black shadow-[6px_6px_0_var(--ink)]">
-              <ClipVideo name={nailao.clip} label={`${nailao.name} 片段`} className="h-full w-full object-cover" />
+              <ClipVideo name={nailao.clip ?? nailao.key} label={`${nailao.name} 片段`} className="h-full w-full object-cover" />
             </div>
           </div>
           <div>

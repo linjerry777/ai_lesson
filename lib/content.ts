@@ -85,8 +85,9 @@ export function parseVideo(input: unknown, file: string): VideoNote {
   if (!CODE_RE.test(code)) fail(file, '"code" must be 1–16 chars a-z0-9')
   const channel = str(raw, 'channel', file, 40)
   if (!CHANNELS.some(item => item.key === channel)) fail(file, `unknown channel "${channel}"`)
-  const publishedAt = str(raw, 'publishedAt', file, 10)
-  if (!DATE_RE.test(publishedAt) || Number.isNaN(Date.parse(publishedAt))) fail(file, '"publishedAt" must be YYYY-MM-DD')
+  // A draft may not have a date yet (the video is still unpublished).
+  const publishedAt = raw.status === 'draft' && (raw.publishedAt === null || raw.publishedAt === '') ? '' : str(raw, 'publishedAt', file, 10)
+  if (publishedAt && (!DATE_RE.test(publishedAt) || Number.isNaN(Date.parse(publishedAt)))) fail(file, '"publishedAt" must be YYYY-MM-DD')
 
   const platformsRaw = (raw.platforms ?? {}) as Raw
   if (typeof platformsRaw !== 'object' || Array.isArray(platformsRaw)) fail(file, '"platforms" must be an object')
@@ -200,12 +201,16 @@ export function loadLibrary() {
 export function getPublishedVideos() {
   return loadLibrary().videos.filter(video => video.status === 'published')
 }
+/** Every note, drafts included. A draft is reachable by its link (/v/<code>, /videos/<slug>) but never listed or indexed. */
+export function getLinkableVideos() {
+  return loadLibrary().videos
+}
 export function getVideo(slug: string) {
-  return getPublishedVideos().find(video => video.slug === slug) ?? null
+  return getLinkableVideos().find(video => video.slug === slug) ?? null
 }
 export function getVideoByCode(code: string) {
   const normalized = code.toLowerCase()
-  return getPublishedVideos().find(video => video.code === normalized) ?? null
+  return getLinkableVideos().find(video => video.code === normalized) ?? null
 }
 export function getPublishedResources() {
   return loadLibrary().resources.filter(resource => resource.status === 'published')

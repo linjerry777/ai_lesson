@@ -483,6 +483,7 @@ const CATALOGUE: Product[] = [
     description: '麻糬QQ「懸案／山難事件簿」的做法：史料查證、調查桌場景、地形圖動畫、本機 AI 影片片段，長片與 Shorts 一起出。',
     price: null,
     status: 'soon',
+    hidden: true, // 2026-11-20: the documentary long-form series stopped
     sticker: 'mochi-popcorn',
     includes: [],
     steps: [],

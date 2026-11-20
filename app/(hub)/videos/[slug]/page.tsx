@@ -5,13 +5,13 @@ import { ArrowRight, ArrowUpRight, PlayCircle } from 'lucide-react'
 import CopyButton from '@/components/site/CopyButton'
 import LeadForm from '@/components/site/LeadForm'
 import { BackLink, Card, Kicker, Lede, PageTitle } from '@/components/site/ui'
-import { getPublishedVideos, getResource, getVideo } from '@/lib/content'
+import { getLinkableVideos, getResource, getVideo } from '@/lib/content'
 import { compareLabel, getProduct, priceLabel } from '@/lib/products'
 import { isYouTubeShort } from '@/lib/youtube'
 import { PLATFORM_LABELS, SITE, getChannel, type PlatformKey } from '@/lib/site'
 
 export function generateStaticParams() {
-  return getPublishedVideos().map(video => ({ slug: video.slug }))
+  return getLinkableVideos().map(video => ({ slug: video.slug }))
 }
 export const dynamicParams = false
 
@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description: video.summary,
     alternates: { canonical: `/videos/${video.slug}` },
     openGraph: { title: video.title, description: video.summary, type: 'article' },
+    ...(video.status === 'draft' && { robots: { index: false, follow: false } }),
   }
 }
 
@@ -59,7 +60,7 @@ export default async function VideoPage({ params }: { params: Promise<{ slug: st
     <main className="px-4 pb-28 pt-12 sm:px-8 sm:pt-20">
       <header className="mx-auto max-w-4xl">
         <BackLink href="/videos">全部影片筆記</BackLink>
-        <Kicker color={channel?.color} className="mt-6">EP_{ep} · {channel?.name} · {video.publishedAt.replaceAll('-', '.')}</Kicker>
+        <Kicker color={channel?.color} className="mt-6">EP_{ep} · {channel?.name} · {video.publishedAt ? video.publishedAt.replaceAll('-', '.') : '影片即將發布'}</Kicker>
         <PageTitle>{video.title}</PageTitle>
         <Lede>{video.summary}</Lede>
       </header>

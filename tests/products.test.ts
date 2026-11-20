@@ -29,6 +29,6 @@ describe('storefront catalogue', () => {
 
   it('labels prices', () => {
     expect(priceLabel(getProduct('shorts-studio-kit')!)).toBe('NT$399')
-    expect(priceLabel(getProduct('mystery-doc-kit')!)).toBe('即將推出')
+    expect(priceLabel(getProduct('chibi-mv-kit')!)).toBe('即將推出')
   })
 })
