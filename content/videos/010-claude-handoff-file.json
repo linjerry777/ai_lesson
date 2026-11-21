@@ -3,12 +3,12 @@
  "code": "x8",
  "title": "Claude 聊越久越健忘？用一份交接檔換到新對話",
  "channel": "xun",
- "publishedAt": null,
- "status": "draft",
+ "publishedAt": "2026-11-21",
+ "status": "published",
  "summary": "Claude Code 的對話快滿時會自動壓縮，前面的內容變成摘要，細節容易掉。先叫它寫一份交接檔，開新對話再讀回來，就能接著做。",
  "platforms": {
-  "youtube": "",
-  "instagram": ""
+  "youtube": "_J8IUclpHEA",
+  "instagram": "https://www.instagram.com/reel/Df_pGc1kcye/"
  },
  "sections": [
   {
