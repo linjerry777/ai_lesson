@@ -1,0 +1,45 @@
+{
+ "slug": "github-4-ai-tools-1122",
+ "code": "x10",
+ "title": "GitHub 這週爆紅的 4 個 AI 工具",
+ "channel": "xun",
+ "publishedAt": "2026-11-22",
+ "status": "published",
+ "summary": "整理 GitHub 熱門榜這週爆紅的 4 個 AI 工具：Chrome DevTools MCP、last30days、ffmpeg-skill、Plannotator。每個工具附用途和星數（截至 11/22）。",
+ "platforms": {
+  "youtube": "",
+  "instagram": ""
+ },
+ "sections": [
+  {
+   "heading": "1. Chrome DevTools MCP",
+   "body": "ChromeDevTools/chrome-devtools-mcp，約 58.7k 星（截至 11/22）。讓 AI agent 直接操作 Chrome：錄效能、查網路請求、讀主控台錯誤訊息、自動操作頁面。"
+  },
+  {
+   "heading": "2. last30days",
+   "body": "mvanhorn/last30days-skill，約 71.9k 星（截至 11/22）。輸入主題，同時搜尋 Reddit、X、YouTube 等來源，整理成附來源的摘要。"
+  },
+  {
+   "heading": "3. ffmpeg-skill",
+   "body": "kajisho5/ffmpeg-skill，約 9.2k 星（截至 11/22）。給 Claude Code 42 個本機 FFmpeg 工具，在自己的電腦上執行，不用雲端也不用 API key。"
+  },
+  {
+   "heading": "4. Plannotator",
+   "body": "backnotprop/plannotator，約 14.1k 星（截至 11/22）。AI 提出計畫時，可以直接在計畫上標註修改，再把意見送回給 agent（Claude Code、Codex 等）。"
+  },
+  {
+   "heading": "注意",
+   "body": "星數是 11/22 看到的數字，會持續變動。我們頻道沒有全部實測過這四個工具；這份是依各 repo 公開的 README 整理，使用前請先看官方說明。"
+  },
+  {
+   "heading": "關於這支影片",
+   "body": "AI 旁白、AI 生成角色。內容為公開資料整理，沒有成效數字。"
+  }
+ ],
+ "prompts": [],
+ "cta": {
+  "kind": "free",
+  "slug": "claude-handoff-kit",
+  "pitch": "這 4 個工具都是給 Claude Code、Codex 這類 agent 用的。用久了對話會滿，先拿這份交接檔模板，換新對話也能接著做。"
+ }
+}
