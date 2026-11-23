@@ -1,0 +1,66 @@
+{
+ "slug": "claude-skill-by-talking",
+ "code": "x15",
+ "title": "用講的，做出你自己的 Claude skill",
+ "channel": "xun",
+ "publishedAt": "2026-11-24",
+ "status": "published",
+ "summary": "skill 是一份寫給 Claude 看的做法：什麼時候用、照哪些步驟做。不用自己從空白檔案寫，裝官方的 skill-creator，用一句話說需求，它會先反問再幫你寫好。這裡有安裝指令、可以直接貼的那一句，還有 SKILL.md 最小範本。",
+ "platforms": {
+  "youtube": "",
+  "instagram": ""
+ },
+ "sections": [
+  {
+   "heading": "skill 是什麼",
+   "body": "一個資料夾，裡面放一份 SKILL.md，寫清楚「什麼時候用」和「照哪些步驟做」。Claude 平常不會把它整份讀進來，用得到的時候才載入。訊號滿格每天的短片，就是一個排程在跑的 skill：每天固定時間，照裡面的步驟做一支片。"
+  },
+  {
+   "heading": "第 1 步：裝官方的 skill-creator",
+   "body": "在 Claude Code 的輸入列貼上下面第 1 段的指令。它會先開外掛的詳情頁，讓你選安裝範圍；看到 Plugin is now active. 就可以用了。如果畫面要你執行 /reload-plugins，照做就好，不用重開。\n\n片中說「兩行指令」，另一行是加入官方市集：/plugin marketplace add anthropics/claude-plugins-official。官方市集預設就有，一般不用打；只有出現 Marketplace \"claude-plugins-official\" not found 的時候，才先執行這一行，再裝一次。"
+  },
+  {
+   "heading": "第 2 步：用一句話說你要什麼",
+   "body": "貼第 2 段提示詞，把括號換成你的事。一次只講一件事就好，例如片中示範的那句：「做一個 skill，每天幫我整理熱門影片。」"
+  },
+  {
+   "heading": "第 3 步：回答它的反問",
+   "body": "它不會馬上寫，會先問你幾件事，常見的是：什麼時候要用到它、做完要交出什麼格式、要不要先設幾題測試。每次問法不一樣，片中的題目卡是示意。照實回答就好，答得越具體，寫出來的 skill 越準。"
+  },
+  {
+   "heading": "第 4 步：看它寫好的 SKILL.md",
+   "body": "檔案最上面是兩行設定：name 是名稱，description 寫這個 skill 做什麼、什麼時候用。下面是用一般文字寫的步驟。看三件事：\n1. 「什麼時候用」有沒有寫在 description 裡。Claude 是看 description 決定要不要載入，寫在下面的內文它不會先看到。\n2. description 寫短一點、講重點，太長會被截掉。\n3. 步驟是不是你平常真的在做的順序。\n\n想自己從頭寫，第 3 段是最小範本。name 沒寫的話，預設就是資料夾的名字。"
+  },
+  {
+   "heading": "第 5 步：放進 skills 資料夾",
+   "body": "只有自己用：~/.claude/skills/〔名稱〕/SKILL.md\n整個專案一起用：專案資料夾裡的 .claude/skills/〔名稱〕/SKILL.md\n\n新增或修改 skill 不用重開 Claude Code，它會自己偵測；沒出現的話，執行 /reload-skills。"
+  },
+  {
+   "heading": "小提示",
+   "body": "skill 有時候該用卻沒被用到。遇到這種情況，回頭把 description 裡「什麼時候用」寫得更具體，把你平常會講的那幾句話直接寫進去，例如：使用者說「今天熱門」「幫我看熱度」時使用。"
+  },
+  {
+   "heading": "關於這支影片",
+   "body": "AI 旁白；小訊、麻糬是 AI 生成角色，角色鏡頭是 AI 生成的影片。片中的介面畫面是程式重畫的示意圖，daily-radar 這個名稱和題目卡的內容都是示範用的。開頭的成品片段裁自訊號滿格已發布的每日短片。"
+  }
+ ],
+ "prompts": [
+  {
+   "title": "第 1 段：安裝 skill-creator（貼在 Claude Code 輸入列）",
+   "text": "/plugin install skill-creator@claude-plugins-official"
+  },
+  {
+   "title": "第 2 段：一句話做出第一個 skill",
+   "text": "用 skill-creator 幫我做一個 skill：〔每次或每天要它做的一件事〕。\n先問我你需要知道的事，問完再寫 SKILL.md。\n不用跑測試，先給我第一版。"
+  },
+  {
+   "title": "第 3 段：SKILL.md 最小範本",
+   "text": "---\nname: daily-radar\ndescription: 整理今天的熱門影片清單。使用者說「今天熱門」「幫我看熱度」，或要找選題時使用。\n---\n\n# 每日熱門整理\n\n## 步驟\n1. 找出今天的熱門影片。\n2. 每支記下標題、觀看數、連結。\n3. 排成一張表，觀看數高的在前面。\n\n## 交出什麼\n一張表，最多 10 列。"
+  }
+ ],
+ "cta": {
+  "kind": "free",
+  "slug": "claude-handoff-kit",
+  "pitch": "skill 是把「做法」寫成檔案，交接檔是把「做到哪」寫成檔案。先拿這份交接檔模板，對話滿了換新的，也能接著做。"
+ }
+}
