@@ -36,10 +36,49 @@
    "body": "AI 旁白、AI 生成角色。內容為公開資料整理，沒有成效數字。"
   }
  ],
- "prompts": [],
+ "prompts": [
+  {
+   "title": "Chrome DevTools MCP 安裝（照 README，我們沒有全部實測）",
+   "text": "以下抄自官方 README（https://github.com/ChromeDevTools/chrome-devtools-mcp）。\n\n在 Claude Code 裡執行：\n/plugin marketplace add ChromeDevTools/chrome-devtools-mcp\n/plugin install chrome-devtools-mcp@chrome-devtools-plugins\n\n其他 MCP 工具，把這段設定加進你的 MCP 設定：\n{\n  \"mcpServers\": {\n    \"chrome-devtools\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"chrome-devtools-mcp@latest\"]\n    }\n  }\n}\n\n裝好後，README 建議用這句檢查有沒有成功：\nCheck the performance of https://developers.chrome.com"
+  },
+  {
+   "title": "last30days 安裝（照 README，我們沒有全部實測）",
+   "text": "以下抄自官方 README（https://github.com/mvanhorn/last30days-skill）。\n\n在 Claude Code 裡執行：\n/plugin marketplace add mvanhorn/last30days-skill\n/plugin install last30days\n\nCodex、Cursor 等其他支援 Agent Skills 的工具：\nnpx skills add mvanhorn/last30days-skill -g\n\n注意：README 說兩種裝法不要同時裝，一台電腦選一種。部分資料來源需要另外設定帳號或金鑰，請看官方說明。"
+  },
+  {
+   "title": "ffmpeg-skill 安裝（照 README，我們沒有全部實測）",
+   "text": "以下抄自官方 README（https://github.com/kajisho5/ffmpeg-skill）。\n\n一行安裝（會把技能裝到 Claude Code，並在找不到 FFmpeg 時嘗試安裝）：\nnpx ffmpeg-skill setup\n\n或分步：\nnpx ffmpeg-skill\nnpx ffmpeg-skill doctor\n\n需要先有 Node 16 以上和 Python 3.10 以上。"
+  },
+  {
+   "title": "Plannotator 安裝（照 README，我們沒有全部實測）",
+   "text": "以下抄自官方 README（https://github.com/backnotprop/plannotator）。\n\n在 Claude Code 裡執行，裝好後重開 Claude Code：\n/plugin marketplace add backnotprop/plannotator\n/plugin install plannotator@plannotator\n\nREADME 另外提供一行安裝器（macOS／Linux／WSL 用 curl，Windows 用 PowerShell），會下載並執行遠端腳本，要用的話請先自己看過官方說明再決定。"
+  }
+ ],
  "cta": {
   "kind": "free",
   "slug": "claude-handoff-kit",
   "pitch": "這 4 個工具都是給 Claude Code、Codex 這類 agent 用的。用久了對話會滿，先拿這份交接檔模板，換新對話也能接著做。"
- }
+ },
+ "tools": [
+  {
+   "name": "Chrome DevTools MCP（GitHub）",
+   "url": "https://github.com/ChromeDevTools/chrome-devtools-mcp",
+   "note": "ChromeDevTools/chrome-devtools-mcp"
+  },
+  {
+   "name": "last30days（GitHub）",
+   "url": "https://github.com/mvanhorn/last30days-skill",
+   "note": "mvanhorn/last30days-skill"
+  },
+  {
+   "name": "ffmpeg-skill（GitHub）",
+   "url": "https://github.com/kajisho5/ffmpeg-skill",
+   "note": "kajisho5/ffmpeg-skill"
+  },
+  {
+   "name": "Plannotator（GitHub）",
+   "url": "https://github.com/backnotprop/plannotator",
+   "note": "backnotprop/plannotator"
+  }
+ ]
 }

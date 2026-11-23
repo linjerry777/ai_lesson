@@ -26,7 +26,7 @@
  ],
  "prompts": [
   {
-   "title": "每次要做新輪播時說這句",
+   "title": "每次要做新輪播時說這句（需先裝輪播套件）",
    "text": "用 carousel 幫我做一組輪播：主題是【主題】，帳號 @【帳號】，風格【paper／bold／dark／mint】"
   }
  ],
