@@ -1,0 +1,45 @@
+{
+ "slug": "claude-code-5-skills",
+ "code": "x12",
+ "title": "我們真的在用的 5 個 Claude Code skill",
+ "channel": "xun",
+ "publishedAt": "2026-11-23",
+ "status": "published",
+ "summary": "skill 是寫好的做事流程，需要時才載入。這是訊號滿格實際在用的 5 個 Claude Code skill 和各自的用途。",
+ "platforms": {
+  "youtube": "",
+  "instagram": ""
+ },
+ "sections": [
+  {
+   "heading": "1. Remotion 影片技能",
+   "body": "讓 Claude 照 Remotion 的規範寫影片動畫。訊號滿格的短影音製作就靠它。"
+  },
+  {
+   "heading": "2. 前端設計技能",
+   "body": "讓 Claude 做的介面不再千篇一律：先決定風格，再動手，而不是直接套模板。"
+  },
+  {
+   "heading": "3. skill-creator",
+   "body": "用來自己做 skill，把常用的做法存起來，之後每次都能用。"
+  },
+  {
+   "heading": "4. 文件技能",
+   "body": "PDF、Word、簡報、試算表，都能直接讀寫。"
+  },
+  {
+   "heading": "5. last30days",
+   "body": "查一個主題最近 30 天各平台的討論，例如 Reddit、YouTube、TikTok。這個不是每天用，需要查題材時才開。"
+  },
+  {
+   "heading": "關於這支影片",
+   "body": "AI 旁白、AI 生成角色。內容是工具用途說明，沒有成效數字。"
+  }
+ ],
+ "prompts": [],
+ "cta": {
+  "kind": "free",
+  "slug": "claude-handoff-kit",
+  "pitch": "skill 是把做法存起來，交接檔是把進度存起來。先拿這份交接檔模板，換新對話也能接著做。"
+ }
+}
