@@ -32,11 +32,36 @@
    "body": "查一個主題最近 30 天各平台的討論，例如 Reddit、YouTube、TikTok。這個不是每天用，需要查題材時才開。"
   },
   {
+   "heading": "怎麼裝",
+   "body": "下面的安裝指令照各 skill 的官方來源整理（2026-11-23）：Remotion 來自 remotion-dev/skills，前端設計和 skill-creator 來自 Anthropic 官方外掛市集，文件技能來自 anthropics/skills，last30days 來自 mvanhorn/last30days-skill。已經加過的市集，第一行可以跳過。"
+  },
+  {
    "heading": "關於這支影片",
    "body": "AI 旁白、AI 生成角色。內容是工具用途說明，沒有成效數字。"
   }
  ],
- "prompts": [],
+ "prompts": [
+  {
+   "title": "1. Remotion 影片技能（在終端機、你的專案資料夾裡執行）",
+   "text": "npx skills add remotion-dev/skills"
+  },
+  {
+   "title": "2. 前端設計技能（在 Claude Code 裡輸入，兩行分開貼）",
+   "text": "/plugin marketplace add anthropics/claude-plugins-official\n/plugin install frontend-design@claude-plugins-official"
+  },
+  {
+   "title": "3. skill-creator（在 Claude Code 裡輸入，兩行分開貼）",
+   "text": "/plugin marketplace add anthropics/claude-plugins-official\n/plugin install skill-creator@claude-plugins-official"
+  },
+  {
+   "title": "4. 文件技能：PDF、Word、簡報、試算表（在 Claude Code 裡輸入，兩行分開貼）",
+   "text": "/plugin marketplace add anthropics/skills\n/plugin install document-skills@anthropic-agent-skills"
+  },
+  {
+   "title": "5. last30days（在 Claude Code 裡輸入，兩行分開貼）",
+   "text": "/plugin marketplace add mvanhorn/last30days-skill\n/plugin install last30days@last30days-skill"
+  }
+ ],
  "cta": {
   "kind": "free",
   "slug": "claude-handoff-kit",
