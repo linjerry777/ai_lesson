@@ -21,15 +21,15 @@
     },
     {
       "heading": "排程怎麼建、什麼時候會跑",
-      "body": "- Code 分頁左側 Scheduled → New task（側邊欄沒看到的話，在 More 選單裡），選 Set up manually 或 Create with Claude；也可以在對話裡用一句話請它設。\n- 頻率有 Hourly、Daily、Weekdays、Weekly。\n- 排程是在你的電腦上跑：電腦醒著、app 開著才會跑。\n- 電腦睡著時錯過的那次會跳過；電腦醒來或 app 啟動時，會看近 7 天錯過的，最多補跑一次。\n- 實際開始的時間可能晚幾分鐘。"
+      "body": "- Code 分頁左側 Scheduled → New task（側邊欄沒看到的話，在 More 選單裡），選 Set up manually 或 Create with Claude；也可以在對話裡用一句話請它設。\n- 建立時頻率可以選 Hourly、Daily、Weekdays、Weekly；之後打開編輯，還多了 Manual 和 Custom。\n- 這裡講的是桌面版的本機排程：在你的電腦上跑，電腦醒著、app 開著才會跑。官方另外有雲端排程，電腦關著也會跑，這支片沒有介紹。\n- 電腦睡著時錯過的那次會跳過；電腦醒來或 app 啟動時，會看近 7 天錯過的，最多補跑一次。\n- 實際開始的時間可能晚幾分鐘。"
     },
     {
       "heading": "用手機接回（Remote Control）",
-      "body": "- 在桌面 Code 分頁的對話裡輸入指令（見下面第 3 條）。\n- 手機開 Claude app 的 Code 分頁，或開 claude.ai/code，找到那個對話接上；也可以掃 QR。\n- 電腦要保持開著。\n- Pro 以上的方案能用；用 API key 登入的不行。"
+      "body": "- 在桌面 Code 分頁的對話裡輸入指令（見下面第 3 條）。\n- 手機開 Claude app 的 Code 分頁，或開 claude.ai/code，找到那個對話接上。\n- 電腦要保持開著。\n- Pro、Max、Team、Enterprise 方案都能用，Team 和 Enterprise 要管理員先開啟；用 API key 登入的不行。"
     },
     {
       "heading": "為什麼一定要試跑",
-      "body": "沒人在旁邊時，排程碰到權限詢問會停住。我們踩過這個坑。官方的建議是：新排程先按 Run now 看它跑一次，遇到提示選 \"always allow\"。"
+      "body": "沒人在旁邊時，排程碰到權限詢問會停住。我們踩過這個坑。官方的建議是：新排程先按 Run now 看它跑一次，遇到提示選 \"always allow\"。改檔案的詢問比較特別：在那裡選 always allow，只會讓那一次的對話自動接受修改。排程如果每次都要改檔案，官方建議直接把這個排程的權限模式設成 Accept edits。"
     },
     {
       "heading": "關於這支影片",
