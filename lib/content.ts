@@ -14,6 +14,8 @@ export const CODE_RE = /^[a-z0-9]{1,16}$/
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
 const YOUTUBE_ID_RE = /^[A-Za-z0-9_-]{11}$/
 const BVID_RE = /^BV[0-9A-Za-z]{10}$/
+/** Note images live in public/notes/<folder>/<file>; a test checks the file exists. */
+export const NOTE_IMAGE_RE = /^\/notes\/[a-z0-9-]+\/[a-z0-9._-]+\.(?:jpg|jpeg|png|webp)$/
 
 export type ContentStatus = 'draft' | 'published'
 
@@ -27,12 +29,15 @@ export interface VideoNote {
   summary: string
   /** youtube = 11-char video id, bilibili = BV id, others = full https URLs. */
   platforms: Partial<Record<PlatformKey, string>>
-  sections: { heading: string; body: string }[]
+  sections: { heading: string; body: string; image?: NoteImage }[]
   prompts: { title: string; text: string }[]
   tools: { name: string; url: string; note?: string }[]
   /** 'free' → a free resource (email-gated download); 'product' → a shop product page. */
   cta: { kind: 'free' | 'product'; slug: string; pitch?: string }
 }
+
+/** Shown under the section body, as wide as the text column. */
+export interface NoteImage { src: string; alt: string; caption?: string }
 
 export interface FreeResource {
   slug: string
@@ -76,6 +81,14 @@ function httpsUrl(value: string, file: string, key: string) {
   fail(file, `"${key}" must be an https URL`)
 }
 
+function parseNoteImage(input: unknown, file: string): NoteImage {
+  if (typeof input !== 'object' || input === null || Array.isArray(input)) fail(file, '"sections.image" must be an object')
+  const raw = input as Raw
+  const src = str(raw, 'src', file, 200)
+  if (!NOTE_IMAGE_RE.test(src) || src.includes('..')) fail(file, '"sections.image.src" must look like /notes/<folder>/<file>.jpg|png|webp')
+  return { src, alt: str(raw, 'alt', file, 300), caption: optStr(raw, 'caption', file, 300) }
+}
+
 export function parseVideo(input: unknown, file: string): VideoNote {
   if (typeof input !== 'object' || input === null) fail(file, 'must be a JSON object')
   const raw = input as Raw
@@ -114,7 +127,11 @@ export function parseVideo(input: unknown, file: string): VideoNote {
     title: str(raw, 'title', file, 120),
     summary: str(raw, 'summary', file, 400),
     platforms,
-    sections: arr(raw, 'sections', file).map(item => ({ heading: str(item, 'heading', file, 120), body: str(item, 'body', file, 4000) })),
+    sections: arr(raw, 'sections', file).map(item => ({
+      heading: str(item, 'heading', file, 120),
+      body: str(item, 'body', file, 4000),
+      ...(item.image !== undefined && { image: parseNoteImage(item.image, file) }),
+    })),
     prompts: arr(raw, 'prompts', file).map(item => ({ title: str(item, 'title', file, 120), text: str(item, 'text', file, 6000) })),
     tools: arr(raw, 'tools', file).map(item => ({
       name: str(item, 'name', file, 80),

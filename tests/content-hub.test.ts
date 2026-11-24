@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import { existsSync } from 'node:fs'
+import path from 'node:path'
 import {
   ContentError, loadLibrary, parseFreeResource, parseVideo, validateLibrary, getVideoByCode, getPublishedVideos,
 } from '@/lib/content'
@@ -29,6 +31,27 @@ describe('content files', () => {
       expect(getVideoByCode(draft.code)?.slug).toBe(draft.slug)
       expect(getPublishedVideos().some(video => video.slug === draft.slug)).toBe(false)
     }
+  })
+
+  it('every note image exists in public/', () => {
+    for (const note of loadLibrary().videos)
+      for (const section of note.sections)
+        if (section.image) expect(existsSync(path.join('public', section.image.src)), `${note.slug}: ${section.image.src}`).toBe(true)
+  })
+
+  it('parses an optional section image', () => {
+    const image = { src: '/notes/x1/a.jpg', alt: 'alt', caption: 'cap' }
+    expect(parseVideo({ ...video, sections: [{ heading: 'h', body: 'b', image }] }, 'v.json').sections[0].image).toEqual(image)
+    expect(parseVideo(video, 'v.json').sections[0]).not.toHaveProperty('image')
+  })
+
+  it.each([
+    [{ src: 'https://evil.example/a.jpg', alt: 'a' }],
+    [{ src: '/notes/../secret.jpg', alt: 'a' }],
+    [{ src: '/notes/x1/a.gif', alt: 'a' }],
+    [{ src: '/notes/x1/a.jpg' }],
+  ])('rejects invalid section image %o', image => {
+    expect(() => parseVideo({ ...video, sections: [{ heading: 'h', body: 'b', image }] }, 'v.json')).toThrow(ContentError)
   })
 
   it('lets a draft go without a date until the video is out', () => {

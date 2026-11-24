@@ -97,6 +97,13 @@ export default async function VideoPage({ params }: { params: Promise<{ slug: st
               <SectionLabel>SCENE_{String(index + 1).padStart(2, '0')}</SectionLabel>
               <h2 className="mt-3 text-3xl font-black leading-snug">{section.heading}</h2>
               <Paragraphs text={section.body} />
+              {section.image && (
+                <figure className="mt-6">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- static file in public/, any size */}
+                  <img src={section.image.src} alt={section.image.alt} loading="lazy" className="block h-auto w-full border-2 border-[var(--ink)]" />
+                  {section.image.caption && <figcaption className="mt-3 text-[13px] leading-6 text-[var(--ink-2)]">{section.image.caption}</figcaption>}
+                </figure>
+              )}
             </section>
           ))}
 

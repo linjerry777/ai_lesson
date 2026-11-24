@@ -1,0 +1,71 @@
+{
+  "slug": "claude-web-design-3-skills",
+  "code": "x18",
+  "title": "Claude 做的網頁，一眼就像 AI？3 個官方設計 skill",
+  "channel": "xun",
+  "publishedAt": "2026-11-26",
+  "status": "published",
+  "summary": "Anthropic 官方的三個免費設計 skill（frontend-design、theme-factory、canvas-design），我們用同一句需求做了一次前後對照：沒讀 skill 的那版，米色底、襯線大標、陶土橘等六項都有；先讀三個的那版，配色改從生豆綠到深焙褐。這裡有安裝指令和三段提示詞。",
+  "platforms": {
+    "youtube": "",
+    "instagram": ""
+  },
+  "sections": [
+    {
+      "heading": "這份筆記在講什麼",
+      "body": "我們用的是 Anthropic 官方的三個免費設計 skill，分別管美學方向、主題配色、主視覺。它們要另外裝，不是內建的。我們用同一句需求做了一次前後對照，這份筆記是那次的做法和結果。"
+    },
+    {
+      "heading": "「AI 味」是哪幾樣",
+      "body": "frontend-design 的說明檔自己寫了：現在 AI 生成的設計集中在幾種特徵。其中一種是暖米色底、高對比的襯線大標、陶土橘的強調色。另外還有不管什麼題材都會出現的裝飾：標題上方的全大寫小標、用「·」串起來的字。它也寫了：這些特徵在某些案子是對的選擇，問題是它們變成了預設。"
+    },
+    {
+      "heading": "三個 skill 各做什麼",
+      "body": "- frontend-design：做介面前先定美學方向、字體、配色，避開看起來像範本的預設選擇。\n- theme-factory：10 組現成主題（配色＋字體），可以套在投影片、文件、HTML 網頁上；都不合的話，也能照它的方法生一組新的。\n- canvas-design：先寫一份設計理念，再做成 PNG 或 PDF 的海報、主視覺。"
+    },
+    {
+      "heading": "我們的實測（只做了一次）",
+      "body": "同一句需求「幫一家咖啡豆訂閱店做一頁網站首頁」，同一個模型，各做一次。\n- 沒讀 skill：米色底、襯線大標、陶土橘、全大寫小標、用「·」串字、標題一個詞換色，六項都有。它是精緻的，只是換哪家店都能用。\n- 先讀三個 skill：配色是一顆豆子從生豆綠到深焙褐；主視覺是十二顆豆子排成的焙度表；10 組現成主題都不合，所以生了一組新的。\n- 照實說：標題還是襯線字。只做一次，不代表每次都這樣。",
+      "image": {
+        "src": "/notes/x18/compare.jpg",
+        "alt": "同一句需求做出的兩個咖啡豆訂閱網站首頁。左邊沒讀 skill：米色底、襯線大標、陶土橘。右邊先讀三個 skill：青灰米底，十二顆豆子從生豆綠排到深焙。",
+        "caption": "同一句需求、同一個模型各做一次的桌機首屏。店名、數字都是模型編的示範內容。"
+      }
+    },
+    {
+      "heading": "中文網頁要多說一句",
+      "body": "canvas-design 附的字型沒有中文。我們第一次照做，整頁變成英文。第二次在需求後面多加一句「文案用繁體中文、中文字型自己選」，才是片中的那一版。"
+    },
+    {
+      "heading": "怎麼裝",
+      "body": "- 想一次裝好三個：用 anthropics/skills 這組範例，指令在下面第 1 段。這組一共 12 個範例 skill，三個都在裡面。\n- 只要 frontend-design：用官方外掛市集，指令在下面第 2 段。兩種都裝的話，frontend-design 會有兩份，選一種就好。\n- 用外掛裝的：裝完顯示 Plugin is now active. 就能用；如果它要你執行 /reload-plugins 就照做，不用重開。\n- 直接放進 skills 資料夾的：不用重開，沒出現就執行 /reload-skills。\n- 授權是 Apache 2.0，見各 skill 資料夾裡的 LICENSE.txt。"
+    }
+  ],
+  "prompts": [
+    {
+      "title": "安裝 1：一次裝好三個（這組共 12 個範例 skill，三個都在裡面）",
+      "text": "/plugin marketplace add anthropics/skills\n/plugin install example-skills@anthropic-agent-skills"
+    },
+    {
+      "title": "安裝 2：只要 frontend-design（已經加過官方市集的話，第一行可以跳過）",
+      "text": "/plugin marketplace add anthropics/claude-plugins-official\n/plugin install frontend-design@claude-plugins-official"
+    },
+    {
+      "title": "第 1 段：先定風格（frontend-design）",
+      "text": "用 frontend-design skill。我要做〔一頁什麼網站，給誰看〕。\n先不要寫程式。先給我一份設計計畫：美學方向、字體、4 到 6 個有名字的色碼、版面。\n方向要從〔這個題材〕本身找，告訴我你避開了哪些預設選擇。\n文案用繁體中文，中文字型自己選。我說可以再開始做。"
+    },
+    {
+      "title": "第 2 段：套主題（theme-factory）",
+      "text": "用 theme-factory skill。先讓我看現成的 10 組主題，等我選。\n如果我說都不合，就照它的方法，替〔這個題材〕生一組新的主題：配色加字體，每個顏色寫出色碼和用在哪裡。"
+    },
+    {
+      "title": "第 3 段：做主視覺（canvas-design）",
+      "text": "用 canvas-design skill，替〔這個網站〕做一張首頁主視覺。\n先寫一份設計理念存成 .md，給我看過，再照它做成 PNG。\n圖上的中文〔用系統裡有的中文字型／或不放中文〕。\n做完把這張圖放進首頁最上面那一屏。"
+    }
+  ],
+  "cta": {
+    "kind": "free",
+    "slug": "claude-handoff-kit",
+    "pitch": "改網頁常常要跟 Claude 來回好幾輪，對話滿了也不怕：先拿這份交接檔模板，把「改到哪」寫成檔案，換新對話也能接著改。"
+  }
+}

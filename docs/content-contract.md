@@ -18,7 +18,8 @@
     "bilibili": "BV1xx411c7mD",               // BV 號；沒有 YouTube 時嵌入 B站播放器
     "instagram": "https://…", "threads": "https://…", "facebook": "https://…", "tiktok": "https://…"
   },
-  "sections": [{ "heading": "小標", "body": "段落，空一行分段" }],
+  "sections": [{ "heading": "小標", "body": "段落，空一行分段",
+                 "image": { "src": "/notes/x18/compare.jpg", "alt": "圖片描述", "caption": "圖說（選填）" } }],  // image 選填
   "prompts":  [{ "title": "prompt 名稱", "text": "可直接複製的完整 prompt" }],
   "tools":    [{ "name": "Claude Code", "url": "https://…", "note": "一句話用途（選填）" }],
   "cta": { "kind": "free", "slug": "autovideo-prompt-pack", "pitch": "影片頁上的一句話（選填）" }
@@ -26,6 +27,7 @@
 }
 ```
 
+- `sections[].image` 選填：圖放在那段文字下面、跟內文欄同寬，圖說在圖下面。圖檔放 `public/notes/<資料夾>/`，只收 jpg/png/webp；檔案不存在測試會擋。repo 是公開的，圖裡不能有帳號、email、個人資料。
 - 平台欄位都可以先留空，影片上架後再補；不認得的平台名稱會被擋下。
 - `cta.kind` 是 `free` 時，`cta.slug` 必須對應一份 `published` 的免費資源；是 `product` 時，必須是 `/shop` 上架中的商品（lib/products.ts），影片也會自動出現在那個商品頁的「小訊的介紹影片」。
 
