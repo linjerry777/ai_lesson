@@ -1,14 +1,8 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import './fonts/root.css'
 import './globals.css'
 import { SITE, SITE_URL } from '@/lib/site'
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-})
 
 const TITLE = `${SITE.name} | ${SITE.tagline}`
 
@@ -45,7 +39,7 @@ const siteJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="zh-TW" className={inter.variable}>
+    <html lang="zh-TW">
       <head>
         <script
           type="application/ld+json"
