@@ -7,8 +7,8 @@
   "status": "published",
   "summary": "片裡那段 3D 是 Blender 算出來的，但我們沒有打開 Blender 的視窗：Claude 寫一支 Python 腳本，Blender 用背景模式照著腳本算圖，ffmpeg 把圖接成影片。這裡有可以貼給 Claude 的提示詞、背景算圖指令、接影片的指令，還有我們的真實數字（210 格、每格約 3.0 秒、約 11 分鐘）。",
   "platforms": {
-    "youtube": "",
-    "instagram": ""
+    "youtube": "ADlGdIWQN8E",
+    "instagram": "https://www.instagram.com/reel/DgNB4-7Bp7e/"
   },
   "sections": [
     {
